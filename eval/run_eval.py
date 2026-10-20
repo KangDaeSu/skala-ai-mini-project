@@ -96,14 +96,20 @@ except ImportError:
     def tag_request_run(result: dict) -> None:
         pass
 
+try:   # 요청 전체 deadline도 server.py와 똑같이 건다 (Before 코드에는 없음)
+    from agent.resilience import request_deadline
+except ImportError:
+    from contextlib import nullcontext as request_deadline
+
 
 @traceable(name="chat_request")
 async def _run_turn(graph, store, query: str, thread_id: str) -> dict:
     """server.py의 _handle_chat과 같은 순서: 이력 로드 → 그래프 실행 → 이력 저장.
     루트 run 이름도 chat_request로 맞춰 LangSmith에서 서버 요청과 같은 모양으로 보인다."""
     history = store.load(thread_id)
-    result = await graph.ainvoke({"query": query, "thread_id": thread_id, "history": history,
-                                  "events": [], "cost_usd": 0.0})
+    with request_deadline():
+        result = await graph.ainvoke({"query": query, "thread_id": thread_id, "history": history,
+                                      "events": [], "cost_usd": 0.0})
     store.append(thread_id, "user", query)
     store.append(thread_id, "assistant", result["final"])
     tag_request_run(result)

@@ -3,13 +3,16 @@
 실제 LLM·MCP 서버 없이, 노드 코드는 그대로 둔 채 deps만 갈아 끼운다 (Wave 13).
 """
 import asyncio
+import time
 
+import httpx
 import pytest
 
 from agent.deps import SupervisorDeps
 from agent.fake_llm import FastLLM, QualityLLM
 from agent.fallback import CHAT_FALLBACK, DEFAULT_PROCEDURE, DEGRADED_NOTICE
 from agent.graph import build_graph
+from agent import resilience as R
 from agent.resilience import ExternalCallError
 
 
@@ -149,3 +152,44 @@ def test_mcp_prompt_failure_falls_back_to_default_procedure():
 def test_bugs_are_not_hidden_behind_fallbacks():
     with pytest.raises(KeyError):
         _run(BuggyLLM(), DeadLLM(), "payments-service CPU가 급증했어요")
+
+
+class HangingLLM:
+    """응답하지 않는 LLM — 실제 어댑터처럼 resilience(call_sync)를 거쳐 단계 예산만큼 기다린다."""
+    name = "hanging-llm"
+
+    @staticmethod
+    def _hang(stage):
+        def attempt(timeout):
+            time.sleep(timeout)
+            raise httpx.ReadTimeout("no response", request=httpx.Request("POST", "http://llm"))
+        return R.call_sync(stage, attempt)
+
+    def route(self, *args, **kwargs):
+        return self._hang("route")
+
+    def plan(self, *args, **kwargs):
+        return self._hang("plan")
+
+    async def write(self, *args, **kwargs):
+        return await asyncio.to_thread(self._hang, "write")
+
+
+def test_request_deadline_bounds_the_whole_graph():
+    """단계 예산 합(route 30 + plan 45 + write 90초)과 무관하게 요청 deadline 안에 끝난다."""
+    deps = SupervisorDeps(fast_llm=HangingLLM(), quality_llm=HangingLLM(), mcp=FakeMCP(),
+                          session_store=None, version="v2")
+
+    async def scenario():
+        with R.request_deadline(1.0):
+            return await build_graph(deps).ainvoke(
+                {"query": "payments-service CPU가 급증했어요", "thread_id": "t", "history": [],
+                 "events": [], "cost_usd": 0.0})
+
+    started = time.monotonic()
+    result = asyncio.run(scenario())
+    assert time.monotonic() - started < 2.5
+    errors = [(d["stage"], d["error"]["kind"]) for d in result["degraded"]]
+    assert errors[0] == ("route", "timeout")            # route가 deadline 1초를 다 썼다
+    assert ("mcp", "deadline") in errors                 # 이후 단계는 MCP까지 호출 없이 바로 폴백
+    assert "조회하지 못했습니다" in result["final"]       # 수치를 지어내지 않고 안내로 끝난다

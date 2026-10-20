@@ -17,7 +17,7 @@ from langsmith import traceable
 
 from .fallback import rule_route
 from .systems import KNOWN_SYSTEMS
-from .resilience import PermanentError, call_async, call_sync, max_tokens
+from .resilience import PermanentError, call_async, call_sync, max_tokens, request_time_left
 
 OLLAMA_URL = "http://127.0.0.1:11434/api/chat"
 
@@ -107,6 +107,9 @@ class OllamaLLM:
                     async with client.stream("POST", OLLAMA_URL, json=payload) as resp:
                         resp.raise_for_status()
                         async for line in resp.aiter_lines():
+                            left = request_time_left()
+                            if left is not None and left <= 0:   # 느린 스트리밍도 요청 deadline에서 끊는다
+                                raise TimeoutError("요청 deadline 초과 — 스트리밍 중단")
                             if not line:
                                 continue
                             data = json.loads(line)

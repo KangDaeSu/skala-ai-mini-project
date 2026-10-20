@@ -28,7 +28,7 @@ from agent.fallback import tag_request_run
 from agent.graph import build_graph
 from agent.mcp_client import MCPClient
 from agent.rag import build_retriever
-from agent.resilience import ExternalCallError
+from agent.resilience import ExternalCallError, request_deadline, request_deadline_seconds
 from agent.session_store import SqliteSessionStore
 from agent.supervisor_v1 import run_v1
 
@@ -104,6 +104,31 @@ def _internal_error(exc: BaseException) -> dict:
             "message": f"{type(exc).__name__}: {str(exc)[:300]}"}
 
 
+def _session_warning(action: str, exc: Exception) -> dict:
+    """세션 저장소(SQLite) 실패 — 대화 이력은 부가 기능이라 답변을 막지 않고 Degraded로만 남긴다."""
+    reason = ("대화 이력 조회 실패 → 이력 없이 진행" if action == "load"
+              else "대화 이력 저장 실패 → 답변은 그대로 반환")
+    return {"type": "Degraded", "stage": "session", "reason": reason,
+            "error": {"stage": "session", "kind": "storage", "retryable": False,
+                      "message": f"{type(exc).__name__}: {str(exc)[:200]}"}}
+
+
+def _load_history(deps, thread_id: str) -> tuple[list[dict], dict | None]:
+    try:
+        return deps.session_store.load(thread_id), None
+    except Exception as exc:   # baseline: 이력 조회 실패가 요청 전체를 500으로 만들었다
+        return [], _session_warning("load", exc)
+
+
+def _save_turn(deps, thread_id: str, message: str, reply: str) -> dict | None:
+    try:
+        deps.session_store.append(thread_id, "user", message)
+        deps.session_store.append(thread_id, "assistant", reply)
+        return None
+    except Exception as exc:
+        return _session_warning("save", exc)
+
+
 @app.exception_handler(ExternalCallError)
 async def _external_failure(request: Request, exc: ExternalCallError):
     """그래프가 폴백하지 못한 외부 호출 실패 — 503 + 구조화된 원인 (재시도 가능 여부 포함)."""
@@ -143,7 +168,8 @@ def _metadata(result: dict, run_id: str | None) -> dict:
         "parallel_elapsed": result.get("parallel_elapsed"),
         "validation_attempts": result.get("validation_attempts", 0),
         "cost_usd": result.get("cost_usd", 0.0),
-        "degraded_count": len(result.get("degraded", [])),   # 외부 호출 실패로 폴백한 단계 수
+        "degraded_count": len(result.get("degraded", [])),   # 외부 호출·이력 실패로 폴백한 단계 수
+        "request_deadline_s": request_deadline_seconds(),     # 요청 하나가 쓸 수 있는 총시간
         "llm_backend": app.state.llm_backend,
         "supervisor_version": app.state.deps.version,
         "instance_id": app.state.instance_id,
@@ -154,15 +180,19 @@ def _metadata(result: dict, run_id: str | None) -> dict:
 @traceable(name="chat_request")
 async def _handle_chat(message: str, thread_id: str) -> tuple[dict, str | None]:
     deps = app.state.deps
-    history = deps.session_store.load(thread_id)   # Wave 12
-    if deps.version == "v2":
-        result = await app.state.graph.ainvoke(
-            {"query": message, "thread_id": thread_id, "history": history,
-             "events": [], "cost_usd": 0.0})
-    else:
-        result = await run_v1(deps, message, thread_id, history)   # Wave 14
-    deps.session_store.append(thread_id, "user", message)
-    deps.session_store.append(thread_id, "assistant", result["final"])
+    history, load_warning = _load_history(deps, thread_id)   # Wave 12 — 실패해도 이력 없이 진행
+    with request_deadline():   # 이 요청의 모든 외부 호출이 하나의 총시간 상한을 공유한다
+        if deps.version == "v2":
+            result = await app.state.graph.ainvoke(
+                {"query": message, "thread_id": thread_id, "history": history,
+                 "events": [], "cost_usd": 0.0})
+        else:
+            result = await run_v1(deps, message, thread_id, history)   # Wave 14
+    save_warning = _save_turn(deps, thread_id, message, result["final"])
+    warnings = [w for w in (load_warning, save_warning) if w]
+    if warnings:
+        result["degraded"] = result.get("degraded", []) + warnings
+        result["events"] = result.get("events", []) + warnings
     tag_request_run(result)   # 폴백이 있었으면 루트 run에 degraded 태그
     rt = get_current_run_tree()
     return result, (str(rt.id) if rt else None)
@@ -203,9 +233,12 @@ async def chat_stream(message: str, thread_id: str = "default"):
         yield "data: [DONE]\n\n"
 
     async def run():
-        history = deps.session_store.load(thread_id)
+        history, load_warning = _load_history(deps, thread_id)
+        if load_warning:
+            yield sse({**load_warning, "node": "session"})
         if deps.version != "v2":
-            result = await run_v1(deps, message, thread_id, history)
+            with request_deadline():
+                result = await run_v1(deps, message, thread_id, history)
             for ev in result["events"]:
                 yield f"data: {json.dumps(ev, ensure_ascii=False)}\n\n"
             yield f"data: {json.dumps({'type': 'FinalAnswer', 'reply': result['final']}, ensure_ascii=False)}\n\n"
@@ -216,25 +249,27 @@ async def chat_stream(message: str, thread_id: str = "default"):
             # stream_mode를 리스트로 주면 (mode, payload) 튜플이 나온다 — "updates"는
             # 노드가 끝날 때마다의 상태 델타, "custom"은 write_node/chat_answer_node가
             # get_stream_writer()로 실행 중에 즉시 흘려보내는 토큰(AnswerToken) 이벤트다.
-            async for mode, payload in app.state.graph.astream(
-                    {"query": message, "thread_id": thread_id, "history": history,
-                     "events": [], "cost_usd": 0.0}, stream_mode=["updates", "custom"]):
-                if mode == "custom":
-                    yield f"data: {json.dumps(payload, ensure_ascii=False)}\n\n"
-                    continue
-                for node_name, delta in payload.items():
-                    for ev in (delta.get("events") or [])[seen:]:
-                        ev = {**ev, "node": node_name}
-                        yield f"data: {json.dumps(ev, ensure_ascii=False)}\n\n"
-                    if delta.get("events"):
-                        seen = len(delta["events"])
-                    if delta.get("final"):
-                        final = delta["final"]
-                    if delta.get("last_prompt"):
-                        last_prompt = delta["last_prompt"]
+            with request_deadline():
+                async for mode, payload in app.state.graph.astream(
+                        {"query": message, "thread_id": thread_id, "history": history,
+                         "events": [], "cost_usd": 0.0}, stream_mode=["updates", "custom"]):
+                    if mode == "custom":
+                        yield f"data: {json.dumps(payload, ensure_ascii=False)}\n\n"
+                        continue
+                    for node_name, delta in payload.items():
+                        for ev in (delta.get("events") or [])[seen:]:
+                            ev = {**ev, "node": node_name}
+                            yield f"data: {json.dumps(ev, ensure_ascii=False)}\n\n"
+                        if delta.get("events"):
+                            seen = len(delta["events"])
+                        if delta.get("final"):
+                            final = delta["final"]
+                        if delta.get("last_prompt"):
+                            last_prompt = delta["last_prompt"]
+            save_warning = _save_turn(deps, thread_id, message, final)
+            if save_warning:
+                yield sse({**save_warning, "node": "session"})
             yield sse({"type": "FinalAnswer", "ok": True, "reply": final, "prompt": last_prompt})
-            deps.session_store.append(thread_id, "user", message)
-            deps.session_store.append(thread_id, "assistant", final)
 
     return StreamingResponse(gen(), media_type="text/event-stream")
 

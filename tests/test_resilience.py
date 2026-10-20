@@ -200,3 +200,39 @@ def test_env_overrides_policy(monkeypatch):
     monkeypatch.setenv("LLM_MAX_TOKENS_JSON", "64")
     assert R.policy_for("write").timeout == 12
     assert R.max_tokens(json_output=True) == 64
+
+
+def test_request_deadline_caps_stage_budget(monkeypatch):
+    """단계 예산(write 90초)이 남아도 요청 deadline에서 멈춘다."""
+    monkeypatch.setenv("LLM_TIMEOUT_WRITE", "5")
+
+    def hang(timeout):
+        time.sleep(timeout)
+        raise httpx.ReadTimeout("hang", request=REQ)
+
+    started = time.monotonic()
+    with R.request_deadline(0.4):
+        with pytest.raises(R.ExternalCallError):
+            R.call_sync("write", hang)
+    assert time.monotonic() - started < 0.7
+
+
+def test_no_call_after_request_deadline_and_not_an_outage():
+    calls = []
+    with R.request_deadline(0.01):
+        time.sleep(0.05)
+        with pytest.raises(R.ExternalCallError) as info:
+            R.call_sync("route", lambda t: calls.append(t))
+    assert (info.value.error["kind"], calls) == ("deadline", [])
+    assert R.breaker_for("route").failures == 0   # 시간 초과는 서비스 장애가 아니다
+
+
+def test_request_deadline_reaches_worker_threads():
+    """동기 호출은 guard가 to_thread로 돌린다 — 그 스레드에서도 같은 deadline이 보여야 한다."""
+    async def scenario():
+        with R.request_deadline(5):
+            return await R.guard(R.request_time_left)
+
+    left = asyncio.run(scenario()).value
+    assert left is not None and 0 < left <= 5
+    assert R.request_time_left() is None   # 블록 밖에서는 deadline 없음
