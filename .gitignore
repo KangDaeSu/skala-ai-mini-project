@@ -1,0 +1,23 @@
+# 비밀 값 — 실제 API 키가 들어 있는 .env는 절대 커밋하지 않는다 (.env.example만 공유)
+.env
+.env.*
+!.env.example
+
+# Python 가상환경 / 캐시
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# 로컬 실행 산출물 (세션 DB, 로그, 배포용 zip)
+session.db
+*.db-journal
+*.log
+*.zip
+
+# OS / 에디터
+.DS_Store
+.idea/
+.vscode/
+.claude/settings.local.json
