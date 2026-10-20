@@ -28,12 +28,14 @@ def rule_route(query: str, known_systems: set[str]) -> dict:
     return {"route": "incident" if incident else "chat", "needs_analysis": False}
 
 
-def describe(exc: BaseException) -> str:
-    return f"{type(exc).__name__}: {str(exc)[:120]}"
+def describe(error: dict) -> str:
+    """resilience가 만든 구조화된 error → 사람이 읽는 한 줄 (예: "timeout, 3회 시도, 30.1초")."""
+    return f"{error['kind']}, {error['attempts']}회 시도, {error['elapsed_s']}초"
 
 
-def degraded_event(stage: str, reason: str) -> dict:
-    return {"type": "Degraded", "stage": stage, "reason": reason}
+def degraded_event(stage: str, reason: str, error: dict | None = None) -> dict:
+    """폴백 기록 1건 — error에는 실패 종류·재시도 가능 여부·시도 횟수가 구조화돼 남는다."""
+    return {"type": "Degraded", "stage": stage, "reason": reason, "error": error}
 
 
 def tag_current_run(stage: str, reason: str) -> None:
@@ -43,6 +45,15 @@ def tag_current_run(stage: str, reason: str) -> None:
     if rt is not None:
         rt.add_tags(["degraded", f"degraded:{stage}"])
         rt.add_metadata({"degraded_stage": stage, "degraded_reason": reason})
+
+
+DEFAULT_PROCEDURE = """다음 장애에 대해 표준 진단 절차를 수행하세요.
+
+## 진단 절차 (반드시 순서대로 수행)
+1. get_monitoring_status Tool로 관련 시스템의 현재 상태를 조회하세요.
+2. 증상에 해당하는 runbook을 확인하세요.
+3. 위 정보를 종합해 가능한 원인과 권장 조치를 제시하세요.
+"""   # MCP Prompt를 못 받았을 때 plan이 쓰는 기본 절차 (mcp_server.py의 prompt와 같은 내용)
 
 
 def tag_request_run(result: dict) -> None:

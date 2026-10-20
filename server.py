@@ -16,8 +16,8 @@ from dotenv import load_dotenv
 
 load_dotenv()   # LANGCHAIN_TRACING_V2 / API_KEY / PROJECT — import보다 먼저
 
-from fastapi import FastAPI
-from fastapi.responses import StreamingResponse
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse, StreamingResponse
 from langsmith import traceable
 from langsmith.run_helpers import get_current_run_tree
 from pydantic import BaseModel
@@ -28,6 +28,7 @@ from agent.fallback import tag_request_run
 from agent.graph import build_graph
 from agent.mcp_client import MCPClient
 from agent.rag import build_retriever
+from agent.resilience import ExternalCallError
 from agent.session_store import SqliteSessionStore
 from agent.supervisor_v1 import run_v1
 
@@ -93,6 +94,28 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
+def _error_body(error: dict) -> dict:
+    """모든 실패 응답의 공통 형태 — 클라이언트는 ok만 보고 성공/실패를 가른다."""
+    return {"ok": False, "reply": None, "error": error}
+
+
+def _internal_error(exc: BaseException) -> dict:
+    return {"stage": "server", "kind": "internal", "retryable": False,
+            "message": f"{type(exc).__name__}: {str(exc)[:300]}"}
+
+
+@app.exception_handler(ExternalCallError)
+async def _external_failure(request: Request, exc: ExternalCallError):
+    """그래프가 폴백하지 못한 외부 호출 실패 — 503 + 구조화된 원인 (재시도 가능 여부 포함)."""
+    return JSONResponse(status_code=503, content=_error_body(exc.error))
+
+
+@app.exception_handler(Exception)
+async def _unexpected_failure(request: Request, exc: Exception):
+    """예상 못 한 예외(버그 포함)도 구조 없는 'Internal Server Error' 대신 같은 형태로 내려준다."""
+    return JSONResponse(status_code=500, content=_error_body(_internal_error(exc)))
+
+
 @app.get("/health")
 async def health():
     return {"status": "ok", "instance_id": app.state.instance_id,
@@ -120,7 +143,7 @@ def _metadata(result: dict, run_id: str | None) -> dict:
         "parallel_elapsed": result.get("parallel_elapsed"),
         "validation_attempts": result.get("validation_attempts", 0),
         "cost_usd": result.get("cost_usd", 0.0),
-        "degraded_count": len(result.get("degraded", [])),   # LLM 실패로 폴백한 단계 수
+        "degraded_count": len(result.get("degraded", [])),   # 외부 호출 실패로 폴백한 단계 수
         "llm_backend": app.state.llm_backend,
         "supervisor_version": app.state.deps.version,
         "instance_id": app.state.instance_id,
@@ -148,8 +171,12 @@ async def _handle_chat(message: str, thread_id: str) -> tuple[dict, str | None]:
 @app.post("/chat")
 async def chat(req: ChatRequest):
     result, run_id = await _handle_chat(req.message, req.thread_id)
-    return {"reply": result["final"], "events": result.get("events", []),
-            "metadata": _metadata(result, run_id)}
+    degraded = result.get("degraded", [])
+    # ok=True: 답변이 나왔다. 일부 단계가 폴백했으면 degraded에 단계별 구조화된 원인이 담긴다
+    return {"ok": True, "reply": result["final"], "error": None,
+            "degraded": [{"stage": d["stage"], "reason": d["reason"], "error": d.get("error")}
+                         for d in degraded],
+            "events": result.get("events", []), "metadata": _metadata(result, run_id)}
 
 
 @app.get("/chat/stream")
@@ -161,7 +188,21 @@ async def chat_stream(message: str, thread_id: str = "default"):
     """
     deps = app.state.deps
 
+    def sse(payload: dict) -> str:
+        return f"data: {json.dumps(payload, ensure_ascii=False)}\n\n"
+
     async def gen():
+        # 스트리밍 도중의 예외는 HTTP 상태로 알릴 수 없다(헤더가 이미 나감) — baseline은 연결이
+        # 조용히 끊겼다. Error 이벤트로 구조화해 보내고 [DONE]으로 정상 종료한다.
+        try:
+            async for chunk in run():
+                yield chunk
+        except Exception as exc:
+            error = exc.error if isinstance(exc, ExternalCallError) else _internal_error(exc)
+            yield sse({"type": "Error", "ok": False, "error": error})
+        yield "data: [DONE]\n\n"
+
+    async def run():
         history = deps.session_store.load(thread_id)
         if deps.version != "v2":
             result = await run_v1(deps, message, thread_id, history)
@@ -191,10 +232,9 @@ async def chat_stream(message: str, thread_id: str = "default"):
                         final = delta["final"]
                     if delta.get("last_prompt"):
                         last_prompt = delta["last_prompt"]
-            yield f"data: {json.dumps({'type': 'FinalAnswer', 'reply': final, 'prompt': last_prompt}, ensure_ascii=False)}\n\n"
+            yield sse({"type": "FinalAnswer", "ok": True, "reply": final, "prompt": last_prompt})
             deps.session_store.append(thread_id, "user", message)
             deps.session_store.append(thread_id, "assistant", final)
-        yield "data: [DONE]\n\n"
 
     return StreamingResponse(gen(), media_type="text/event-stream")
 

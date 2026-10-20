@@ -166,6 +166,7 @@ createApp({
       const es = new EventSource(url);
       let streamItem = null;
       let streamAttempt = null;   // write_node 재작성(attempt 증가) 시 새 말풍선으로 끊는다
+      let finished = false;       // FinalAnswer 또는 Error를 받았는가 — 못 받고 끊기면 연결 오류로 표시
 
       es.onmessage = (event) => {
         if (event.data === '[DONE]') { es.close(); sending.value = false; return; }
@@ -183,7 +184,18 @@ createApp({
           return;
         }
 
+        if (e.type === 'Error') {   // 서버가 구조화해 보낸 실패 (stage·kind·retryable·message)
+          finished = true;
+          const err = e.error || {};
+          log.value.push({ id: nextId++, kind: 'agent',
+            text: `⚠ 처리 중 오류가 발생했습니다 (${err.stage} · ${err.kind})\n${err.message}`
+              + (err.retryable ? '\n일시적인 문제일 수 있으니 잠시 후 다시 시도해 주세요.' : '') });
+          scrollToBottom();
+          return;
+        }
+
         if (e.type === 'FinalAnswer') {
+          finished = true;
           if (!streamItem) {
             streamItem = reactive({ id: nextId++, kind: 'agent', text: '' });
             log.value.push(streamItem);
@@ -204,7 +216,13 @@ createApp({
         scrollToBottom();
       };
 
-      es.onerror = () => { es.close(); sending.value = false; };
+      es.onerror = () => {
+        es.close(); sending.value = false;
+        if (!finished) {   // baseline은 여기서 아무 표시 없이 끝났다 (306초 대기 후 빈 화면)
+          log.value.push({ id: nextId++, kind: 'agent', text: '⚠ 서버와의 연결이 끊겼습니다. 다시 시도해 주세요.' });
+          scrollToBottom();
+        }
+      };
     }
 
     return { backendLabel, log, input, sending, logEl, onSubmit };

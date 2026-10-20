@@ -180,7 +180,7 @@ def _markdown(meta: dict, overall: dict, by_cat: dict, per_item: dict) -> str:
              f"- 실행 시각: {meta['started_at']}  · 커밋: `{meta['git_rev']}`  · 반복: {meta['repeat']}회",
              f"- 모델: fast=`{meta['fast_llm']}`, quality=`{meta['quality_llm']}`"
              f" · runbook 선택: `{meta.get('runbook_classifier', 'keyword')}`",
-             *([f"- 장애 주입: `{meta['chaos_rates']}` (seed={meta['chaos_seed']})"]
+             *([f"- 장애 주입: `{meta['chaos_rates']}` · MCP `{meta.get('chaos_mcp_rate', 0)}` (seed={meta['chaos_seed']})"]
                if meta["mode"] == "chaos" else []), "",
              "## 전체", "", "| " + " | ".join(cols) + " |", "|" + "---|" * len(cols),
              "| " + " | ".join(str(overall[c]) for c in cols) + " |", "",
@@ -205,6 +205,8 @@ async def main() -> None:
     ap.add_argument("--mode", default="normal", choices=["normal", "chaos"])
     ap.add_argument("--chaos-rates", default="hang=0.15,error=0.10,badjson=0.10")
     ap.add_argument("--chaos-seed", type=int, default=42)
+    ap.add_argument("--chaos-mcp-rate", type=float, default=0.0,
+                    help="MCP 호출 장애 비율 (절반 응답 없음, 절반 연결 실패). 기본 0 = MCP 장애 없음")
     ap.add_argument("--out", default=str(ROOT / "output"))
     args = ap.parse_args()
 
@@ -241,7 +243,8 @@ async def main() -> None:
             "started_at": datetime.now().isoformat(timespec="seconds"),
             "runbook_classifier": f"rag({retriever.embedder.name})" if retriever else "keyword"}
     if args.mode == "chaos":
-        meta.update({"chaos_rates": args.chaos_rates, "chaos_seed": args.chaos_seed})
+        meta.update({"chaos_rates": args.chaos_rates, "chaos_seed": args.chaos_seed,
+                     "chaos_mcp_rate": args.chaos_mcp_rate})
     print(f"[eval] label={args.label} mode={args.mode} backend={backend} fast={fast_llm.name} "
           f"quality={quality_llm.name} rev={meta['git_rev']} items={len(dataset)} repeat={args.repeat} "
           f"runbook={meta['runbook_classifier']}")
@@ -258,8 +261,14 @@ async def main() -> None:
     if args.mode == "chaos":   # 워밍업이 끝난 뒤에만 설치 — 측정하는 턴에만 장애를 건다
         chaos.install({"api.openai.com", "127.0.0.1"}, chaos.parse_rates(args.chaos_rates),
                       args.chaos_seed)
-        print(f"[eval] 장애 주입 설치: {args.chaos_rates} seed={args.chaos_seed}")
+        if args.chaos_mcp_rate > 0:
+            chaos.wrap_mcp(mcp, args.chaos_mcp_rate)
+        print(f"[eval] 장애 주입 설치: {args.chaos_rates} mcp={args.chaos_mcp_rate} seed={args.chaos_seed}")
 
+    try:   # After 코드에만 있다
+        from agent.resilience import reset_breakers
+    except ImportError:
+        reset_breakers = None
     tag = datetime.now().strftime("%H%M%S")
     runs: list[dict] = []
     for rep in range(1, args.repeat + 1):
@@ -271,6 +280,10 @@ async def main() -> None:
                 for setup in item.get("setup", []):   # 다턴 시나리오의 앞선 턴 (측정 제외)
                     await _run_turn(graph, store, setup, thread_id)
                 CALLS.clear()
+                if reset_breakers is not None:
+                    # 장애 주입은 호출마다 독립적으로 걸린다 — 앞 쿼리의 연속 실패로 열린 서킷이
+                    # 다음 쿼리로 이어지면 쿼리별 비교가 흐려지므로 쿼리마다 초기화한다
+                    reset_breakers()
                 if args.mode == "chaos":
                     chaos.begin(item["id"], rep)
                 started = time.perf_counter()

@@ -10,6 +10,10 @@ agent/ 코드는 전혀 바꾸지 않는다. openai_llm.py·ollama_llm.py가 쓰
 - error   : 503 Service Unavailable
 - badjson : JSON 출력을 강제한 요청(route/plan)에 잘린 JSON을 돌려준다
             (JSON 모드가 아닌 요청에는 적용하지 않고 정상 통과)
+
+MCP 장애(wrap_mcp): MCP는 HTTP가 아니라 stdio라서 전송 계층 대신 MCPClient 메서드를 감싼다.
+- hang  : 응답하지 않는다 (graph의 asyncio.wait_for 타임아웃이 끊어야 한다)
+- error : 세션 연결 실패(ConnectionError)
 """
 import asyncio
 import hashlib
@@ -31,6 +35,8 @@ class _State:
     qid = ""
     rep = 0
     call_idx = 0
+    mcp_rate = 0.0
+    mcp_idx = 0
     injected: list[dict] = []
 
 
@@ -122,8 +128,42 @@ def install(hosts: set[str], rates: list[tuple[str, float]], seed: int) -> None:
 
 def begin(qid: str, rep: int) -> None:
     """측정할 쿼리 1건 시작 — 호출 순번을 0으로 되돌리고 장애 주입을 켠다."""
-    S.qid, S.rep, S.call_idx, S.injected = qid, rep, 0, []
+    S.qid, S.rep, S.call_idx, S.mcp_idx, S.injected = qid, rep, 0, 0, []
     S.enabled = True
+
+
+MCP_METHODS = ("find_prompt", "get_prompt", "call_tool", "find_resource_template", "read_resource")
+
+
+def _decide_mcp(method: str) -> str | None:
+    if not S.enabled or S.mcp_rate <= 0:
+        return None
+    k = S.mcp_idx
+    S.mcp_idx += 1
+    digest = hashlib.sha256(f"{S.seed}|mcp|{S.qid}|{S.rep}|{k}".encode()).digest()
+    u = int.from_bytes(digest[:8], "big") / 2 ** 64
+    if u >= S.mcp_rate:
+        return None
+    fault = "mcp_hang" if u < S.mcp_rate / 2 else "mcp_error"   # 절반은 응답 없음, 절반은 연결 실패
+    S.injected.append({"call": k, "fault": fault, "url": f"mcp:{method}"})
+    return fault
+
+
+def wrap_mcp(mcp, rate: float) -> None:
+    """MCPClient 인스턴스의 호출 메서드를 감싸 rate 비율로 장애를 낸다 (에이전트 코드 수정 없음)."""
+    S.mcp_rate = rate
+    for name in MCP_METHODS:
+        original = getattr(mcp, name)
+
+        async def wrapped(*args, _original=original, _name=name, **kwargs):
+            fault = _decide_mcp(_name)
+            if fault == "mcp_hang":
+                await asyncio.sleep(3600)   # 타임아웃이 끊지 않으면 영원히 기다린다
+            if fault == "mcp_error":
+                raise ConnectionError(f"chaos: MCP {_name} 연결 실패")
+            return await _original(*args, **kwargs)
+
+        setattr(mcp, name, wrapped)
 
 
 def end() -> list[dict]:

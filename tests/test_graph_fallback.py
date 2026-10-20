@@ -4,14 +4,13 @@
 """
 import asyncio
 
-import httpx
+import pytest
 
 from agent.deps import SupervisorDeps
 from agent.fake_llm import FastLLM, QualityLLM
-from agent.fallback import CHAT_FALLBACK, DEGRADED_NOTICE
+from agent.fallback import CHAT_FALLBACK, DEFAULT_PROCEDURE, DEGRADED_NOTICE
 from agent.graph import build_graph
-
-REQ = httpx.Request("POST", "http://llm.test")
+from agent.resilience import ExternalCallError
 
 
 class FakeMCP:
@@ -35,11 +34,12 @@ class FakeMCP:
 
 
 class DeadLLM:
-    """모든 호출이 타임아웃으로 실패하는 LLM — resilience가 포기한 뒤의 상황."""
+    """모든 호출이 실패하는 LLM — resilience가 재시도·예산을 다 쓰고 포기한 뒤의 상황."""
     name = "dead-llm"
 
     def _fail(self, *args, **kwargs):
-        raise httpx.ReadTimeout("simulated outage", request=REQ)
+        raise ExternalCallError({"stage": "llm", "kind": "timeout", "retryable": True,
+                                 "attempts": 3, "elapsed_s": 30.0, "message": "simulated outage"})
 
     route = plan = analyze = _fail
 
@@ -50,8 +50,25 @@ class DeadLLM:
         self._fail()
 
 
-def _run(fast, quality, query, history=None):
-    deps = SupervisorDeps(fast_llm=fast, quality_llm=quality, mcp=FakeMCP(),
+class DownMCP(FakeMCP):
+    """MCP 서버가 응답하지 않는다 — 모든 호출이 연결 실패 (resilience가 재시도 후 포기)."""
+
+    async def find_prompt(self, name):
+        raise ConnectionError("MCP 세션 없음")
+
+    async def call_tool(self, name, arguments, server="ops"):
+        raise ConnectionError("MCP 세션 없음")
+
+
+class BuggyLLM(DeadLLM):
+    """외부 장애가 아니라 우리 코드의 버그 — 폴백으로 숨기면 안 된다."""
+
+    def route(self, *args, **kwargs):
+        raise KeyError("route 결과 파싱 버그")
+
+
+def _run(fast, quality, query, history=None, mcp=None):
+    deps = SupervisorDeps(fast_llm=fast, quality_llm=quality, mcp=mcp or FakeMCP(),
                           session_store=None, version="v2")
     return asyncio.run(build_graph(deps).ainvoke(
         {"query": query, "thread_id": "t", "history": history or [], "events": [], "cost_usd": 0.0}))
@@ -94,3 +111,41 @@ def test_plan_targets_are_corrected_to_the_query():
                   "gateway-service에서 payments-service로 가는 요청 지연")
     assert _monitored(result) == ["gateway-service", "payments-service"]
     assert not result.get("degraded")
+
+
+def test_degraded_events_carry_structured_errors():
+    result = _run(DeadLLM(), DeadLLM(), "payments-service CPU가 급증했어요")
+    first = result["degraded"][0]
+    assert first["error"]["kind"] == "timeout" and first["error"]["retryable"] is True
+    assert first["error"]["attempts"] == 3
+
+
+def test_mcp_outage_does_not_take_down_the_request():
+    """MCP가 죽어도(prompt·monitoring 조회 실패) 예외 없이 "조회하지 못했다"는 안내로 끝난다."""
+    result = _run(FastLLM("fake", 0.0), QualityLLM("fake", 0.0),
+                  "payments-service CPU가 급증했어요", mcp=DownMCP())
+    stages = [d["stage"] for d in result["degraded"]]
+    assert stages.count("mcp") == 2                  # prompt 조회 + monitoring 조회
+    assert result["degraded"][0]["error"]["kind"] == "connection"
+    failed = [e for e in result["events"] if e["type"] == "TaskFailed"]
+    assert [e["target"] for e in failed] == ["payments-service"]
+    assert "payments-service 모니터링 상태를 조회하지 못했습니다" in result["final"]
+    assert "CPU 91" not in result["final"]           # 조회 못 한 수치를 지어내지 않는다
+
+
+def test_mcp_prompt_failure_falls_back_to_default_procedure():
+    class PromptDown(FakeMCP):
+        async def find_prompt(self, name):
+            raise ConnectionError("MCP 세션 없음")
+
+    result = _run(FastLLM("fake", 0.0), QualityLLM("fake", 0.0),
+                  "payments-service CPU가 급증했어요", mcp=PromptDown())
+    assert [d["stage"] for d in result["degraded"]] == ["mcp"]
+    assert "기본 절차" in result["degraded"][0]["reason"]
+    assert any(e["type"] == "TaskCompleted" for e in result["events"])   # 나머지는 정상 진행
+    assert DEFAULT_PROCEDURE.splitlines()[0] in DEFAULT_PROCEDURE
+
+
+def test_bugs_are_not_hidden_behind_fallbacks():
+    with pytest.raises(KeyError):
+        _run(BuggyLLM(), DeadLLM(), "payments-service CPU가 급증했어요")
