@@ -125,6 +125,8 @@ const STEP_LABELS = {
   Validation: e => e.verdict === '합격' ? '검수 통과' : '검수 반려 → 다시 작성',
   Finalize: () => '최종 답변 완성',
   Degraded: e => `⚠ ${e.stage} 단계 대체 동작: ${e.reason}`,
+  TargetsCorrected: e => (e.unmonitored?.length ? `모니터링 대상 아님: ${e.unmonitored.join(', ')} · ` : '')
+      + `조사 대상 보정: ${e.final.length ? e.final.join(', ') : '없음'}`,
 };
 
 createApp({

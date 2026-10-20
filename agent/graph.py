@@ -9,10 +9,8 @@ incident: plan(MCP Prompt 절차 반영) → gate(권위 게이트) → research
 각 노드는 @traceable로 LangSmith에 계층 트리로 기록된다.
 """
 import asyncio
-import json
 import time
 from functools import partial
-from pathlib import Path
 from typing import Any, TypedDict
 
 from langgraph.config import get_stream_writer
@@ -23,30 +21,8 @@ from .deps import SupervisorDeps
 from .fallback import (CHAT_FALLBACK, degraded_event, describe, rule_route,
                        tag_current_run, template_answer)
 from .retry import with_retry
+from .systems import KNOWN_SYSTEMS, no_data_answer, notices_for, prompt_label, resolve_targets
 
-
-def _load_known_systems() -> set[str]:
-    """ollama_llm.py/openai_llm.py와 동일한 소스(data/monitoring.json)에서
-    시스템 목록을 읽는다 — plan_node가 MCP Prompt에 넘길 system_name을
-    쿼리에서 멤버십 매칭으로 뽑아낼 때 쓴다."""
-    path = Path(__file__).resolve().parent.parent / "data" / "monitoring.json"
-    try:
-        return set(json.loads(path.read_text()).keys())
-    except (OSError, json.JSONDecodeError):
-        return {"auth-service", "web-01"}
-
-
-KNOWN_SYSTEMS = _load_known_systems()
-
-
-def _extract_system_name(query: str) -> str:
-    """정규식 대신 실제 KNOWN_SYSTEMS 멤버십 매칭 — MCP Prompt(incident_analysis_
-    prompt)의 system_name은 "시스템: X" 한 줄짜리 컨텍스트라 항상 정해진 이름
-    중 하나로만 고정한다(여러 개 언급돼도 join하지 않음 — 실제 조사 대상 목록은
-    이후 plan()의 tasks가 별도로 결정). 쿼리에서 가장 먼저 등장하는 시스템을
-    고르고, 하나도 안 걸리면 가장 흔한 사례인 auth-service로 폴백."""
-    matches = [(query.index(s), s) for s in KNOWN_SYSTEMS if s in query]
-    return min(matches)[1] if matches else "auth-service"
 
 
 class AgentState(TypedDict, total=False):
@@ -85,12 +61,13 @@ def _degrade(state: AgentState, update: dict, stage: str, reason: str) -> dict:
 
 
 def _rule_plan(query: str) -> dict:
-    """plan 폴백 — 쿼리에 등장한 알려진 시스템을 등장 순서대로 조사한다."""
-    found = sorted((query.index(s), s) for s in KNOWN_SYSTEMS if s in query)
-    targets = [s for _, s in found] or ["auth-service"]
-    return {"needs_analysis": False,
-            "tasks": [{"id": f"task-{i}", "agent": "research", "kind": "monitoring",
-                       "target": t, "status": "pending"} for i, t in enumerate(targets)]}
+    """plan 폴백 — 조사 대상은 아래 plan_node의 resolve_targets 보정이 정한다."""
+    return {"needs_analysis": False, "tasks": []}
+
+
+def _research_tasks(targets: list[str]) -> list[dict]:
+    return [{"id": f"task-{i}", "agent": "research", "kind": "monitoring",
+             "target": t, "status": "pending"} for i, t in enumerate(targets)]
 
 
 @traceable(name="route_node")
@@ -140,7 +117,7 @@ async def plan_node(state: AgentState, deps: SupervisorDeps) -> dict:
     prompt_server = await deps.mcp.find_prompt("incident_analysis_prompt")
     procedure = await deps.mcp.get_prompt(
         "incident_analysis_prompt",
-        {"system_name": _extract_system_name(state["query"]), "symptom": state["query"]},
+        {"system_name": prompt_label(state["query"]), "symptom": state["query"]},
         server=prompt_server,
     )
     try:
@@ -149,12 +126,20 @@ async def plan_node(state: AgentState, deps: SupervisorDeps) -> dict:
     except Exception as exc:
         result, usage = _rule_plan(state["query"]), {"usd": 0.0}
         reason = f"LLM 호출 실패({describe(exc)}) → 쿼리의 시스템으로 계획"
-    targets = [t["target"] for t in result["tasks"]
-               if t["agent"] == "research" and t.get("target")]
-    event = {"type": "PlanCreated", "task_count": len(result["tasks"]),
-             "targets": targets}
-    update = {"tasks": result["tasks"], "needs_analysis": result["needs_analysis"],
-              "cost_usd": _cost(state, usage), "events": state["events"] + [event]}
+    # 조사 대상 보정 — 쿼리에 명시된 시스템이 우선, 모니터링 밖 시스템은 조사하지 않는다
+    model_targets = [t["target"] for t in result["tasks"]
+                     if t["agent"] == "research" and t.get("target")]
+    targets, unmonitored = resolve_targets(state["query"], model_targets)
+    tasks = _research_tasks(targets) + [t for t in result["tasks"] if t["agent"] != "research"]
+    events = list(state["events"])
+    if targets != model_targets or unmonitored:
+        events.append({"type": "TargetsCorrected", "model": model_targets,
+                       "final": targets, "unmonitored": unmonitored})
+    events.append({"type": "PlanCreated", "task_count": len(tasks), "targets": targets})
+    notices = [{"source": "notice", "data": n} for n in notices_for(targets, unmonitored)]
+    update = {"tasks": tasks, "needs_analysis": result["needs_analysis"],
+              "collected": state.get("collected", []) + notices,
+              "cost_usd": _cost(state, usage), "events": events}
     return _degrade(state, update, "plan", reason) if reason else update
 
 
@@ -256,8 +241,11 @@ def _classify_incident_type(collected: list[dict]) -> str:
 async def replan_check_node(state: AgentState, deps: SupervisorDeps) -> dict:
     """Wave 7 — 1차 수집 결과 평가. runbook이 없으면 gap task만 추가해 재조사."""
     has_runbook = any(c["source"] == "runbook" for c in state.get("collected", []))
+    has_monitoring = any(c["source"] == "monitoring" for c in state.get("collected", []))
     rounds = state.get("replan_rounds", 0)
-    if has_runbook or rounds >= 1:
+    # 모니터링 데이터가 없으면(대상이 모니터링 밖이거나 특정 불가) 증상 근거가 없으므로
+    # runbook을 추측하지 않는다 — baseline은 이때 db-down으로 폴백해 엉뚱한 절차를 안내했다
+    if has_runbook or rounds >= 1 or not has_monitoring:
         verdict = {"type": "ReplanCheck", "round": rounds, "is_sufficient": True}
         return {"events": state["events"] + [verdict]}
     incident_type = _classify_incident_type(state.get("collected", []))
@@ -279,6 +267,11 @@ async def analysis_node(state: AgentState, deps: SupervisorDeps) -> dict:
     if not pending:
         return {"events": state["events"] +
                 [{"type": "AnalysisSkipped", "reason": "analysis task 0개"}]}
+    if not any(c["source"] == "monitoring" for c in state.get("collected", [])):
+        # 비교할 모니터링 데이터가 없으면 분석하지 않는다 ("특이 패턴 없음"이 답변에 섞이던 문제)
+        return {"tasks": [{**t, "status": "done"} if t["agent"] == "analysis" else t for t in tasks],
+                "events": state["events"] +
+                [{"type": "AnalysisSkipped", "reason": "모니터링 데이터 없음"}]}
     new_tasks = [dict(t) for t in tasks]
     for t in new_tasks:
         if t["agent"] == "analysis" and t["status"] == "pending":
@@ -304,6 +297,14 @@ async def write_node(state: AgentState, deps: SupervisorDeps) -> dict:
     그대로 노출)."""
     attempt = state.get("validation_attempts", 0) + 1
     writer = get_stream_writer()
+    collected = state.get("collected", [])
+    if not any(c["source"] == "monitoring" for c in collected):
+        # 조사한 시스템이 없으면(모니터링 대상 아님 / 대상 특정 불가) LLM 없이 안내 답변
+        draft = no_data_answer([c["data"] for c in collected if c["source"] == "notice"]
+                               or notices_for([], []))
+        writer({"type": "AnswerToken", "attempt": attempt, "delta": draft})
+        return {"draft": draft, "events": state["events"] + [
+            {"type": "DraftWritten", "attempt": attempt, "length": len(draft), "llm": False}]}
     reason = None
     try:
         draft, usage = await deps.quality_llm.write(
