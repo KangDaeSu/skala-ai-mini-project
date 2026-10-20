@@ -40,8 +40,8 @@ baseline을 Ollama(qwen3:0.6b / 8b)로 회귀 쿼리 10개에 돌린 결과(2026
 | 0 | 평가 스크립트 + 데이터셋 + 장애 주입기, Before 측정 | `eval/run_eval.py`, `eval/dataset.json`, `eval/chaos.py` | Before (OpenAI, 정상·장애 주입) | 완료 |
 | 1 | `agent/resilience.py` — 단계별 타임아웃·재시도·전체 시간 예산, Ollama `think:false`·`num_predict` | `resilience.py`, `openai_llm.py`, `ollama_llm.py` | 최대 지연 | 완료 |
 | 2 | 실패 시 폴백(route/plan/analyze/write) + `Degraded` 이벤트 + LangSmith 태그 | 각 어댑터 / `graph.py` | 성공률, 폴백 수 | 완료 |
-| 3 | `agent/systems.py` — 중복 함수 통합, 모르는 시스템은 "미확인", 누락 시스템 보충 | `systems.py`, `graph.py`, 어댑터 | 대상 정확도 | |
-| 4 | 장애 주입 단위 테스트 (가짜 deps 주입) | `tests/` | pytest | |
+| 3 | `agent/systems.py` — 중복 함수 통합, 모르는 시스템은 "미확인", 누락 시스템 보충 | `systems.py`, `graph.py`, 어댑터 | 대상 정확도 | 완료 |
+| 4 | 장애 주입 단위 테스트 (가짜 deps 주입) | `tests/` | pytest | 완료 |
 | 5 | (선택) MCP 방어선 **또는** RAG runbook 선택 | — | — | 미정 |
 | 6 | OpenAI 최종 측정 (After), Before와 비교표 | `eval/compare.py` | After | |
 | 7 | 루트 README, 결과 보고서, 발표 자료 | `README.md` | — | |
