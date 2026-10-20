@@ -72,9 +72,15 @@ graph.py   route_node()
 | 503 (error) | OpenAI 형식의 503 응답을 그 자리에서 만들어 반환 | `raise_for_status()`에서 `HTTPStatusError` |
 | 깨진 JSON (badjson) | 200 응답이지만 내용이 `{"route": "inci`처럼 잘림 (JSON 출력을 강제한 route·plan 요청에만) | `json.loads()` 실패 |
 
+### MCP 장애 (`--chaos-mcp-rate`)
+
+MCP는 HTTP가 아니라 stdio라서 전송 계층 대신 `MCPClient` 메서드(find_prompt·get_prompt·call_tool·
+find_resource_template·read_resource)를 감싼다. 비율의 절반은 응답 없음(타임아웃이 끊어야 함),
+절반은 연결 실패(ConnectionError). 기본값 0 — Before/After 비교 측정은 MCP 장애 없이 했다.
+
 ### 장애를 걸지 않는 범위
 
-- MCP 호출(모니터링 조회·runbook) — HTTP가 아니라 stdio 통신
+- MCP 호출 — `--chaos-mcp-rate`를 주지 않으면
 - LangSmith 전송 — 대상 호스트를 OpenAI(`api.openai.com`)와 로컬 Ollama(`127.0.0.1`)로 한정
 - 워밍업 요청, 다턴 시나리오의 앞선 턴(r10의 "제 이름은 민수입니다") — 측정하는 턴에만 건다
 
