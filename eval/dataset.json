@@ -1,59 +1,250 @@
 [
-  {"id": "r1", "category": "regression",
-   "query": "payments-service 결제 응답이 느려지고 CPU가 치솟았어요, 원인 확인해주세요",
-   "expect_route": "incident", "expect_targets": ["payments-service"], "expect_runbook": ["cpu-spike"]},
-  {"id": "r2", "category": "regression",
-   "query": "cache-service 메모리 사용률이 계속 올라가고 있어요",
-   "expect_route": "incident", "expect_targets": ["cache-service"], "expect_runbook": ["memory-leak"]},
-  {"id": "r3", "category": "regression",
-   "query": "log-service 디스크 공간이 부족하다는 알림이 왔어요",
-   "expect_route": "incident", "expect_targets": ["log-service"], "expect_runbook": ["disk-full"]},
-  {"id": "r4", "category": "regression",
-   "query": "gateway-service에서 payments-service로 가는 요청이 타임아웃 나고 있어요",
-   "expect_route": "incident", "expect_targets": ["gateway-service", "payments-service"],
-   "expect_runbook": ["network-timeout"]},
-  {"id": "r5", "category": "regression",
-   "query": "web-01 CPU 급증, auth-service 커넥션 풀도 같이 확인해줘",
-   "expect_route": "incident", "expect_targets": ["web-01", "auth-service"],
-   "expect_runbook": ["cpu-spike", "high-latency"]},
-  {"id": "r6", "category": "regression",
-   "query": "payments-service랑 cache-service 둘 다 저하됐는데 공통 원인이 있는지 분석해줘",
-   "expect_route": "incident", "expect_targets": ["payments-service", "cache-service"],
-   "expect_runbook": ["cpu-spike", "memory-leak"]},
-  {"id": "r7", "category": "regression",
-   "query": "로그인 응답이 느려요, 원인 확인해주세요",
-   "expect_route": "incident", "expect_targets": ["auth-service"], "expect_runbook": ["high-latency"]},
-  {"id": "r8", "category": "unknown-system",
-   "query": "billing-service 응답이 느려요",
-   "expect_route": "incident", "expect_targets": [], "expect_runbook": null,
-   "note": "모니터링 목록에 없는 시스템 — 엉뚱한 시스템(auth-service)을 조사하지 않아야 정답"},
-  {"id": "r9", "category": "chat",
-   "query": "안녕, 너는 누구야?",
-   "expect_route": "chat", "expect_targets": null, "expect_runbook": null},
-  {"id": "r10", "category": "chat",
-   "setup": ["제 이름은 민수입니다"],
-   "query": "제 이름이 뭐였죠?",
-   "expect_route": "chat", "expect_targets": null, "expect_runbook": null,
-   "expect_reply_contains": ["민수"]},
-  {"id": "s1", "category": "unknown-system",
-   "query": "order-service 주문 API가 계속 실패해요",
-   "expect_route": "incident", "expect_targets": [], "expect_runbook": null},
-  {"id": "s2", "category": "unknown-system",
-   "query": "inventory-service 디스크가 꽉 찼다는 알림이 왔어요",
-   "expect_route": "incident", "expect_targets": [], "expect_runbook": null},
-  {"id": "s3", "category": "multi-system",
-   "query": "auth-service, payments-service, cache-service 전부 느려졌어요",
-   "expect_route": "incident", "expect_targets": ["auth-service", "payments-service", "cache-service"],
-   "expect_runbook": ["high-latency", "cpu-spike", "memory-leak"]},
-  {"id": "s4", "category": "multi-system",
-   "query": "gateway-service 타임아웃이랑 log-service 디스크 경고가 동시에 떴어요",
-   "expect_route": "incident", "expect_targets": ["gateway-service", "log-service"],
-   "expect_runbook": ["network-timeout", "disk-full"]},
-  {"id": "s5", "category": "single-system",
-   "query": "cache-service 힙 메모리가 한계에 가까워요",
-   "expect_route": "incident", "expect_targets": ["cache-service"], "expect_runbook": ["memory-leak"]},
-  {"id": "s6", "category": "no-system",
-   "query": "전체적으로 서비스가 느려요, 원인 좀 봐줘",
-   "expect_route": "incident", "expect_targets": null, "expect_runbook": null,
-   "note": "기대 대상이 모호해 대상 정확도는 채점하지 않고 기록만 한다"}
+ {
+  "id": "r1",
+  "category": "regression",
+  "query": "payments-service 결제 응답이 느려지고 CPU가 치솟았어요, 원인 확인해주세요",
+  "expect_route": "incident",
+  "expect_targets": [
+   "payments-service"
+  ],
+  "expect_runbook": [
+   "cpu-spike"
+  ]
+ },
+ {
+  "id": "r2",
+  "category": "regression",
+  "query": "cache-service 메모리 사용률이 계속 올라가고 있어요",
+  "expect_route": "incident",
+  "expect_targets": [
+   "cache-service"
+  ],
+  "expect_runbook": [
+   "memory-leak"
+  ]
+ },
+ {
+  "id": "r3",
+  "category": "regression",
+  "query": "log-service 디스크 공간이 부족하다는 알림이 왔어요",
+  "expect_route": "incident",
+  "expect_targets": [
+   "log-service"
+  ],
+  "expect_runbook": [
+   "disk-full"
+  ]
+ },
+ {
+  "id": "r4",
+  "category": "regression",
+  "query": "gateway-service에서 payments-service로 가는 요청이 타임아웃 나고 있어요",
+  "expect_route": "incident",
+  "expect_targets": [
+   "gateway-service",
+   "payments-service"
+  ],
+  "expect_runbook": [
+   "network-timeout"
+  ]
+ },
+ {
+  "id": "r5",
+  "category": "regression",
+  "query": "web-01 CPU 급증, auth-service 커넥션 풀도 같이 확인해줘",
+  "expect_route": "incident",
+  "expect_targets": [
+   "web-01",
+   "auth-service"
+  ],
+  "expect_runbook": [
+   "cpu-spike",
+   "high-latency"
+  ]
+ },
+ {
+  "id": "r6",
+  "category": "regression",
+  "query": "payments-service랑 cache-service 둘 다 저하됐는데 공통 원인이 있는지 분석해줘",
+  "expect_route": "incident",
+  "expect_targets": [
+   "payments-service",
+   "cache-service"
+  ],
+  "expect_runbook": [
+   "cpu-spike",
+   "memory-leak"
+  ]
+ },
+ {
+  "id": "r7",
+  "category": "regression",
+  "query": "로그인 응답이 느려요, 원인 확인해주세요",
+  "expect_route": "incident",
+  "expect_targets": [
+   "auth-service"
+  ],
+  "expect_runbook": [
+   "high-latency"
+  ]
+ },
+ {
+  "id": "r8",
+  "category": "unknown-system",
+  "query": "billing-service 응답이 느려요",
+  "expect_route": "incident",
+  "expect_targets": [],
+  "expect_runbook": null,
+  "note": "모니터링 목록에 없는 시스템 — 엉뚱한 시스템(auth-service)을 조사하지 않아야 정답"
+ },
+ {
+  "id": "r9",
+  "category": "chat",
+  "query": "안녕, 너는 누구야?",
+  "expect_route": "chat",
+  "expect_targets": null,
+  "expect_runbook": null
+ },
+ {
+  "id": "r10",
+  "category": "chat",
+  "setup": [
+   "제 이름은 민수입니다"
+  ],
+  "query": "제 이름이 뭐였죠?",
+  "expect_route": "chat",
+  "expect_targets": null,
+  "expect_runbook": null,
+  "expect_reply_contains": [
+   "민수"
+  ]
+ },
+ {
+  "id": "s1",
+  "category": "unknown-system",
+  "query": "order-service 주문 API가 계속 실패해요",
+  "expect_route": "incident",
+  "expect_targets": [],
+  "expect_runbook": null
+ },
+ {
+  "id": "s2",
+  "category": "unknown-system",
+  "query": "inventory-service 디스크가 꽉 찼다는 알림이 왔어요",
+  "expect_route": "incident",
+  "expect_targets": [],
+  "expect_runbook": null
+ },
+ {
+  "id": "s3",
+  "category": "multi-system",
+  "query": "auth-service, payments-service, cache-service 전부 느려졌어요",
+  "expect_route": "incident",
+  "expect_targets": [
+   "auth-service",
+   "payments-service",
+   "cache-service"
+  ],
+  "expect_runbook": [
+   "high-latency",
+   "cpu-spike",
+   "memory-leak"
+  ]
+ },
+ {
+  "id": "s4",
+  "category": "multi-system",
+  "query": "gateway-service 타임아웃이랑 log-service 디스크 경고가 동시에 떴어요",
+  "expect_route": "incident",
+  "expect_targets": [
+   "gateway-service",
+   "log-service"
+  ],
+  "expect_runbook": [
+   "network-timeout",
+   "disk-full"
+  ]
+ },
+ {
+  "id": "s5",
+  "category": "single-system",
+  "query": "cache-service 힙 메모리가 한계에 가까워요",
+  "expect_route": "incident",
+  "expect_targets": [
+   "cache-service"
+  ],
+  "expect_runbook": [
+   "memory-leak"
+  ]
+ },
+ {
+  "id": "s6",
+  "category": "no-system",
+  "query": "전체적으로 서비스가 느려요, 원인 좀 봐줘",
+  "expect_route": "incident",
+  "expect_targets": null,
+  "expect_runbook": null,
+  "note": "기대 대상이 모호해 대상 정확도는 채점하지 않고 기록만 한다"
+ },
+ {
+  "id": "b1",
+  "category": "runbook",
+  "query": "web-01 CPU 급증 원인 진단해줘",
+  "expect_route": "incident",
+  "expect_targets": [
+   "web-01"
+  ],
+  "expect_runbook": [
+   "cpu-spike"
+  ],
+  "note": "사용자가 말한 증상과 모니터링 alert가 엇갈리는 runbook 선택 케이스 (5단계 RAG 추가 시 보강)"
+ },
+ {
+  "id": "b2",
+  "category": "runbook",
+  "query": "web-01 메모리 사용량이 계속 늘어나요, 누수 같아요",
+  "expect_route": "incident",
+  "expect_targets": [
+   "web-01"
+  ],
+  "expect_runbook": [
+   "memory-leak"
+  ]
+ },
+ {
+  "id": "b3",
+  "category": "runbook",
+  "query": "payments-service DB 연결이 끊기고 리플리케이션이 멈췄어요",
+  "expect_route": "incident",
+  "expect_targets": [
+   "payments-service"
+  ],
+  "expect_runbook": [
+   "db-down"
+  ]
+ },
+ {
+  "id": "b4",
+  "category": "runbook",
+  "query": "gateway-service에서 504 타임아웃이 계속 나요",
+  "expect_route": "incident",
+  "expect_targets": [
+   "gateway-service"
+  ],
+  "expect_runbook": [
+   "network-timeout"
+  ]
+ },
+ {
+  "id": "b5",
+  "category": "runbook",
+  "query": "auth-service 디스크가 꽉 찼다는 알림이 왔어요",
+  "expect_route": "incident",
+  "expect_targets": [
+   "auth-service"
+  ],
+  "expect_runbook": [
+   "disk-full"
+  ]
+ }
 ]

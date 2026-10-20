@@ -248,13 +248,24 @@ async def replan_check_node(state: AgentState, deps: SupervisorDeps) -> dict:
     if has_runbook or rounds >= 1 or not has_monitoring:
         verdict = {"type": "ReplanCheck", "round": rounds, "is_sufficient": True}
         return {"events": state["events"] + [verdict]}
-    incident_type = _classify_incident_type(state.get("collected", []))
+    collected = state.get("collected", [])
+    incident_type, detail, update = None, {"classifier": "keyword"}, {}
+    if deps.retriever is not None:   # RAG — 질의 + 수집된 alert의 임베딩 유사도로 runbook 선택
+        try:
+            found = deps.retriever.classify(state["query"], collected)
+            incident_type = found["incident_type"]
+            detail = {"classifier": "rag", **{k: found[k] for k in
+                                              ("score", "margin", "ranking", "embed_tokens")}}
+        except Exception as exc:     # 임베딩 실패 시 baseline 키워드 규칙으로 폴백
+            update = _degrade(state, {}, "rag", f"임베딩 실패({describe(exc)}) → 키워드 규칙")
+    if incident_type is None:
+        incident_type = _classify_incident_type(collected)
     gap_task = {"id": "task-gap-runbook", "agent": "research", "kind": "runbook",
                 "target": incident_type, "status": "pending"}
     verdict = {"type": "ReplanCheck", "round": rounds, "is_sufficient": False,
-               "gap_task": gap_task["id"], "target": incident_type}
-    return {"tasks": state["tasks"] + [gap_task], "replan_rounds": rounds + 1,
-            "events": state["events"] + [verdict]}
+               "gap_task": gap_task["id"], "target": incident_type, **detail}
+    return {**update, "tasks": state["tasks"] + [gap_task], "replan_rounds": rounds + 1,
+            "events": update.get("events", state["events"]) + [verdict]}
 
 
 @traceable(name="analysis_node")

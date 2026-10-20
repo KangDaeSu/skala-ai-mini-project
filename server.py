@@ -27,6 +27,7 @@ from agent.fake_llm import FastLLM, QualityLLM
 from agent.fallback import tag_request_run
 from agent.graph import build_graph
 from agent.mcp_client import MCPClient
+from agent.rag import build_retriever
 from agent.session_store import SqliteSessionStore
 from agent.supervisor_v1 import run_v1
 
@@ -74,6 +75,7 @@ async def lifespan(app: FastAPI):
         mcp=mcp,
         session_store=SqliteSessionStore(),
         version=os.environ.get("SUPERVISOR_VERSION", "v2"),
+        retriever=build_retriever(backend),   # runbook 인덱스는 기동 시 1회만 임베딩
     )
     app.state.deps = deps
     app.state.graph = build_graph(deps) if deps.version == "v2" else None
@@ -98,7 +100,9 @@ async def health():
             "supervisor_version": app.state.deps.version,
             "llm_backend": app.state.llm_backend,
             "fast_llm": app.state.deps.fast_llm.name,
-            "quality_llm": app.state.deps.quality_llm.name}
+            "quality_llm": app.state.deps.quality_llm.name,
+            "runbook_classifier": (f"rag({app.state.deps.retriever.embedder.name})"
+                                   if app.state.deps.retriever else "keyword")}
 
 
 @app.get("/version")

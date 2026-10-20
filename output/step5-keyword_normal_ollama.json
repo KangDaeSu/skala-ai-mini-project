@@ -1,0 +1,1999 @@
+{
+ "meta": {
+  "label": "step5-keyword",
+  "mode": "normal",
+  "backend": "ollama",
+  "repeat": 1,
+  "fast_llm": "ollama:qwen3:0.6b",
+  "quality_llm": "ollama:qwen3:8b",
+  "git_rev": "4a2d422",
+  "started_at": "2026-10-20T15:09:01",
+  "runbook_classifier": "keyword"
+ },
+ "overall": {
+  "degraded_runs": 0,
+  "full_success": "21/21 (100%)",
+  "faults_injected": 0,
+  "faulted_runs": 0,
+  "success_when_faulted": "-",
+  "latency_max_all": 19.1,
+  "runs": 21,
+  "success": "21/21 (100%)",
+  "route_acc": "21/21 (100%)",
+  "target_acc": "17/18 (94%)",
+  "runbook_acc": "9/15 (60%)",
+  "reply_acc": "1/1 (100%)",
+  "latency_p50": 13.36,
+  "latency_p95": 18.6,
+  "latency_max": 19.1,
+  "avg_llm_calls": 3.43,
+  "avg_tokens": 1096.0,
+  "total_tokens": 23017,
+  "retries": 0,
+  "avg_validation_attempts": 0.9
+ },
+ "by_category": {
+  "regression": {
+   "degraded_runs": 0,
+   "full_success": "7/7 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 18.6,
+   "runs": 7,
+   "success": "7/7 (100%)",
+   "route_acc": "7/7 (100%)",
+   "target_acc": "6/7 (86%)",
+   "runbook_acc": "5/7 (71%)",
+   "reply_acc": "-",
+   "latency_p50": 15.29,
+   "latency_p95": 18.17,
+   "latency_max": 18.6,
+   "avg_llm_calls": 3.71,
+   "avg_tokens": 1263,
+   "total_tokens": 8841,
+   "retries": 0,
+   "avg_validation_attempts": 1
+  },
+  "unknown-system": {
+   "degraded_runs": 0,
+   "full_success": "3/3 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 1.12,
+   "runs": 3,
+   "success": "3/3 (100%)",
+   "route_acc": "3/3 (100%)",
+   "target_acc": "3/3 (100%)",
+   "runbook_acc": "-",
+   "reply_acc": "-",
+   "latency_p50": 1.1,
+   "latency_p95": 1.12,
+   "latency_max": 1.12,
+   "avg_llm_calls": 2,
+   "avg_tokens": 513,
+   "total_tokens": 1539,
+   "retries": 0,
+   "avg_validation_attempts": 1
+  },
+  "chat": {
+   "degraded_runs": 0,
+   "full_success": "2/2 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 0.33,
+   "runs": 2,
+   "success": "2/2 (100%)",
+   "route_acc": "2/2 (100%)",
+   "target_acc": "-",
+   "runbook_acc": "-",
+   "reply_acc": "1/1 (100%)",
+   "latency_p50": 0.31,
+   "latency_p95": 0.33,
+   "latency_max": 0.33,
+   "avg_llm_calls": 2,
+   "avg_tokens": 286,
+   "total_tokens": 572,
+   "retries": 0,
+   "avg_validation_attempts": 0
+  },
+  "multi-system": {
+   "degraded_runs": 0,
+   "full_success": "2/2 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 16.73,
+   "runs": 2,
+   "success": "2/2 (100%)",
+   "route_acc": "2/2 (100%)",
+   "target_acc": "2/2 (100%)",
+   "runbook_acc": "2/2 (100%)",
+   "reply_acc": "-",
+   "latency_p50": 14.73,
+   "latency_p95": 16.53,
+   "latency_max": 16.73,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1486,
+   "total_tokens": 2972,
+   "retries": 0,
+   "avg_validation_attempts": 1
+  },
+  "single-system": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 19.1,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "1/1 (100%)",
+   "reply_acc": "-",
+   "latency_p50": 19.1,
+   "latency_p95": 19.1,
+   "latency_max": 19.1,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1395,
+   "total_tokens": 1395,
+   "retries": 0,
+   "avg_validation_attempts": 1
+  },
+  "no-system": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 16.76,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "-",
+   "runbook_acc": "-",
+   "reply_acc": "-",
+   "latency_p50": 16.76,
+   "latency_p95": 16.76,
+   "latency_max": 16.76,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1348,
+   "total_tokens": 1348,
+   "retries": 0,
+   "avg_validation_attempts": 1
+  },
+  "runbook": {
+   "degraded_runs": 0,
+   "full_success": "5/5 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 13.96,
+   "runs": 5,
+   "success": "5/5 (100%)",
+   "route_acc": "5/5 (100%)",
+   "target_acc": "5/5 (100%)",
+   "runbook_acc": "1/5 (20%)",
+   "reply_acc": "-",
+   "latency_p50": 13.36,
+   "latency_p95": 13.93,
+   "latency_max": 13.96,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1270,
+   "total_tokens": 6350,
+   "retries": 0,
+   "avg_validation_attempts": 1
+  }
+ },
+ "per_item": {
+  "r1": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 15.29,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "1/1 (100%)",
+   "reply_acc": "-",
+   "latency_p50": 15.29,
+   "latency_p95": 15.29,
+   "latency_max": 15.29,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1301,
+   "total_tokens": 1301,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [
+    "payments-service"
+   ],
+   "last_runbooks": [
+    "cpu-spike"
+   ],
+   "fault_names": []
+  },
+  "r2": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 16.34,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "1/1 (100%)",
+   "reply_acc": "-",
+   "latency_p50": 16.34,
+   "latency_p95": 16.34,
+   "latency_max": 16.34,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1362,
+   "total_tokens": 1362,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [
+    "cache-service"
+   ],
+   "last_runbooks": [
+    "memory-leak"
+   ],
+   "fault_names": []
+  },
+  "r3": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 11.04,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "1/1 (100%)",
+   "reply_acc": "-",
+   "latency_p50": 11.04,
+   "latency_p95": 11.04,
+   "latency_max": 11.04,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1256,
+   "total_tokens": 1256,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [
+    "log-service"
+   ],
+   "last_runbooks": [
+    "disk-full"
+   ],
+   "fault_names": []
+  },
+  "r4": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 13.76,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "0/1 (0%)",
+   "reply_acc": "-",
+   "latency_p50": 13.76,
+   "latency_p95": 13.76,
+   "latency_max": 13.76,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1396,
+   "total_tokens": 1396,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [
+    "gateway-service",
+    "payments-service"
+   ],
+   "last_runbooks": [
+    "cpu-spike"
+   ],
+   "fault_names": []
+  },
+  "r5": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 18.6,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "1/1 (100%)",
+   "reply_acc": "-",
+   "latency_p50": 18.6,
+   "latency_p95": 18.6,
+   "latency_max": 18.6,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1491,
+   "total_tokens": 1491,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [
+    "web-01",
+    "auth-service"
+   ],
+   "last_runbooks": [
+    "high-latency"
+   ],
+   "fault_names": []
+  },
+  "r6": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 17.18,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "1/1 (100%)",
+   "reply_acc": "-",
+   "latency_p50": 17.18,
+   "latency_p95": 17.18,
+   "latency_max": 17.18,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1461,
+   "total_tokens": 1461,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [
+    "payments-service",
+    "cache-service"
+   ],
+   "last_runbooks": [
+    "cpu-spike"
+   ],
+   "fault_names": []
+  },
+  "r7": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 1.56,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "0/1 (0%)",
+   "runbook_acc": "0/1 (0%)",
+   "reply_acc": "-",
+   "latency_p50": 1.56,
+   "latency_p95": 1.56,
+   "latency_max": 1.56,
+   "avg_llm_calls": 2,
+   "avg_tokens": 574,
+   "total_tokens": 574,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [],
+   "last_runbooks": [],
+   "fault_names": []
+  },
+  "r8": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 1.12,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "-",
+   "reply_acc": "-",
+   "latency_p50": 1.12,
+   "latency_p95": 1.12,
+   "latency_max": 1.12,
+   "avg_llm_calls": 2,
+   "avg_tokens": 522,
+   "total_tokens": 522,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [],
+   "last_runbooks": [],
+   "fault_names": []
+  },
+  "r9": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 0.29,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "-",
+   "runbook_acc": "-",
+   "reply_acc": "-",
+   "latency_p50": 0.29,
+   "latency_p95": 0.29,
+   "latency_max": 0.29,
+   "avg_llm_calls": 2,
+   "avg_tokens": 235,
+   "total_tokens": 235,
+   "retries": 0,
+   "avg_validation_attempts": 0,
+   "last_monitored": [],
+   "last_runbooks": [],
+   "fault_names": []
+  },
+  "r10": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 0.33,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "-",
+   "runbook_acc": "-",
+   "reply_acc": "1/1 (100%)",
+   "latency_p50": 0.33,
+   "latency_p95": 0.33,
+   "latency_max": 0.33,
+   "avg_llm_calls": 2,
+   "avg_tokens": 337,
+   "total_tokens": 337,
+   "retries": 0,
+   "avg_validation_attempts": 0,
+   "last_monitored": [],
+   "last_runbooks": [],
+   "fault_names": []
+  },
+  "s1": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 0.85,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "-",
+   "reply_acc": "-",
+   "latency_p50": 0.85,
+   "latency_p95": 0.85,
+   "latency_max": 0.85,
+   "avg_llm_calls": 2,
+   "avg_tokens": 491,
+   "total_tokens": 491,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [],
+   "last_runbooks": [],
+   "fault_names": []
+  },
+  "s2": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 1.1,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "-",
+   "reply_acc": "-",
+   "latency_p50": 1.1,
+   "latency_p95": 1.1,
+   "latency_max": 1.1,
+   "avg_llm_calls": 2,
+   "avg_tokens": 526,
+   "total_tokens": 526,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [],
+   "last_runbooks": [],
+   "fault_names": []
+  },
+  "s3": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 16.73,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "1/1 (100%)",
+   "reply_acc": "-",
+   "latency_p50": 16.73,
+   "latency_p95": 16.73,
+   "latency_max": 16.73,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1556,
+   "total_tokens": 1556,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [
+    "auth-service",
+    "payments-service",
+    "cache-service"
+   ],
+   "last_runbooks": [
+    "high-latency"
+   ],
+   "fault_names": []
+  },
+  "s4": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 12.74,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "1/1 (100%)",
+   "reply_acc": "-",
+   "latency_p50": 12.74,
+   "latency_p95": 12.74,
+   "latency_max": 12.74,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1416,
+   "total_tokens": 1416,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [
+    "gateway-service",
+    "log-service"
+   ],
+   "last_runbooks": [
+    "network-timeout"
+   ],
+   "fault_names": []
+  },
+  "s5": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 19.1,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "1/1 (100%)",
+   "reply_acc": "-",
+   "latency_p50": 19.1,
+   "latency_p95": 19.1,
+   "latency_max": 19.1,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1395,
+   "total_tokens": 1395,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [
+    "cache-service"
+   ],
+   "last_runbooks": [
+    "memory-leak"
+   ],
+   "fault_names": []
+  },
+  "s6": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 16.76,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "-",
+   "runbook_acc": "-",
+   "reply_acc": "-",
+   "latency_p50": 16.76,
+   "latency_p95": 16.76,
+   "latency_max": 16.76,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1348,
+   "total_tokens": 1348,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [
+    "auth-service"
+   ],
+   "last_runbooks": [
+    "high-latency"
+   ],
+   "fault_names": []
+  },
+  "b1": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 13.96,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "0/1 (0%)",
+   "reply_acc": "-",
+   "latency_p50": 13.96,
+   "latency_p95": 13.96,
+   "latency_max": 13.96,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1205,
+   "total_tokens": 1205,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [
+    "web-01"
+   ],
+   "last_runbooks": [
+    "db-down"
+   ],
+   "fault_names": []
+  },
+  "b2": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 10.25,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "0/1 (0%)",
+   "reply_acc": "-",
+   "latency_p50": 10.25,
+   "latency_p95": 10.25,
+   "latency_max": 10.25,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1196,
+   "total_tokens": 1196,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [
+    "web-01"
+   ],
+   "last_runbooks": [
+    "db-down"
+   ],
+   "fault_names": []
+  },
+  "b3": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 13.83,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "0/1 (0%)",
+   "reply_acc": "-",
+   "latency_p50": 13.83,
+   "latency_p95": 13.83,
+   "latency_max": 13.83,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1298,
+   "total_tokens": 1298,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [
+    "payments-service"
+   ],
+   "last_runbooks": [
+    "cpu-spike"
+   ],
+   "fault_names": []
+  },
+  "b4": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 13.36,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "1/1 (100%)",
+   "reply_acc": "-",
+   "latency_p50": 13.36,
+   "latency_p95": 13.36,
+   "latency_max": 13.36,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1335,
+   "total_tokens": 1335,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [
+    "gateway-service"
+   ],
+   "last_runbooks": [
+    "network-timeout"
+   ],
+   "fault_names": []
+  },
+  "b5": {
+   "degraded_runs": 0,
+   "full_success": "1/1 (100%)",
+   "faults_injected": 0,
+   "faulted_runs": 0,
+   "success_when_faulted": "-",
+   "latency_max_all": 11.04,
+   "runs": 1,
+   "success": "1/1 (100%)",
+   "route_acc": "1/1 (100%)",
+   "target_acc": "1/1 (100%)",
+   "runbook_acc": "0/1 (0%)",
+   "reply_acc": "-",
+   "latency_p50": 11.04,
+   "latency_p95": 11.04,
+   "latency_max": 11.04,
+   "avg_llm_calls": 4,
+   "avg_tokens": 1316,
+   "total_tokens": 1316,
+   "retries": 0,
+   "avg_validation_attempts": 1,
+   "last_monitored": [
+    "auth-service"
+   ],
+   "last_runbooks": [
+    "high-latency"
+   ],
+   "fault_names": []
+  }
+ },
+ "runs": [
+  {
+   "id": "r1",
+   "category": "regression",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 15.29,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1301,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 147,
+     "sec": 1.61
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 380,
+     "sec": 0.67
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 142,
+     "sec": 0.11
+    },
+    {
+     "model": "ollama:qwen3:8b",
+     "ok": true,
+     "error": null,
+     "tokens": 632,
+     "sec": 12.09
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "payments-service"
+   ],
+   "runbooks": [
+    "cpu-spike"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "keyword",
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.00326,
+   "reply": "1) 모니터링 대상인 payments-service의 상태가 degraded로 확인되었으며, CPU 사용률은 97.8%, 메모리 사용률은 58.4%로 높은 수준입니다. 알림 2건 중 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 발생했습니다.  \n2) 반복 호출, 배치 작업 중복 실행 등 특정 요청 패턴이 원인인지 최근 로그를 확인해야 합니다.  \n3) CPU 사용률이 90%를 넘고 지속되고 있으므로, 해당 인스턴스를 오토스케일링 그룹에서 한 대 더 띄워 부하를 분산해야 합니다."
+  },
+  {
+   "id": "r2",
+   "category": "regression",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 16.34,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1362,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 142,
+     "sec": 0.23
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 371,
+     "sec": 0.84
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 135,
+     "sec": 0.12
+    },
+    {
+     "model": "ollama:qwen3:8b",
+     "ok": true,
+     "error": null,
+     "tokens": 714,
+     "sec": 14.37
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "cache-service"
+   ],
+   "runbooks": [
+    "memory-leak"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "keyword",
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.003667,
+   "reply": "1) 모니터링 대상인 cache-service의 메모리 사용률은 88.2%로 상승 중이며, 알림 2건이 발생한 상태입니다.  \n2) OOM 직전(90% 이상)이 아니므로 즉시 재시작은 하지 않으며, 재시작은 임시 조치임을 기록합니다.  \n3) 힙 덤프 또는 프로파일링 도구를 통해 메모리 누수 원인을 확인하고, 최근 배포에 캐시 무제한 증가, 커넥션 미반환, 이벤트 리스너 중복 등록 등 패턴이 있는지 점검합니다. 원인 배포가 있으면 롤백하고, 컨테이너 메모리 상한선을 재확인해 재발 시 빠르게 감지되도록 조정합니다."
+  },
+  {
+   "id": "r3",
+   "category": "regression",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 11.04,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1256,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 140,
+     "sec": 0.18
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 388,
+     "sec": 0.84
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 137,
+     "sec": 0.11
+    },
+    {
+     "model": "ollama:qwen3:8b",
+     "ok": true,
+     "error": null,
+     "tokens": 591,
+     "sec": 9.1
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "log-service"
+   ],
+   "runbooks": [
+    "disk-full"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "keyword",
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.003055,
+   "reply": "1) 모니터링 대상인 log-service의 디스크 사용률은 95%로 임계 수준(90% 이상)에 도달하여 알림이 발생하였다.  \n2) 로그 파일 및 임시 파일 등을 우선적으로 정리하여 즉시 디스크 공간을 확보해야 한다.  \n3) 로그 레벨 조정 또는 로테이션 주기 단축 등을 통해 장기적인 디스크 사용량 관리를 검토해야 한다."
+  },
+  {
+   "id": "r4",
+   "category": "regression",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 13.76,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1396,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 145,
+     "sec": 0.31
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 397,
+     "sec": 0.94
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 180,
+     "sec": 0.12
+    },
+    {
+     "model": "ollama:qwen3:8b",
+     "ok": true,
+     "error": null,
+     "tokens": 674,
+     "sec": 11.62
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "gateway-service",
+    "payments-service"
+   ],
+   "runbooks": [
+    "cpu-spike"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": false,
+   "classifier": "keyword",
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.003479,
+   "reply": "1) 모니터링 대상인 gateway-service와 payments-service 모두 상태가 degraded로 확인되었으며, payments-service의 CPU 사용률은 91.8%로 임계치(80%)를 초과한 상태입니다.  \n2) payments-service의 알림 중 'payments-service-3 instance responding slow'가 있으며, gateway-service에서는 'upstream timeout to payments-service (504)' 알림이 발생했습니다.  \n3) CPU 급증 대응 절차에 따라 payments-service의 CPU 사용률이 90%를 넘고 지속되고 있으므로, 해당 인스턴스를 오토스케일링 그룹에서 한 대 더 띄워 부하를 분산해야 합니다."
+  },
+  {
+   "id": "r5",
+   "category": "regression",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 18.6,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1491,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 149,
+     "sec": 0.19
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 382,
+     "sec": 0.79
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 167,
+     "sec": 0.12
+    },
+    {
+     "model": "ollama:qwen3:8b",
+     "ok": true,
+     "error": null,
+     "tokens": 793,
+     "sec": 16.73
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "web-01",
+    "auth-service"
+   ],
+   "runbooks": [
+    "high-latency"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "keyword",
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.004069,
+   "reply": "1) 모니터링 대상인 web-01은 상태가 healthy이지만 CPU 사용률 34.9%로 비정상적으로 높은 수치를 보이고 있으며, auth-service는 상태가 degraded로, CPU 사용률 84.2%, 메모리 사용률 64.1%, 알림 2건 중 'p95 latency 2.4s (threshold 1.0s)' 및 'connection pool 92% used'가 발생한 것으로 확인됨.  \n2) auth-service의 커넥션 풀 사용률 92%가 90%를 넘으므로 풀 크기 확장 또는 느린 쿼리/외부 호출에 타임아웃을 적용해야 함.  \n3) p95 지연시간이 1.0s를 초과하고 있으며, 5분 내에 정상화되지 않으면 캐시 계층 또는 읽기 복제본을 통해 트래픽을 분산해야 함."
+  },
+  {
+   "id": "r6",
+   "category": "regression",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 17.18,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1461,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 149,
+     "sec": 0.3
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 416,
+     "sec": 1.01
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 175,
+     "sec": 0.12
+    },
+    {
+     "model": "ollama:qwen3:8b",
+     "ok": true,
+     "error": null,
+     "tokens": 721,
+     "sec": 14.94
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "payments-service",
+    "cache-service"
+   ],
+   "runbooks": [
+    "cpu-spike"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "keyword",
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.003715,
+   "reply": "1) payments-service와 cache-service 모두 상태가 degraded로 확인되었으며, 공통 원인으로는 CPU 및 메모리 사용률의 이상이 의심된다. payments-service는 CPU 97.2% 및 알림 2건, cache-service는 메모리 89.2% 및 알림 2건이 수집되었다.  \n2) payments-service의 CPU 사용률이 91%를 넘고 지속 중인 것으로 보여, 오토스케일링 그룹에서 인스턴스를 추가해야 할 가능성이 있다.  \n3) cache-service의 메모리 사용률이 89.2%로 높아지고 있으며, heap near limit 알림이 발생했으므로 메모리 관리 및 GC 최적화가 필요하다. 추가적으로, CPU 급증 대응 절차에 따라 정상화 후 프로파일링을 통해 코드 최적화를 검토해야 한다."
+  },
+  {
+   "id": "r7",
+   "category": "regression",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 1.56,
+   "error": null,
+   "llm_calls": 2,
+   "llm_failed_calls": 0,
+   "tokens": 574,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 138,
+     "sec": 0.18
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 436,
+     "sec": 1.34
+    }
+   ],
+   "route": "incident",
+   "monitored": [],
+   "runbooks": [],
+   "route_ok": true,
+   "targets_ok": false,
+   "runbook_ok": false,
+   "classifier": null,
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 8.6e-05,
+   "reply": "1) 요청에서 대상 시스템을 특정하지 못했습니다 — 시스템명을 알려주시면 조사하겠습니다\n2) 현재 모니터링 대상 시스템: auth-service, cache-service, gateway-service, log-service, payments-service, web-01\n3) 위 목록의 시스템명으로 다시 요청해 주시면 상태 조회와 대응 절차를 안내하겠습니다."
+  },
+  {
+   "id": "r8",
+   "category": "unknown-system",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 1.12,
+   "error": null,
+   "llm_calls": 2,
+   "llm_failed_calls": 0,
+   "tokens": 522,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 132,
+     "sec": 0.17
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 390,
+     "sec": 0.92
+    }
+   ],
+   "route": "incident",
+   "monitored": [],
+   "runbooks": [],
+   "route_ok": true,
+   "targets_ok": true,
+   "classifier": null,
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 7.8e-05,
+   "reply": "1) billing-service은(는) 모니터링 대상 시스템이 아니어서 상태를 조회할 수 없습니다\n2) 현재 모니터링 대상 시스템: auth-service, cache-service, gateway-service, log-service, payments-service, web-01\n3) 위 목록의 시스템명으로 다시 요청해 주시면 상태 조회와 대응 절차를 안내하겠습니다."
+  },
+  {
+   "id": "r9",
+   "category": "chat",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 0.29,
+   "error": null,
+   "llm_calls": 2,
+   "llm_failed_calls": 0,
+   "tokens": 235,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 131,
+     "sec": 0.16
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 104,
+     "sec": 0.12
+    }
+   ],
+   "route": "chat",
+   "monitored": [],
+   "runbooks": [],
+   "route_ok": true,
+   "classifier": null,
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 0,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 3.6e-05,
+   "reply": "안녕하세요! 저는 '나'입니다."
+  },
+  {
+   "id": "r10",
+   "category": "chat",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 0.33,
+   "error": null,
+   "llm_calls": 2,
+   "llm_failed_calls": 0,
+   "tokens": 337,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 131,
+     "sec": 0.15
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 206,
+     "sec": 0.17
+    }
+   ],
+   "route": "chat",
+   "monitored": [],
+   "runbooks": [],
+   "route_ok": true,
+   "reply_ok": true,
+   "classifier": null,
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 0,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 5.1e-05,
+   "reply": "민수님의 이름을 알려주시면 조사하겠습니다."
+  },
+  {
+   "id": "s1",
+   "category": "unknown-system",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 0.85,
+   "error": null,
+   "llm_calls": 2,
+   "llm_failed_calls": 0,
+   "tokens": 491,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 137,
+     "sec": 0.19
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 354,
+     "sec": 0.63
+    }
+   ],
+   "route": "incident",
+   "monitored": [],
+   "runbooks": [],
+   "route_ok": true,
+   "targets_ok": true,
+   "classifier": null,
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 7.4e-05,
+   "reply": "1) order-service은(는) 모니터링 대상 시스템이 아니어서 상태를 조회할 수 없습니다\n2) 현재 모니터링 대상 시스템: auth-service, cache-service, gateway-service, log-service, payments-service, web-01\n3) 위 목록의 시스템명으로 다시 요청해 주시면 상태 조회와 대응 절차를 안내하겠습니다."
+  },
+  {
+   "id": "s2",
+   "category": "unknown-system",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 1.1,
+   "error": null,
+   "llm_calls": 2,
+   "llm_failed_calls": 0,
+   "tokens": 526,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 141,
+     "sec": 0.16
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 385,
+     "sec": 0.89
+    }
+   ],
+   "route": "incident",
+   "monitored": [],
+   "runbooks": [],
+   "route_ok": true,
+   "targets_ok": true,
+   "classifier": null,
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 7.9e-05,
+   "reply": "1) inventory-service은(는) 모니터링 대상 시스템이 아니어서 상태를 조회할 수 없습니다\n2) 현재 모니터링 대상 시스템: auth-service, cache-service, gateway-service, log-service, payments-service, web-01\n3) 위 목록의 시스템명으로 다시 요청해 주시면 상태 조회와 대응 절차를 안내하겠습니다."
+  },
+  {
+   "id": "s3",
+   "category": "multi-system",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 16.73,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1556,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 140,
+     "sec": 0.29
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 382,
+     "sec": 0.88
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 220,
+     "sec": 0.13
+    },
+    {
+     "model": "ollama:qwen3:8b",
+     "ok": true,
+     "error": null,
+     "tokens": 814,
+     "sec": 14.66
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "auth-service",
+    "payments-service",
+    "cache-service"
+   ],
+   "runbooks": [
+    "high-latency"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "keyword",
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.004181,
+   "reply": "1) auth-service, payments-service, cache-service 모두 상태가 degraded로 확인되었으며, 각 서비스의 p95 latency 및 커넥션 풀 사용률을 확인해야 합니다.  \n2) payments-service의 커넥션 풀 사용률이 92%로 임계치(90%)를 넘었으므로 풀 크기를 늘리거나 느린 쿼리/외부 호출에 타임아웃을 적용해야 합니다.  \n3) payments-service-3 인스턴스가 느려지고 있으며, 해당 인스턴스를 로드밸런서에서 일시 제외해야 합니다. 5분 내 p95 latency가 1.0s 이하로 내려오지 않으면 트래픽을 캐시 계층 또는 읽기 복제본으로 분산해야 합니다."
+  },
+  {
+   "id": "s4",
+   "category": "multi-system",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 12.74,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1416,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 148,
+     "sec": 0.2
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 415,
+     "sec": 1.12
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 175,
+     "sec": 0.12
+    },
+    {
+     "model": "ollama:qwen3:8b",
+     "ok": true,
+     "error": null,
+     "tokens": 678,
+     "sec": 10.51
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "gateway-service",
+    "log-service"
+   ],
+   "runbooks": [
+    "network-timeout"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "keyword",
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.0035,
+   "reply": "1) 모니터링 대상이 아닌 시스템의 상태나 수치는 수집되지 않았습니다.  \n2) gateway-service 상태=degraded, CPU 36.3%, 메모리 48.2%, 알림 2건 ['upstream timeout to payments-service (504)', 'network packet loss 3%']  \n3) log-service 상태=degraded, CPU 25.0%, 메모리 37.5%, 알림 2건 ['disk usage 95% on /var/log', 'disk space low']"
+  },
+  {
+   "id": "s5",
+   "category": "single-system",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 19.1,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1395,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 142,
+     "sec": 0.19
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 371,
+     "sec": 0.68
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 135,
+     "sec": 0.11
+    },
+    {
+     "model": "ollama:qwen3:8b",
+     "ok": true,
+     "error": null,
+     "tokens": 747,
+     "sec": 17.33
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "cache-service"
+   ],
+   "runbooks": [
+    "memory-leak"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "keyword",
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.003832,
+   "reply": "1) 모니터링 대상인 cache-service의 상태는 degraded로, 메모리 사용률 91.1%이며, 알림 2건('memory usage climbing steadily over 6h', 'heap near limit')이 발생한 상태입니다.  \n2) OOM 직전(90% 이상)이므로 해당 프로세스를 즉시 재시작하여 서비스 중단을 방지합니다. 재시작은 임시 조치로 기록합니다.  \n3) 힙 덤프 또는 프로파일링 도구를 사용해 어떤 객체가 계속 쌓이는지 확인하고, 원인을 분석합니다. 또한, 최근 배포에 캐시 무제한 증가, 커넥션 미반환, 이벤트 리스너 중복 등록 등 패턴이 있는지 점검합니다. 원인 배포가 있으면 롤백하고, 컨테이너 메모리 상한선을 재확인해 재발 시 빠르게 감지되도록 조정합니다."
+  },
+  {
+   "id": "s6",
+   "category": "no-system",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 16.76,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1348,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 139,
+     "sec": 0.3
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 364,
+     "sec": 0.99
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 147,
+     "sec": 0.12
+    },
+    {
+     "model": "ollama:qwen3:8b",
+     "ok": true,
+     "error": null,
+     "tokens": 698,
+     "sec": 14.55
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "auth-service"
+   ],
+   "runbooks": [
+    "high-latency"
+   ],
+   "route_ok": true,
+   "classifier": "keyword",
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.003588,
+   "reply": "1) 모니터링 대상인 auth-service의 상태가 degraded로 확인되었으며, p95 latency는 2.4s로 임계치(1.0s)를 초과하고 있으며, 커넥션 풀 사용률은 92%로 높은 수준입니다.  \n2) 커넥션 풀 사용률이 90%를 넘은 점에 따라 풀 크기를 늘리거나 느린 쿼리/외부 호출에 타임아웃을 적용해야 합니다.  \n3) p95 지연이 5분 내 임계치 이하로 내려오지 않으면 캐시 계층 또는 읽기 복제본을 통해 트래픽을 분산해야 합니다."
+  },
+  {
+   "id": "b1",
+   "category": "runbook",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 13.96,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1205,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 136,
+     "sec": 0.18
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 434,
+     "sec": 1.7
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 122,
+     "sec": 0.12
+    },
+    {
+     "model": "ollama:qwen3:8b",
+     "ok": true,
+     "error": null,
+     "tokens": 513,
+     "sec": 11.17
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "web-01"
+   ],
+   "runbooks": [
+    "db-down"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": false,
+   "classifier": "keyword",
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.002668,
+   "reply": "1) 모니터링 대상이 아닌 web-01의 CPU 사용률은 37.0%로 정상 범위 내에 있으며, 알림도 0건으로 나타나는 것으로 보아 현재 시스템 상태는 정상입니다.  \n2) DB Down 관련 증상(연결 끊김, 리플리케이션 중단 등)이 관찰되지 않으며, 패턴 분석에서도 특이한 패턴은 확인되지 않았습니다.  \n3) 현재 수집된 정보에 따르면 web-01의 CPU 급증 원인은 확인되지 않았으므로, 추가 모니터링 및 로그 분석을 통해 원인을 추적해야 합니다."
+  },
+  {
+   "id": "b2",
+   "category": "runbook",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 10.25,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1196,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 148,
+     "sec": 0.18
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 450,
+     "sec": 1.31
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 122,
+     "sec": 0.13
+    },
+    {
+     "model": "ollama:qwen3:8b",
+     "ok": true,
+     "error": null,
+     "tokens": 476,
+     "sec": 7.84
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "web-01"
+   ],
+   "runbooks": [
+    "db-down"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": false,
+   "classifier": "keyword",
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.002488,
+   "reply": "1) web-01의 메모리 사용량은 49.7%로 정상 범위 내에 있으며, 현재 장애 상태는 아님.  \n2) 메모리 누수 의심 시, 메모리 사용량 추이를 추적하는 모니터링 데이터가 필요하나, 현재 수집된 데이터에는 해당 정보가 없음.  \n3) DB Down 대응 절차에 따라, 현재는 DB 연결 상태 및 리플리케이션 상태 점검이 필요함."
+  },
+  {
+   "id": "b3",
+   "category": "runbook",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 13.83,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1298,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 143,
+     "sec": 0.15
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 374,
+     "sec": 0.62
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 142,
+     "sec": 0.11
+    },
+    {
+     "model": "ollama:qwen3:8b",
+     "ok": true,
+     "error": null,
+     "tokens": 639,
+     "sec": 12.18
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "payments-service"
+   ],
+   "runbooks": [
+    "cpu-spike"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": false,
+   "classifier": "keyword",
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.003293,
+   "reply": "1) payments-service 모니터링 상태가 degraded로 확인되었으며, CPU 사용률 95.8%, 메모리 사용률 57.4%로 과부하 상태입니다. 알림 2건 중 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 발생했습니다.  \n2) CPU 사용률이 90%를 넘고 지속되고 있으므로, 해당 인스턴스를 오토스케일링 그룹에서 한 대 더 띄워 부하를 분산합니다.  \n3) 특이 패턴 분석 결과는 없으므로, CPU 급증 원인을 확인하고, 정상화 후 프로파일링 결과를 바탕으로 최적화 작업을 등록합니다."
+  },
+  {
+   "id": "b4",
+   "category": "runbook",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 13.36,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1335,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 142,
+     "sec": 0.19
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 388,
+     "sec": 0.78
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 140,
+     "sec": 0.11
+    },
+    {
+     "model": "ollama:qwen3:8b",
+     "ok": true,
+     "error": null,
+     "tokens": 665,
+     "sec": 11.52
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "gateway-service"
+   ],
+   "runbooks": [
+    "network-timeout"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "keyword",
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.003425,
+   "reply": "1) 모니터링 대상 시스템인 gateway-service의 상태는 degraded로, CPU 29.8%, 메모리 44.9%이며, 알림 2건 발생: 'upstream timeout to payments-service (504)', 'network packet loss 3%'.  \n2) 네트워크 타임아웃 대응 절차에 따라 get_monitoring_status로 타임아웃 발생 시스템 확인 필요.  \n3) DNS 해석 실패, 방화벽/보안그룹 변경, 로드밸런서 헬스체크 실패 등 최근 변경 사항 점검 및 특정 리전/가용영역에서의 발생 여부 확인 후 라우팅 전환 고려."
+  },
+  {
+   "id": "b5",
+   "category": "runbook",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 11.04,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1316,
+   "llm_detail": [
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 141,
+     "sec": 0.16
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 378,
+     "sec": 0.71
+    },
+    {
+     "model": "ollama:qwen3:0.6b",
+     "ok": true,
+     "error": null,
+     "tokens": 147,
+     "sec": 0.11
+    },
+    {
+     "model": "ollama:qwen3:8b",
+     "ok": true,
+     "error": null,
+     "tokens": 650,
+     "sec": 9.29
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "auth-service"
+   ],
+   "runbooks": [
+    "high-latency"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": false,
+   "classifier": "keyword",
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.00335,
+   "reply": "1) auth-service의 디스크 사용량은 모니터링 대상이 아니므로 확인할 수 없습니다.  \n2) p95 latency는 2.4s로 임계치(1.0s)를 초과하고 있으며, 커넥션 풀 사용률은 92%로 나타납니다.  \n3) 커넥션 풀 사용률이 90%를 넘은 경우, 풀 크기를 늘리거나 느린 쿼리/외부 호출에 타임아웃을 적용해야 합니다."
+  }
+ ]
+}

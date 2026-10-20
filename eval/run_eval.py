@@ -178,7 +178,8 @@ def _markdown(meta: dict, overall: dict, by_cat: dict, per_item: dict) -> str:
                 "degraded_runs", "full_success", "latency_p50", "latency_max_all", "avg_llm_calls"]
     lines = [f"# 평가 결과 — {meta['label']} / {meta['mode']} / {meta['backend']}", "",
              f"- 실행 시각: {meta['started_at']}  · 커밋: `{meta['git_rev']}`  · 반복: {meta['repeat']}회",
-             f"- 모델: fast=`{meta['fast_llm']}`, quality=`{meta['quality_llm']}`",
+             f"- 모델: fast=`{meta['fast_llm']}`, quality=`{meta['quality_llm']}`"
+             f" · runbook 선택: `{meta.get('runbook_classifier', 'keyword')}`",
              *([f"- 장애 주입: `{meta['chaos_rates']}` (seed={meta['chaos_seed']})"]
                if meta["mode"] == "chaos" else []), "",
              "## 전체", "", "| " + " | ".join(cols) + " |", "|" + "---|" * len(cols),
@@ -226,16 +227,24 @@ async def main() -> None:
     await mcp.start()
     backend, fast_llm, quality_llm = _build_llms()
     store = SqliteSessionStore(Path(":memory:"))   # 실제 session.db를 건드리지 않는다
+    try:   # After 코드에만 있다 — Before 코드에서는 키워드 규칙으로 동작
+        from agent.rag import build_retriever
+        extra = {"retriever": build_retriever(backend)}
+    except ImportError:
+        extra = {}
     deps = SupervisorDeps(fast_llm=fast_llm, quality_llm=quality_llm, mcp=mcp,
-                          session_store=store, version="v2")
+                          session_store=store, version="v2", **extra)
+    retriever = extra.get("retriever")
     graph = build_graph(deps)
     meta = {"label": args.label, "mode": args.mode, "backend": backend, "repeat": args.repeat,
             "fast_llm": fast_llm.name, "quality_llm": quality_llm.name, "git_rev": _git_rev(),
-            "started_at": datetime.now().isoformat(timespec="seconds")}
+            "started_at": datetime.now().isoformat(timespec="seconds"),
+            "runbook_classifier": f"rag({retriever.embedder.name})" if retriever else "keyword"}
     if args.mode == "chaos":
         meta.update({"chaos_rates": args.chaos_rates, "chaos_seed": args.chaos_seed})
     print(f"[eval] label={args.label} mode={args.mode} backend={backend} fast={fast_llm.name} "
-          f"quality={quality_llm.name} rev={meta['git_rev']} items={len(dataset)} repeat={args.repeat}")
+          f"quality={quality_llm.name} rev={meta['git_rev']} items={len(dataset)} repeat={args.repeat} "
+          f"runbook={meta['runbook_classifier']}")
     if backend != args.backend:
         print(f"[eval] 경고: 요청한 백엔드({args.backend})와 실제 백엔드({backend})가 다릅니다")
 
@@ -279,7 +288,12 @@ async def main() -> None:
                    "tokens": sum(c["tokens"] for c in CALLS), "llm_detail": list(CALLS),
                    **_score(item, result)}
             if result is not None:
-                run.update({"degraded": len(result.get("degraded", [])),   # Before 코드에는 키가 없어 0
+                replan = next((e for e in result.get("events", [])
+                               if e.get("type") == "ReplanCheck" and not e.get("is_sufficient")), {})
+                run.update({"classifier": replan.get("classifier", "keyword" if replan else None),
+                            "rag_score": replan.get("score"), "rag_margin": replan.get("margin"),
+                            "embed_tokens": replan.get("embed_tokens", 0),
+                            "degraded": len(result.get("degraded", [])),   # Before 코드에는 키가 없어 0
                             "degraded_stages": [d["stage"] for d in result.get("degraded", [])],
                             "retry_count": result.get("retry_count", 0),
                             "validation_attempts": result.get("validation_attempts", 0),
