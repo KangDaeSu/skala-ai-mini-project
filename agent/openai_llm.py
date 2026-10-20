@@ -187,7 +187,6 @@ class OpenAIQualityLLM(OpenAILLM):
         system = ("당신은 ICT 운영 보고 작성자다. 수집된 사실만 사용해 한국어로 "
                   "간결한 대응 보고를 작성하라. 반드시 '1) ... 2) ... 3) ...' 형식의 "
                   "번호 절차로 답하고, 수치는 수집된 값을 그대로 인용하라. "
-                  "'참고' 사실(모니터링 대상 아님 등)이 있으면 1)에서 그대로 밝히고, "
                   "수집되지 않은 시스템의 상태나 수치를 지어내지 마라.")
         facts = []
         for c in collected:
@@ -202,6 +201,9 @@ class OpenAIQualityLLM(OpenAILLM):
                 facts.append(f"- 패턴 분석: {c['data'].strip()}")
             elif c["source"] == "notice":
                 facts.append(f"- 참고: {c['data']}")
+        if any(c["source"] == "notice" for c in collected):
+            # 참고 사실이 있을 때만 지시한다 — 항상 넣으면 모델이 없는 안내문을 지어냈다(실측)
+            system += " '참고' 사실(모니터링 대상 아님 등)은 1)에서 그대로 밝혀라."
         user = f"## 사용자 요청\n{query}\n\n## 수집된 사실\n" + "\n".join(facts)
         if feedback:
             user += f"\n\n## 이전 초안에 대한 검증 반려 사유 (반드시 반영)\n{feedback}"
