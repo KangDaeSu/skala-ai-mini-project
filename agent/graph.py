@@ -20,6 +20,8 @@ from langgraph.graph import END, StateGraph
 from langsmith import traceable
 
 from .deps import SupervisorDeps
+from .fallback import (CHAT_FALLBACK, degraded_event, describe, rule_route,
+                       tag_current_run, template_answer)
 from .retry import with_retry
 
 
@@ -66,20 +68,45 @@ class AgentState(TypedDict, total=False):
     last_prompt: str
     cost_usd: float
     events: list[dict]
+    degraded: list[dict]   # LLM 실패로 폴백한 단계 기록 (fallback.py)
 
 
 def _cost(state: AgentState, usage: dict) -> float:
     return round(state.get("cost_usd", 0.0) + usage["usd"], 6)
 
 
+def _degrade(state: AgentState, update: dict, stage: str, reason: str) -> dict:
+    """폴백 기록 — Degraded 이벤트를 붙이고 degraded 목록에 누적, LangSmith 노드 run에 태그."""
+    tag_current_run(stage, reason)
+    event = degraded_event(stage, reason)
+    update["events"] = update.get("events", state.get("events", [])) + [event]
+    update["degraded"] = state.get("degraded", []) + [event]
+    return update
+
+
+def _rule_plan(query: str) -> dict:
+    """plan 폴백 — 쿼리에 등장한 알려진 시스템을 등장 순서대로 조사한다."""
+    found = sorted((query.index(s), s) for s in KNOWN_SYSTEMS if s in query)
+    targets = [s for _, s in found] or ["auth-service"]
+    return {"needs_analysis": False,
+            "tasks": [{"id": f"task-{i}", "agent": "research", "kind": "monitoring",
+                       "target": t, "status": "pending"} for i, t in enumerate(targets)]}
+
+
 @traceable(name="route_node")
 async def route_node(state: AgentState, deps: SupervisorDeps) -> dict:
     """Wave 5 — 모든 쿼리가 무거운 파이프라인을 탈 필요는 없다."""
-    result, usage = deps.fast_llm.route(state["query"])
+    try:
+        result, usage = deps.fast_llm.route(state["query"])
+        reason = result.get("fallback")   # 어댑터 안에서 JSON 파싱 실패로 폴백한 경우
+    except Exception as exc:
+        result, usage = rule_route(state["query"], KNOWN_SYSTEMS), {"usd": 0.0}
+        reason = f"LLM 호출 실패({describe(exc)}) → 규칙 기반 분류"
     event = {"type": "RouteDecided", "route": result["route"]}
-    return {"route": result["route"], "needs_analysis": result["needs_analysis"],
-            "cost_usd": _cost(state, usage),
-            "events": state.get("events", []) + [event]}
+    update = {"route": result["route"], "needs_analysis": result["needs_analysis"],
+              "cost_usd": _cost(state, usage),
+              "events": state.get("events", []) + [event]}
+    return _degrade(state, update, "route", reason) if reason else update
 
 
 @traceable(name="chat_answer_node")
@@ -90,12 +117,18 @@ async def chat_answer_node(state: AgentState, deps: SupervisorDeps) -> dict:
     때만 실제로 전송되고, /chat(ainvoke)처럼 스트리밍하지 않는 호출에서는 자동으로
     no-op이 된다."""
     writer = get_stream_writer()
-    reply, usage = await deps.fast_llm.chat(
-        state["query"], state.get("history", []),
-        on_token=lambda piece: writer({"type": "AnswerToken", "delta": piece}))
-    return {"final": reply, "last_prompt": usage.get("prompt"),
-            "cost_usd": _cost(state, usage),
-            "events": state["events"] + [{"type": "Finalize", "pipeline": "chat-direct"}]}
+    reason = None
+    try:
+        reply, usage = await deps.fast_llm.chat(
+            state["query"], state.get("history", []),
+            on_token=lambda piece: writer({"type": "AnswerToken", "delta": piece}))
+    except Exception as exc:
+        reply, usage = CHAT_FALLBACK, {"usd": 0.0}
+        reason = f"LLM 호출 실패({describe(exc)}) → 안내 문구로 대체"
+    update = {"final": reply, "last_prompt": usage.get("prompt"),
+              "cost_usd": _cost(state, usage),
+              "events": state["events"] + [{"type": "Finalize", "pipeline": "chat-direct"}]}
+    return _degrade(state, update, "chat", reason) if reason else update
 
 
 @traceable(name="plan_node")
@@ -110,13 +143,19 @@ async def plan_node(state: AgentState, deps: SupervisorDeps) -> dict:
         {"system_name": _extract_system_name(state["query"]), "symptom": state["query"]},
         server=prompt_server,
     )
-    result, usage = deps.fast_llm.plan(state["query"], procedure)
+    try:
+        result, usage = deps.fast_llm.plan(state["query"], procedure)
+        reason = result.get("fallback")   # 어댑터 안에서 JSON 파싱 실패로 복구한 경우
+    except Exception as exc:
+        result, usage = _rule_plan(state["query"]), {"usd": 0.0}
+        reason = f"LLM 호출 실패({describe(exc)}) → 쿼리의 시스템으로 계획"
     targets = [t["target"] for t in result["tasks"]
                if t["agent"] == "research" and t.get("target")]
     event = {"type": "PlanCreated", "task_count": len(result["tasks"]),
              "targets": targets}
-    return {"tasks": result["tasks"], "needs_analysis": result["needs_analysis"],
-            "cost_usd": _cost(state, usage), "events": state["events"] + [event]}
+    update = {"tasks": result["tasks"], "needs_analysis": result["needs_analysis"],
+              "cost_usd": _cost(state, usage), "events": state["events"] + [event]}
+    return _degrade(state, update, "plan", reason) if reason else update
 
 
 @traceable(name="gate_node")
@@ -240,11 +279,16 @@ async def analysis_node(state: AgentState, deps: SupervisorDeps) -> dict:
     if not pending:
         return {"events": state["events"] +
                 [{"type": "AnalysisSkipped", "reason": "analysis task 0개"}]}
-    summary, usage = deps.fast_llm.analyze(state.get("collected", []))
     new_tasks = [dict(t) for t in tasks]
     for t in new_tasks:
         if t["agent"] == "analysis" and t["status"] == "pending":
             t["status"] = "done"
+    try:
+        summary, usage = deps.fast_llm.analyze(state.get("collected", []))
+    except Exception as exc:   # 비교 분석은 부가 단계 — 건너뛰고 수집된 사실로 답변을 쓴다
+        update = {"tasks": new_tasks, "events": state["events"] +
+                  [{"type": "AnalysisSkipped", "reason": "LLM 호출 실패"}]}
+        return _degrade(state, update, "analyze", f"LLM 호출 실패({describe(exc)}) → 분석 생략")
     collected = state.get("collected", []) + [{"source": "analysis", "data": summary}]
     event = {"type": "AnalysisCompleted", "length": len(summary)}
     return {"tasks": new_tasks, "collected": collected,
@@ -260,15 +304,21 @@ async def write_node(state: AgentState, deps: SupervisorDeps) -> dict:
     그대로 노출)."""
     attempt = state.get("validation_attempts", 0) + 1
     writer = get_stream_writer()
-    draft, usage = await deps.quality_llm.write(
-        state["query"], state.get("collected", []),
-        attempt, state.get("validation_feedback"),
-        on_token=lambda piece: writer(
-            {"type": "AnswerToken", "attempt": attempt, "delta": piece}))
-    return {"draft": draft, "last_prompt": usage.get("prompt"),
-            "cost_usd": _cost(state, usage),
-            "events": state["events"] + [{"type": "DraftWritten", "attempt": attempt,
-                                          "length": len(draft)}]}
+    reason = None
+    try:
+        draft, usage = await deps.quality_llm.write(
+            state["query"], state.get("collected", []),
+            attempt, state.get("validation_feedback"),
+            on_token=lambda piece: writer(
+                {"type": "AnswerToken", "attempt": attempt, "delta": piece}))
+    except Exception as exc:   # LLM 없이 수집된 사실만으로 1) 2) 3) 답변을 만든다
+        draft, usage = template_answer(state["query"], state.get("collected", [])), {"usd": 0.0}
+        reason = f"LLM 호출 실패({describe(exc)}) → 수집된 사실로 템플릿 답변"
+    update = {"draft": draft, "last_prompt": usage.get("prompt"),
+              "cost_usd": _cost(state, usage),
+              "events": state["events"] + [{"type": "DraftWritten", "attempt": attempt,
+                                            "length": len(draft)}]}
+    return _degrade(state, update, "write", reason) if reason else update
 
 
 @traceable(name="validate_node")

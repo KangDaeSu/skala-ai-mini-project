@@ -20,12 +20,12 @@ OpenAI 계정에 실제 비용이 청구된다(run_openai.sh 실행 전 반드�
 """
 import json
 import os
-import re
 from pathlib import Path
 
 import httpx
 from langsmith import traceable
 
+from .fallback import rule_route
 from .resilience import call_sync, max_tokens
 
 OPENAI_URL = "https://api.openai.com/v1/chat/completions"
@@ -133,9 +133,8 @@ class OpenAIFastLLM(OpenAILLM):
         except (json.JSONDecodeError, AttributeError):
             # JSON 모드는 "유효한 JSON"만 보장할 뿐 스키마까지 강제하진 않으므로,
             # 필드 누락·오탐 시 코드 레벨 fallback을 둔다(W6 정신, ollama_llm.py와 동일).
-            incident = bool(re.search(r"장애|진단|다운|지연|급증|incident|티켓", query))
-            result = {"route": "incident" if incident else "chat",
-                      "needs_analysis": False}
+            # fallback 키로 표시해 graph의 route_node가 Degraded로 기록하게 한다.
+            result = {**rule_route(query, KNOWN_SYSTEMS), "fallback": "JSON 파싱 실패 → 규칙 기반 분류"}
         return result, usage
 
     @traceable(run_type="llm", name="openai_fast.plan")
@@ -155,7 +154,8 @@ class OpenAIFastLLM(OpenAILLM):
         try:
             raw = json.loads(content)
         except json.JSONDecodeError:
-            raw = {"needs_analysis": False, "tasks": []}
+            raw = {"needs_analysis": False, "tasks": [],
+                   "fallback": "JSON 파싱 실패 → 쿼리에서 대상 시스템 복구"}
         tasks, seen, idx = [], set(), 0
         analysis_added = False
         for t in raw.get("tasks", []):
@@ -184,6 +184,8 @@ class OpenAIFastLLM(OpenAILLM):
             tasks = recovered + tasks
         result = {"needs_analysis": bool(raw.get("needs_analysis", False)),
                   "tasks": tasks}
+        if raw.get("fallback"):   # graph의 plan_node가 Degraded로 기록한다
+            result["fallback"] = raw["fallback"]
         return result, usage
 
     @traceable(run_type="llm", name="openai_fast.analyze")

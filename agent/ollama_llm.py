@@ -11,12 +11,12 @@ fc
 사전 조건: `ollama serve` 실행 중 + `ollama pull qwen3:0.6b qwen3:8b`.
 """
 import json
-import re
 from pathlib import Path
 
 import httpx
 from langsmith import traceable
 
+from .fallback import rule_route
 from .resilience import PermanentError, call_async, call_sync, max_tokens
 
 OLLAMA_URL = "http://127.0.0.1:11434/api/chat"
@@ -184,9 +184,8 @@ class OllamaFastLLM(OllamaLLM):
                       "needs_analysis": bool(raw.get("needs_analysis", False))}
         except (json.JSONDecodeError, AttributeError):
             # 소형 모델의 형식 붕괴 대비 — 코드 레벨 fallback (W6 정신)
-            incident = bool(re.search(r"장애|진단|다운|지연|급증|incident|티켓", query))
-            result = {"route": "incident" if incident else "chat",
-                      "needs_analysis": False}
+            # fallback 키로 표시해 graph의 route_node가 Degraded로 기록하게 한다.
+            result = {**rule_route(query, KNOWN_SYSTEMS), "fallback": "JSON 파싱 실패 → 규칙 기반 분류"}
         return result, usage
 
     @traceable(run_type="llm", name="ollama_fast.plan")
@@ -205,7 +204,8 @@ class OllamaFastLLM(OllamaLLM):
         try:
             raw = json.loads(content)
         except json.JSONDecodeError:
-            raw = {"needs_analysis": False, "tasks": []}
+            raw = {"needs_analysis": False, "tasks": [],
+                   "fallback": "JSON 파싱 실패 → 쿼리에서 대상 시스템 복구"}
         tasks, seen, idx = [], set(), 0
         analysis_added = False
         for t in raw.get("tasks", []):
@@ -234,6 +234,8 @@ class OllamaFastLLM(OllamaLLM):
             tasks = recovered + tasks
         result = {"needs_analysis": bool(raw.get("needs_analysis", False)),
                   "tasks": tasks}
+        if raw.get("fallback"):   # graph의 plan_node가 Degraded로 기록한다
+            result["fallback"] = raw["fallback"]
         return result, usage
 
     @traceable(run_type="llm", name="ollama_fast.analyze")

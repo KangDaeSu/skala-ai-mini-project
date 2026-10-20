@@ -35,6 +35,8 @@ from dotenv import load_dotenv
 
 load_dotenv(ROOT / ".env")
 
+from langsmith import traceable
+
 CALLS: list[dict] = []   # 현재 쿼리 1건 동안의 LLM 호출 기록 (쿼리마다 비운다)
 
 
@@ -88,13 +90,23 @@ def _git_rev() -> str:
         return "unknown"
 
 
+try:   # After 코드에만 있다 — Before 코드(fallback.py 없음)에서도 평가가 돌아가게 한다
+    from agent.fallback import tag_request_run
+except ImportError:
+    def tag_request_run(result: dict) -> None:
+        pass
+
+
+@traceable(name="chat_request")
 async def _run_turn(graph, store, query: str, thread_id: str) -> dict:
-    """server.py의 _handle_chat과 같은 순서: 이력 로드 → 그래프 실행 → 이력 저장."""
+    """server.py의 _handle_chat과 같은 순서: 이력 로드 → 그래프 실행 → 이력 저장.
+    루트 run 이름도 chat_request로 맞춰 LangSmith에서 서버 요청과 같은 모양으로 보인다."""
     history = store.load(thread_id)
     result = await graph.ainvoke({"query": query, "thread_id": thread_id, "history": history,
                                   "events": [], "cost_usd": 0.0})
     store.append(thread_id, "user", query)
     store.append(thread_id, "assistant", result["final"])
+    tag_request_run(result)
     return result
 
 
@@ -136,6 +148,8 @@ def _summarize(runs: list[dict]) -> dict:
     lat = [r["elapsed_s"] for r in runs if r["success"]]
     faulted = [r for r in runs if r.get("faults")]
     return {
+        "degraded_runs": sum(1 for r in runs if r.get("degraded", 0) > 0),
+        "full_success": _rate([{"v": r["success"] and not r.get("degraded", 0)} for r in runs], "v"),
         "faults_injected": sum(len(r.get("faults", [])) for r in runs),
         "faulted_runs": len(faulted),
         "success_when_faulted": _rate(faulted, "success"),
@@ -161,7 +175,7 @@ def _markdown(meta: dict, overall: dict, by_cat: dict, per_item: dict) -> str:
             "latency_max", "avg_llm_calls", "avg_tokens"]
     if meta["mode"] == "chaos":
         cols = ["faults_injected", "faulted_runs", "success", "success_when_faulted",
-                "latency_p50", "latency_max_all", "avg_llm_calls"]
+                "degraded_runs", "full_success", "latency_p50", "latency_max_all", "avg_llm_calls"]
     lines = [f"# 평가 결과 — {meta['label']} / {meta['mode']} / {meta['backend']}", "",
              f"- 실행 시각: {meta['started_at']}  · 커밋: `{meta['git_rev']}`  · 반복: {meta['repeat']}회",
              f"- 모델: fast=`{meta['fast_llm']}`, quality=`{meta['quality_llm']}`",
@@ -265,7 +279,9 @@ async def main() -> None:
                    "tokens": sum(c["tokens"] for c in CALLS), "llm_detail": list(CALLS),
                    **_score(item, result)}
             if result is not None:
-                run.update({"retry_count": result.get("retry_count", 0),
+                run.update({"degraded": len(result.get("degraded", [])),   # Before 코드에는 키가 없어 0
+                            "degraded_stages": [d["stage"] for d in result.get("degraded", [])],
+                            "retry_count": result.get("retry_count", 0),
                             "validation_attempts": result.get("validation_attempts", 0),
                             "replan_rounds": result.get("replan_rounds", 0),
                             "cost_usd_virtual": result.get("cost_usd", 0.0),
@@ -277,6 +293,7 @@ async def main() -> None:
                   f"{'OK ' if run['success'] else 'ERR'} calls={run['llm_calls']} "
                   f"tok={run['tokens']} {flags} {run.get('monitored', '')} {run.get('runbooks', '')}"
                   + (f" faults={[f['fault'] for f in faults]}" if faults else "")
+                  + (f" degraded={run['degraded_stages']}" if run.get("degraded") else "")
                   + (f" {error[:120]}" if error else ""), flush=True)
 
     await mcp.stop()

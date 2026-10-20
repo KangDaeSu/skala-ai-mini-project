@@ -24,6 +24,7 @@ from pydantic import BaseModel
 
 from agent.deps import SupervisorDeps
 from agent.fake_llm import FastLLM, QualityLLM
+from agent.fallback import tag_request_run
 from agent.graph import build_graph
 from agent.mcp_client import MCPClient
 from agent.session_store import SqliteSessionStore
@@ -115,6 +116,7 @@ def _metadata(result: dict, run_id: str | None) -> dict:
         "parallel_elapsed": result.get("parallel_elapsed"),
         "validation_attempts": result.get("validation_attempts", 0),
         "cost_usd": result.get("cost_usd", 0.0),
+        "degraded_count": len(result.get("degraded", [])),   # LLM 실패로 폴백한 단계 수
         "llm_backend": app.state.llm_backend,
         "supervisor_version": app.state.deps.version,
         "instance_id": app.state.instance_id,
@@ -134,6 +136,7 @@ async def _handle_chat(message: str, thread_id: str) -> tuple[dict, str | None]:
         result = await run_v1(deps, message, thread_id, history)   # Wave 14
     deps.session_store.append(thread_id, "user", message)
     deps.session_store.append(thread_id, "assistant", result["final"])
+    tag_request_run(result)   # 폴백이 있었으면 루트 run에 degraded 태그
     rt = get_current_run_tree()
     return result, (str(rt.id) if rt else None)
 
