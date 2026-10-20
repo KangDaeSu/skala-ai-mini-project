@@ -44,13 +44,33 @@ LangGraph + MCP 기반 운영 장애 진단 에이전트(Base 코드)에서 **"�
 | 단위 테스트 34개 | 의존성 주입(`SupervisorDeps`)으로 가짜 LLM·MCP·임베더를 넣어 장애 상황 검증 | `4a2d422`, `f585c7b` |
 | 데이터 보강 | runbook에 한국어·영어 증상 키워드 한 줄, runbook 평가 케이스 5건 | `f585c7b` |
 
+```mermaid
+flowchart TB
+    Q(["사용자 질의"]) --> route
+    route -->|chat| chat["chat_answer"]
+    route -->|incident| plan
+    plan --> gate --> research --> replan["replan_check"]
+    replan -->|runbook 부족| research
+    replan -->|충분| analysis --> write --> validate
+    validate -->|반려| write
+    validate -->|합격| finalize(["최종 답변"])
+    chat --> finalize
+
+    plan -.- SYS["<b>systems.resolve_targets</b><br/>쿼리에 명시된 시스템만 조사<br/>모니터링 밖 시스템은 안내"]
+    replan -.- RAG["<b>rag.classify</b><br/>임베딩 유사도로 runbook 선택<br/>실패 시 키워드 규칙"]
+
+    subgraph GUARD["LLM 호출 방어선 (노란 노드 전부)"]
+        RES["<b>resilience</b><br/>단계별 타임아웃 · 재시도 · 시간 예산"] -->|그래도 실패| FB["<b>fallback</b><br/>축소 답변 + Degraded 기록"]
+    end
+
+
+    classDef llm fill:#fef3c7,stroke:#d97706,color:#111;
+    classDef added fill:#dcfce7,stroke:#16a34a,color:#111;
+    class route,plan,analysis,write,chat llm;
+    class SYS,RAG,RES,FB added;
 ```
-route ─ plan ─ gate ─ research ─ replan_check ─ analysis ─ write ─ validate ─ finalize
-  │       │                          │            │          │
-  │       └ systems.resolve_targets  └ rag.classify (실패 시 키워드 규칙)
-  │                                               │          │
-  └──────── 모든 LLM 호출: resilience(타임아웃·재시도·예산) → 실패 시 fallback(축소 답변) ┘
-```
+
+노란 노드 = LLM을 호출하는 노드(모두 resilience → fallback 방어선 적용) · 초록 노드 = 이번에 새로 추가한 모듈
 
 ## 3. 사용한 기술 요소
 
