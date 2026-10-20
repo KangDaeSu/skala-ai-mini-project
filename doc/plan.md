@@ -43,7 +43,7 @@ baseline을 Ollama(qwen3:0.6b / 8b)로 회귀 쿼리 10개에 돌린 결과(2026
 | 3 | `agent/systems.py` — 중복 함수 통합, 모르는 시스템은 "미확인", 누락 시스템 보충 | `systems.py`, `graph.py`, 어댑터 | 대상 정확도 | 완료 |
 | 4 | 장애 주입 단위 테스트 (가짜 deps 주입) | `tests/` | pytest | 완료 |
 | 5 | RAG runbook 선택 — 청크 임베딩(incident_type 메타데이터) + 질의·alert 가중 유사도, runbook 증상 키워드 보강 | `rag.py`, `graph.py`, `data/runbooks` | runbook 정확도 | 완료 |
-| 6 | OpenAI 최종 측정 (After), Before와 비교표 | `eval/compare.py` | After | |
+| 6 | OpenAI 최종 측정 (After), Before와 비교표 | `eval/compare.py` | After | 완료 |
 | 7 | 루트 README, 결과 보고서, 발표 자료 | `README.md` | — | |
 
 ## Before 측정 결과 (OpenAI, 커밋 `253fb4c`)
