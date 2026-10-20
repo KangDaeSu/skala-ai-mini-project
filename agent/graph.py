@@ -7,6 +7,14 @@ incident: plan(MCP Prompt 절차 반영) → gate(권위 게이트) → research
 
 모든 노드는 SupervisorDeps를 functools.partial로 주입받는 순수 함수다(Wave 13).
 각 노드는 @traceable로 LangSmith에 계층 트리로 기록된다.
+
+신뢰성 개선에서 바뀐 점 (그래프 구조·엣지는 그대로, 노드 내부만 변경):
+- LLM을 부르는 노드(route·plan·analysis·write·chat_answer)는 호출이 끝내 실패해도 예외를
+  밖으로 던지지 않고 fallback.py의 대체 동작으로 계속 진행한다 → _degrade()로 기록
+  (baseline: 예외가 그래프 밖으로 터져 HTTP 500)
+- plan: 모델이 고른 조사 대상을 systems.resolve_targets로 쿼리 기준 보정
+- replan_check: runbook을 키워드 규칙 대신 RAG(rag.py)로 선택, 실패 시 키워드 규칙
+- analysis·write: 조사한 모니터링 데이터가 없으면 LLM을 부르지 않는다
 """
 import asyncio
 import time
@@ -22,7 +30,6 @@ from .fallback import (CHAT_FALLBACK, degraded_event, describe, rule_route,
                        tag_current_run, template_answer)
 from .retry import with_retry
 from .systems import KNOWN_SYSTEMS, no_data_answer, notices_for, prompt_label, resolve_targets
-
 
 
 class AgentState(TypedDict, total=False):
@@ -52,7 +59,11 @@ def _cost(state: AgentState, usage: dict) -> float:
 
 
 def _degrade(state: AgentState, update: dict, stage: str, reason: str) -> dict:
-    """폴백 기록 — Degraded 이벤트를 붙이고 degraded 목록에 누적, LangSmith 노드 run에 태그."""
+    """폴백 기록 — Degraded 이벤트를 붙이고 degraded 목록에 누적, LangSmith 노드 run에 태그.
+
+    update는 노드가 돌려줄 상태 델타다. events는 노드가 이미 새 목록을 만들었으면 그 뒤에,
+    아니면 기존 state의 events 뒤에 붙인다. degraded 목록은 /chat metadata의
+    degraded_count와 평가 스크립트의 degraded_runs 지표가 된다."""
     tag_current_run(stage, reason)
     event = degraded_event(stage, reason)
     update["events"] = update.get("events", state.get("events", [])) + [event]
@@ -61,18 +72,22 @@ def _degrade(state: AgentState, update: dict, stage: str, reason: str) -> dict:
 
 
 def _rule_plan(query: str) -> dict:
-    """plan 폴백 — 조사 대상은 아래 plan_node의 resolve_targets 보정이 정한다."""
+    """plan 폴백 — LLM이 계획을 못 세우면 빈 계획에서 출발한다. 비어 있어도 괜찮은 이유:
+    아래 plan_node의 resolve_targets가 쿼리에 명시된 시스템으로 조사 대상을 다시 채운다."""
     return {"needs_analysis": False, "tasks": []}
 
 
 def _research_tasks(targets: list[str]) -> list[dict]:
+    """보정된 조사 대상 목록 → research(monitoring) task 목록."""
     return [{"id": f"task-{i}", "agent": "research", "kind": "monitoring",
              "target": t, "status": "pending"} for i, t in enumerate(targets)]
 
 
 @traceable(name="route_node")
 async def route_node(state: AgentState, deps: SupervisorDeps) -> dict:
-    """Wave 5 — 모든 쿼리가 무거운 파이프라인을 탈 필요는 없다."""
+    """Wave 5 — 모든 쿼리가 무거운 파이프라인을 탈 필요는 없다.
+
+    LLM 호출이 실패하면(resilience의 재시도·예산을 다 쓴 뒤) 정규식 규칙으로 분류한다."""
     try:
         result, usage = deps.fast_llm.route(state["query"])
         reason = result.get("fallback")   # 어댑터 안에서 JSON 파싱 실패로 폴백한 경우
@@ -115,6 +130,9 @@ async def plan_node(state: AgentState, deps: SupervisorDeps) -> dict:
     resource와 마찬가지로 이름을 어느 서버가 들고 있는지 미리 가정하지 않고,
     find_prompt()로 연결된 서버들을 먼저 조회해 찾은 뒤에만 get_prompt를 보낸다."""
     prompt_server = await deps.mcp.find_prompt("incident_analysis_prompt")
+    # system_name은 증상 문장과 모순되지 않는 이름만 넣는다(모르면 "미확인").
+    # baseline은 billing-service 질의에 "시스템: auth-service"를 넣어 추론 모델이 thinking
+    # 루프에 빠졌다(302초 후 HTTP 500의 직접 원인).
     procedure = await deps.mcp.get_prompt(
         "incident_analysis_prompt",
         {"system_name": prompt_label(state["query"]), "symptom": state["query"]},
@@ -130,12 +148,14 @@ async def plan_node(state: AgentState, deps: SupervisorDeps) -> dict:
     model_targets = [t["target"] for t in result["tasks"]
                      if t["agent"] == "research" and t.get("target")]
     targets, unmonitored = resolve_targets(state["query"], model_targets)
+    # research task는 보정된 대상으로 새로 만들고, analysis task는 모델 계획 그대로 둔다
     tasks = _research_tasks(targets) + [t for t in result["tasks"] if t["agent"] != "research"]
     events = list(state["events"])
     if targets != model_targets or unmonitored:
         events.append({"type": "TargetsCorrected", "model": model_targets,
                        "final": targets, "unmonitored": unmonitored})
     events.append({"type": "PlanCreated", "task_count": len(tasks), "targets": targets})
+    # "모니터링 대상 아님" 같은 안내는 collected에 notice로 넣어 write 단계가 답변에 쓰게 한다
     notices = [{"source": "notice", "data": n} for n in notices_for(targets, unmonitored)]
     update = {"tasks": tasks, "needs_analysis": result["needs_analysis"],
               "collected": state.get("collected", []) + notices,
@@ -210,6 +230,8 @@ async def research_node(state: AgentState, deps: SupervisorDeps) -> dict:
             "parallel_elapsed": elapsed, "events": events}
 
 
+# [baseline 규칙] RAG가 없거나(RUNBOOK_CLASSIFIER=keyword) 임베딩이 실패했을 때만 쓰인다.
+# 사용자 질의를 보지 않고 alert 문구만, 목록 순서대로 매칭한다는 한계가 RAG 도입의 이유.
 # 수집된 모니터링 결과(상태·알림 문구)를 보고 어떤 runbook이 맞는지 고른다. LLM에게
 # 다시 묻는 대신 코드 레벨 규칙으로 판단한다 — gate(Wave 6)·replan(Wave 7)과 같은 설계
 # 원칙: 모델의 판단을 그대로 믿지 않고, 실측 데이터로 검증 가능한 결정은 코드가 내린다.
@@ -239,7 +261,10 @@ def _classify_incident_type(collected: list[dict]) -> str:
 
 @traceable(name="replan_check_node")
 async def replan_check_node(state: AgentState, deps: SupervisorDeps) -> dict:
-    """Wave 7 — 1차 수집 결과 평가. runbook이 없으면 gap task만 추가해 재조사."""
+    """Wave 7 — 1차 수집 결과 평가. runbook이 없으면 gap task만 추가해 재조사.
+
+    plan은 monitoring task만 만들기 때문에 1차 조사 뒤에는 거의 항상 runbook이 없다 —
+    즉 runbook 선택은 사실상 이 노드가 전담한다(RAG 적용 지점)."""
     has_runbook = any(c["source"] == "runbook" for c in state.get("collected", []))
     has_monitoring = any(c["source"] == "monitoring" for c in state.get("collected", []))
     rounds = state.get("replan_rounds", 0)
@@ -254,6 +279,7 @@ async def replan_check_node(state: AgentState, deps: SupervisorDeps) -> dict:
         try:
             found = deps.retriever.classify(state["query"], collected)
             incident_type = found["incident_type"]
+            # 유사도·1·2위 차이를 이벤트에 남겨 웹 UI·평가에서 판단 근거를 볼 수 있게 한다
             detail = {"classifier": "rag", **{k: found[k] for k in
                                               ("score", "margin", "ranking", "embed_tokens")}}
         except Exception as exc:     # 임베딩 실패 시 baseline 키워드 규칙으로 폴백
@@ -264,6 +290,7 @@ async def replan_check_node(state: AgentState, deps: SupervisorDeps) -> dict:
                 "target": incident_type, "status": "pending"}
     verdict = {"type": "ReplanCheck", "round": rounds, "is_sufficient": False,
                "gap_task": gap_task["id"], "target": incident_type, **detail}
+    # update는 RAG 실패 시의 Degraded 기록(events·degraded)이다 — 있으면 그 events 뒤에 verdict
     return {**update, "tasks": state["tasks"] + [gap_task], "replan_rounds": rounds + 1,
             "events": update.get("events", state["events"]) + [verdict]}
 
@@ -313,7 +340,7 @@ async def write_node(state: AgentState, deps: SupervisorDeps) -> dict:
         # 조사한 시스템이 없으면(모니터링 대상 아님 / 대상 특정 불가) LLM 없이 안내 답변
         draft = no_data_answer([c["data"] for c in collected if c["source"] == "notice"]
                                or notices_for([], []))
-        writer({"type": "AnswerToken", "attempt": attempt, "delta": draft})
+        writer({"type": "AnswerToken", "attempt": attempt, "delta": draft})   # 웹 UI 스트리밍에도 전달
         return {"draft": draft, "events": state["events"] + [
             {"type": "DraftWritten", "attempt": attempt, "length": len(draft), "llm": False}]}
     reason = None

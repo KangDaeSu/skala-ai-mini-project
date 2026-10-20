@@ -37,8 +37,9 @@ def degraded_event(stage: str, reason: str) -> dict:
 
 
 def tag_current_run(stage: str, reason: str) -> None:
-    """지금 실행 중인 LangSmith run(노드)에 degraded 태그와 원인을 붙인다."""
-    rt = get_current_run_tree()
+    """지금 실행 중인 LangSmith run(노드)에 degraded 태그와 원인을 붙인다.
+    LangSmith에서 tag = degraded 로 필터하면 폴백이 일어난 실행만 모아볼 수 있다."""
+    rt = get_current_run_tree()   # @traceable 노드 안에서 호출되므로 그 노드의 run (추적 off면 None)
     if rt is not None:
         rt.add_tags(["degraded", f"degraded:{stage}"])
         rt.add_metadata({"degraded_stage": stage, "degraded_reason": reason})
@@ -57,6 +58,8 @@ def tag_request_run(result: dict) -> None:
 def template_answer(query: str, collected: list[dict]) -> str:
     """write 폴백 — 수집된 모니터링 수치와 runbook 절차만으로 1) 2) 3) 형식 답변을 만든다.
     LLM이 지어낼 여지가 없으므로 수치는 수집값 그대로다."""
+    # collected의 source별로 나눈다: monitoring(MCP Tool 결과) / runbook(MCP Resource 본문) /
+    # notice(systems.py가 넣은 "모니터링 대상 아님" 같은 안내)
     mon = [c["data"] for c in collected if c["source"] == "monitoring"]
     runbooks = [c["data"] for c in collected if c["source"] == "runbook"]
     notices = [c["data"] for c in collected if c["source"] == "notice"]
@@ -69,6 +72,7 @@ def template_answer(query: str, collected: list[dict]) -> str:
     if runbooks:
         body = [l.strip() for l in runbooks[0].strip().splitlines() if l.strip()]
         title = body[0].lstrip("# ") if body else "runbook"
+        # "1. ..." 형식의 절차 줄만 뽑아 앞의 3개를 → 로 잇는다 (증상 키워드 줄은 제외됨)
         steps = [m.group(1) for l in body[1:] if (m := re.match(r"^\d+\.\s+(.*)", l))]
         lines.append(f"2) 표준 절차({title}): " + (" → ".join(steps[:3]) or "runbook 본문 확인 필요"))
     else:

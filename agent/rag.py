@@ -77,13 +77,17 @@ class Chunk:
 
 
 def _cosine(a: list[float], b: list[float]) -> float:
+    """코사인 유사도 — 벡터 방향이 같을수록 1에 가깝다. 청크가 수십 개라 numpy 없이 계산한다."""
     dot = sum(x * y for x, y in zip(a, b))
     norm = math.sqrt(sum(x * x for x in a) * sum(y * y for y in b))
     return dot / norm if norm else 0.0
 
 
 def split_runbook(text: str) -> list[str]:
-    """runbook 1개 → 청크 목록: [제목 + 증상 키워드] + [제목 — 절차 n]…"""
+    """runbook 1개 → 청크 목록: [제목 + 증상 키워드] + [제목 — 절차 n]…
+
+    절차 줄마다 제목을 붙이는 이유: "로그 파일 정리" 같은 절차 문장만으로는 어떤 장애의
+    절차인지 임베딩에 드러나지 않는다. 실험(16건)에서 문서 통째 임베딩보다 정확도가 높았다."""
     lines = [l.strip() for l in text.splitlines() if l.strip()]
     title = lines[0].lstrip("# ") if lines else ""
     symptoms = [l.lstrip("> ") for l in lines[1:] if l.startswith(">")]
@@ -112,9 +116,11 @@ class RunbookRetriever:
         alerts = " ".join(
             f"{d['system_name']}: {'; '.join(d.get('alerts') or ['no alerts'])}"
             for d in (c["data"] for c in collected if c["source"] == "monitoring"))
+        # 질의와 alert를 따로 임베딩한다 — 이어 붙이면 길이가 긴 alert 쪽으로 의미가 쏠린다
         texts = [query, alerts] if alerts else [query]
         vectors, tokens = self.embedder.embed(texts, "query")
         q_vec, a_vec = vectors[0], vectors[-1]
+        # 사용자가 말한 증상을 우선(기본 0.8). alert가 없는 healthy 시스템이면 질의만 본다
         w = self.query_weight if alerts else 1.0
         scores: dict[str, float] = {}
         for ch in self.chunks:   # runbook별 점수 = 그 runbook 청크 중 최고 유사도
@@ -122,6 +128,7 @@ class RunbookRetriever:
             scores[ch.incident_type] = max(s, scores.get(ch.incident_type, -1.0))
         ranking = sorted(scores.items(), key=lambda kv: kv[1], reverse=True)
         best, score = ranking[0]
+        # 1·2위 점수 차 — 작을수록 판단이 불안정하다(nomic 실측 0.002~0.005, 한계 장표 근거)
         margin = score - ranking[1][1] if len(ranking) > 1 else score
         return {"incident_type": best, "score": round(score, 4), "margin": round(margin, 4),
                 "ranking": [[t, round(s, 4)] for t, s in ranking[:3]], "embed_tokens": tokens}

@@ -12,6 +12,15 @@ HTTP 500). 여기서는 호출 단계(stage)마다 정책을 따로 두고 어�
 - 출력 토큰 상한: JSON 출력(route/plan)과 텍스트 출력(chat/write/analyze)을 나눠 둔다
 
 모든 값은 환경변수로 덮어쓸 수 있다 (예: LLM_TIMEOUT_WRITE=90, LLM_RETRIES=1).
+
+사용법 — 어댑터는 "timeout을 받아 HTTP 요청 1회를 보내는 함수"만 만들어 넘긴다:
+    def attempt(timeout): return httpx.post(URL, json=payload, timeout=timeout).json()
+    data, retries = call_sync("plan", attempt)
+재시도·대기·예산 계산은 전부 여기서 하므로 어댑터 코드는 baseline과 거의 같다.
+
+한계(실측): httpx의 timeout은 "응답 조각 사이의 대기 시간" 기준이라, 토큰이 조금씩 계속
+흘러오는 느린 스트리밍의 총 시간은 제한하지 못한다. 또 단계별 예산만 있고 요청 전체 예산은
+없어서, 여러 단계에 장애가 겹치면 예산이 합쳐진다(장애 주입 측정 최대 약 99초).
 """
 import asyncio
 import os
@@ -82,20 +91,26 @@ def is_transient(exc: BaseException) -> bool:
 
 
 class _Attempts:
-    """한 번의 논리적 호출에서 시도 간격과 남은 예산을 계산한다 (sync/async 공용)."""
+    """한 번의 논리적 호출에서 시도 간격과 남은 예산을 계산한다 (sync/async 공용).
+
+    예) route: timeout 20초, budget 30초 → 1차 시도 20초 대기 후 실패 → 0.5초 쉬고 →
+        2차 시도는 남은 약 9.5초만 기다린다 → 그래도 실패하면 예외 → graph가 폴백."""
 
     def __init__(self, policy: CallPolicy):
         self.policy = policy
-        self.deadline = time.monotonic() + policy.budget
+        self.deadline = time.monotonic() + policy.budget   # 이 시각을 넘기면 더 시도하지 않는다
         self.attempt = 0
 
     def next_timeout(self) -> float:
+        # 시도당 타임아웃과 남은 예산 중 작은 값 (0 이하로 내려가 httpx가 오동작하지 않게 최소 0.1초)
         return max(0.1, min(self.policy.timeout, self.deadline - time.monotonic()))
 
     def backoff_or_raise(self, exc: BaseException) -> float:
         """재시도할 수 있으면 기다릴 시간을 돌려주고, 아니면 예외를 그대로 다시 던진다."""
-        delay = self.policy.base_delay * (2 ** (self.attempt - 1))
+        delay = self.policy.base_delay * (2 ** (self.attempt - 1))   # 0.5 → 1.0 → 2.0초…
         remaining = self.deadline - time.monotonic()
+        # 포기하는 세 경우: ① 재시도해도 소용없는 실패(4xx 등) ② 재시도 횟수 소진
+        # ③ 쉬고 나면 예산이 남지 않음
         if (not is_transient(exc) or self.attempt > self.policy.retries
                 or remaining <= delay + 0.1):
             raise exc
@@ -111,6 +126,8 @@ def call_sync(stage: str, fn):
         try:
             return fn(tracker.next_timeout()), tracker.attempt - 1
         except Exception as exc:
+            # 재시도할 수 있으면 백오프만큼 쉬고 다시, 아니면 backoff_or_raise가 예외를 던진다.
+            # (동기 sleep — 어댑터의 route/plan/analyze가 원래 동기 호출이라 그대로 맞췄다)
             time.sleep(tracker.backoff_or_raise(exc))
 
 

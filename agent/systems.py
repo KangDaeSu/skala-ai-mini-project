@@ -17,7 +17,8 @@ from pathlib import Path
 
 _MONITORING = Path(__file__).resolve().parent.parent / "data" / "monitoring.json"
 
-# 시스템명처럼 생긴 토큰 (예: billing-service, order-api, web-01) — 모니터링 목록 밖 이름 감지용
+# 시스템명처럼 생긴 토큰 (예: billing-service, order-api, web-01) — 모니터링 목록 밖 이름 감지용.
+# 소문자로 시작하고 하이픈으로 이어지며 -service/-server/-api/-db/-숫자로 끝나는 단어.
 _NAME_LIKE = re.compile(r"\b[a-z][a-z0-9]*(?:-[a-z0-9]+)*-(?:service|server|api|db|\d+)\b")
 
 UNKNOWN_LABEL = "미확인"
@@ -36,7 +37,10 @@ KNOWN_SYSTEMS = load_known_systems()
 
 def mentioned(query: str) -> tuple[list[str], list[str]]:
     """쿼리에 등장한 (모니터링 대상 시스템, 모니터링 밖 시스템명)을 등장 순서대로 돌려준다."""
+    # 쿼리에서 처음 등장한 위치로 정렬 — "gateway에서 payments로"는 [gateway, payments]
     known = [s for _, s in sorted((query.index(s), s) for s in KNOWN_SYSTEMS if s in query)]
+    # 모니터링 목록에 없는 시스템명. 단 "payments-service-3"처럼 아는 시스템의 인스턴스명은
+    # 모르는 시스템으로 치지 않는다(startswith 검사)
     unknown = [n for n in dict.fromkeys(_NAME_LIKE.findall(query))
                if n not in KNOWN_SYSTEMS and not any(n.startswith(k) for k in known)]
     return known, unknown

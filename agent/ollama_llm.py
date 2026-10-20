@@ -73,11 +73,12 @@ class OllamaLLM:
 
     def _chat(self, system: str, user: str, schema: dict | None = None,
               stage: str = "chat") -> tuple[str, dict]:
+        # stage: resilience 정책 이름(route/plan/analyze/chat/write) — 단계별 타임아웃·예산이 다르다
         payload = self._payload(system, user, stream=False, json_output=schema is not None)
         if schema is not None:
             payload["format"] = schema
 
-        def attempt(timeout: float) -> dict:
+        def attempt(timeout: float) -> dict:   # HTTP 요청 1회 — 재시도 여부는 resilience가 판단
             resp = httpx.post(OLLAMA_URL, json=payload, timeout=timeout)
             resp.raise_for_status()
             return resp.json()
@@ -177,7 +178,9 @@ class OllamaFastLLM(OllamaLLM):
             agent = t.get("agent")
             if agent == "research":
                 target = t.get("target", "")
-                if target not in KNOWN_SYSTEMS or target in seen:   # 추측하지 않고 버린다
+                # 모르는 이름·중복은 추측하지 않고 버린다
+                # (baseline은 _guess_target으로 쿼리에서 다시 찾거나 auth-service를 끼워 넣었다)
+                if target not in KNOWN_SYSTEMS or target in seen:
                     continue
                 seen.add(target)
                 tasks.append({"id": f"task-{idx}", "agent": "research",
