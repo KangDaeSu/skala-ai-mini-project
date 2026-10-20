@@ -45,6 +45,7 @@ baseline을 Ollama(qwen3:0.6b / 8b)로 회귀 쿼리 10개에 돌린 결과(2026
 | 5 | RAG runbook 선택 — 청크 임베딩(incident_type 메타데이터) + 질의·alert 가중 유사도, runbook 증상 키워드 보강 | `rag.py`, `graph.py`, `data/runbooks` | runbook 정확도 | 완료 |
 | 6 | OpenAI 최종 측정 (After), Before와 비교표 | `eval/compare.py` | After | 완료 |
 | 7 | 루트 README, 결과 보고서, 발표 자료 | `README.md` | — | README 완료 |
+| 9 | (OpenAI 측정 이후) 요청 전체 deadline(contextvar, 기본 60초), 세션 저장소 실패 시 이력 없이 진행 | `resilience.py`, `server.py`, `ollama_llm.py` | Ollama 장애 주입 최대 지연 115초 → 60초 | 완료 |
 | 8 | (OpenAI 측정 이후) 실패 구조화 `CallResult`/`ExternalCallError`, MCP 방어선·자동 재연결, 서킷 브레이커·Retry-After·지터, 서버 `{ok, error}` 응답 | `resilience.py`, `mcp_client.py`, `graph.py`, `server.py` | Ollama 장애 주입(LLM+MCP) | 완료 |
 
 ## Before 측정 결과 (OpenAI, 커밋 `253fb4c`)

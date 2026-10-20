@@ -41,6 +41,8 @@ LangGraph + MCP 기반 운영 장애 진단 에이전트(Base 코드)에서 **"�
 |---|---|---|
 | 실패 시 폴백 응답 | route·plan·analyze·write·chat 단계별 대체 동작, 500 대신 수집된 사실로 축소 답변 (`agent/fallback.py`) | `12a7cc7` |
 | 구조화된 실패 | 재시도를 다 쓴 실패는 `ExternalCallError(error={stage, kind, retryable, attempts, elapsed_s, message})`, 노드는 `guard()`로 `CallResult(ok, value, error)`를 받아 분기. 버그(그 외 예외)는 폴백으로 숨기지 않음. `/chat`은 항상 `{ok, reply, error, degraded}`, 전역 예외 처리기·SSE `Error` 이벤트 | 이후 보강 |
+| 요청 전체 deadline | 요청 하나가 쓸 수 있는 총시간(`REQUEST_DEADLINE`, 기본 60초)을 contextvar로 모든 외부 호출이 공유 — 넘기면 호출 없이 즉시 폴백, 느린 스트리밍도 끊음 | 이후 보강 |
+| 세션 저장소 실패 격리 | SQLite 이력 조회·저장이 실패해도 이력 없이 진행하고 답변 반환, 실패는 `degraded`(stage=session)로 기록 | 이후 보강 |
 | MCP 방어선 | 모든 MCP 호출(prompt·monitoring·runbook)에 타임아웃·재시도·서킷 브레이커, 실패 시 기본 절차·"조회하지 못했다" 안내. 세션이 끊기면 세대별 연결 task로 **자동 재연결** (`agent/mcp_client.py`) | 이후 보강 |
 | 관측 | `Degraded` 이벤트, `/chat` metadata `degraded_count`, LangSmith run에 `degraded` 태그·원인 메타데이터, 웹 UI 단계 표시 | `12a7cc7` |
 | 장애 주입 평가 | `eval/chaos.py` — 코드 수정 없이 httpx 전송 계층에서 응답 없음·503·깨진 JSON을 seed 고정으로 주입 | `6b73c78` |
@@ -85,7 +87,7 @@ flowchart TB
 | 의존성 주입 | `SupervisorDeps`에 retriever 추가, 테스트에서 가짜 LLM·MCP·임베더 주입 |
 | LangSmith | 폴백 run에 `degraded` 태그·원인 메타데이터, 평가 실행을 `chat_request` 루트 run으로 기록 |
 | 모듈화 | `resilience.py`·`fallback.py`·`systems.py`·`rag.py`로 관심사 분리, 중복 함수 3벌 제거 |
-| 단위 테스트 | pytest 48개 (약 10초) — 재시도·서킷 브레이커·구조화된 실패·MCP 폴백·서버 오류 응답, MCP 프로세스 강제 종료 후 재연결(통합) |
+| 단위 테스트 | pytest 54개 (약 11초) — 재시도·서킷 브레이커·구조화된 실패·MCP 폴백·서버 오류 응답, MCP 프로세스 강제 종료 후 재연결(통합) |
 | 장애 주입(Chaos) 테스트 | httpx 전송 계층 monkeypatch, 같은 seed로 Before/After 같은 위치에 같은 장애 |
 
 ## 4. Before / After (OpenAI 실측)
@@ -116,7 +118,7 @@ fast=`gpt-4o-mini`, quality=`gpt-4o` · Before=`before` 태그, After=`after` �
 
 | 항목 | 내용 |
 |---|---|
-| 최대 지연 | 단계별 예산만 있고 요청 전체 예산이 없어, 장애가 연속되면 예산이 합쳐져 최대 약 99초 (MCP 장애까지 겹치면 Ollama 실측 115초) |
+| 최대 지연 vs 답변 품질 | 요청 deadline(60초)으로 최대 지연을 115초 → 60초로 묶었지만(Ollama, LLM+MCP 장애), 시간이 끊긴 실행은 write가 템플릿 답변으로 대체돼 폴백 없이 성공한 비율이 52% → 43%로 내려감 |
 | 타임아웃 기준 | httpx 타임아웃은 응답 조각 사이 대기 시간 기준 — 토큰이 계속 흘러오는 느린 스트리밍의 총 시간은 제한하지 못함 (웹 UI 캡처 중 실측) |
 | 폴백 품질 | 서버는 죽지 않지만 장애 주입 시 11/32건이 축소 답변(LLM 분석 없이 수집값만) |
 | RAG 비용·정확도 | 임베딩 호출로 p50 +0.6초·토큰 +10%, 요청당 runbook 1개만 선택(여러 증상 동시 대응 불가), "세 시스템 전부 느려졌어요"는 오분류. Ollama nomic 모델은 1·2위 점수 차가 0.002~0.005로 불안정 |
@@ -124,9 +126,9 @@ fast=`gpt-4o-mini`, quality=`gpt-4o` · Before=`before` 태그, After=`after` �
 | 추론 모드 off | 소형 모델(qwen3:0.6b)의 plan 품질 하락 — 대상 보정 규칙이 가려 주는 구조. 시스템명이 없는 질의는 추측 대신 되묻기 발생 |
 | 평가의 한계 | 데이터셋 21건·직접 라벨링, 장애 비율은 실제보다 가혹, 모니터링 수치 jitter로 수치 인용 정확도는 미채점 |
 | 남은 약점 | 30자+`1)`만 보는 validate(할루시네이션 미검출). 동기 LLM 호출은 `to_thread`로 옮겨 이벤트 루프는 막지 않지만 스레드를 점유 |
-| 측정 시점 | 구조화된 실패·MCP 방어선·서킷 브레이커는 `after` 태그(OpenAI 최종 측정) **이후** 변경 — 위 OpenAI 수치에는 포함되지 않음. Ollama 점검: LLM+MCP 장애 54건 주입에도 21/21 성공, 예외 0건 (`output/step6-mcp_chaos_ollama.md`) |
+| 측정 시점 | 구조화된 실패·MCP 방어선·서킷 브레이커·요청 deadline·세션 실패 격리는 `after` 태그(OpenAI 최종 측정) **이후** 변경 — 위 OpenAI 수치에는 포함되지 않음. Ollama 점검: LLM+MCP 장애 54건 주입에도 21/21 성공, 예외 0건 (`output/step6-mcp_chaos_ollama.md`) |
 
-**추가 개선 방향**: 요청 전체 deadline, 비동기 LLM 호출, LLM-as-judge 검증, runbook 다중 선택·하이브리드 검색(BM25+임베딩), 장애 질의의 난이도별 분기
+**추가 개선 방향**: 비동기 LLM 호출, LLM-as-judge 검증, runbook 다중 선택·하이브리드 검색(BM25+임베딩), 장애 질의의 난이도별 분기
 
 ## 6. 실행 방법
 
@@ -142,7 +144,7 @@ bash sh/run_frontend.sh          # 웹 채팅 :8600
 평가·테스트:
 
 ```bash
-.venv/bin/python3 -m pytest tests                                              # 단위 테스트 48개
+.venv/bin/python3 -m pytest tests                                              # 단위 테스트 54개
 .venv/bin/python3 eval/run_eval.py --label after --backend ollama --repeat 1   # 정상 모드
 .venv/bin/python3 eval/run_eval.py --label after --backend ollama --mode chaos # 장애 주입 모드 (--chaos-mcp-rate 0.15 로 MCP 장애 추가)
 .venv/bin/python3 eval/compare.py                                              # Before/After 표 (OpenAI 결과 기준)
@@ -153,6 +155,7 @@ bash sh/run_frontend.sh          # 웹 채팅 :8600
 | 변수 | 의미 | 기본값 |
 |---|---|---|
 | `LLM_TIMEOUT_<STAGE>` / `LLM_BUDGET_<STAGE>` | 단계(ROUTE·PLAN·ANALYZE·CHAT·WRITE·EMBED·MCP)별 시도당 타임아웃 / 재시도 포함 예산(초) | route 20/30, write 60/90, mcp 10/20 등 |
+| `REQUEST_DEADLINE` | 요청 하나가 쓸 수 있는 총시간(초), 0이면 끔 | 60 |
 | `CIRCUIT_FAILURES` / `CIRCUIT_COOLDOWN` | 서비스(llm·mcp·embed)별 연속 실패 몇 번에 차단할지 / 차단 시간(초) | 3 / 30 |
 | `LLM_RETRIES`, `LLM_RETRY_BASE_DELAY` | 재시도 횟수, 백오프 시작 간격 | 2, 0.5 |
 | `LLM_MAX_TOKENS_JSON` / `LLM_MAX_TOKENS_TEXT` | 출력 토큰 상한 | 512 / 1024 |
