@@ -26,6 +26,8 @@ from pathlib import Path
 import httpx
 from langsmith import traceable
 
+from .resilience import call_sync, max_tokens
+
 OPENAI_URL = "https://api.openai.com/v1/chat/completions"
 
 
@@ -80,7 +82,8 @@ class OpenAILLM:
         self.usd_per_1k = usd_per_1k_tokens
         self.api_key = os.environ.get("OPENAI_API_KEY", "")
 
-    def _chat(self, system: str, user: str, json_mode: bool = False) -> tuple[str, dict]:
+    def _chat(self, system: str, user: str, json_mode: bool = False,
+              stage: str = "chat") -> tuple[str, dict]:
         if not self.api_key:
             raise RuntimeError(
                 "OPENAI_API_KEY가 설정되지 않았습니다 — .env 또는 환경변수로 지정하세요."
@@ -90,17 +93,23 @@ class OpenAILLM:
             "messages": [{"role": "system", "content": system},
                          {"role": "user", "content": user}],
             "temperature": 0,
+            "max_tokens": max_tokens(json_output=json_mode),
         }
         if json_mode:
             payload["response_format"] = {"type": "json_object"}
         headers = {"Authorization": f"Bearer {self.api_key}",
                    "Content-Type": "application/json"}
-        resp = httpx.post(OPENAI_URL, json=payload, headers=headers, timeout=120.0)
-        resp.raise_for_status()
-        data = resp.json()
+
+        def attempt(timeout: float) -> dict:
+            resp = httpx.post(OPENAI_URL, json=payload, headers=headers, timeout=timeout)
+            resp.raise_for_status()
+            return resp.json()
+
+        # 단계별 타임아웃·재시도·시간 예산은 resilience가 맡는다 (baseline: timeout 120초 1회)
+        data, retries = call_sync(stage, attempt)
         content = data["choices"][0]["message"]["content"]
         tokens = data.get("usage", {}).get("total_tokens", 0)
-        usage = {"model": self.name, "tokens": tokens,
+        usage = {"model": self.name, "tokens": tokens, "retries": retries,
                  "usd": round(tokens / 1000 * self.usd_per_1k, 6)}
         return content, usage
 
@@ -115,7 +124,7 @@ class OpenAIFastLLM(OpenAILLM):
                   "인사·잡담·일반 질문이면 route=chat. "
                   "needs_analysis는 패턴 비교/통계 분석이 꼭 필요할 때만 true. "
                   + ROUTE_INSTRUCTIONS)
-        content, usage = self._chat(system, query, json_mode=True)
+        content, usage = self._chat(system, query, json_mode=True, stage="route")
         try:
             raw = json.loads(content)
             route = raw.get("route") if raw.get("route") in ("chat", "incident") else None
@@ -139,7 +148,7 @@ class OpenAIFastLLM(OpenAILLM):
                   "패턴 분석이 꼭 필요하다고 판단되면 agent=analysis task를 추가해도 된다. "
                   + PLAN_INSTRUCTIONS)
         user = f"## 표준 절차\n{procedure_prompt}\n\n## 사용자 요청\n{query}"
-        content, usage = self._chat(system, user, json_mode=True)
+        content, usage = self._chat(system, user, json_mode=True, stage="plan")
 
         # 코드 레벨 정규화 — JSON 형식은 지켜져도 내용은 흔들릴 수 있으므로
         # (대상 시스템 오타, task 누락/중복) 실행 가능한 형태로 보정한다.
@@ -186,7 +195,7 @@ class OpenAIFastLLM(OpenAILLM):
         facts = "\n".join(
             f"- {d['system_name']}: 상태={d['status']}, CPU {d['cpu_percent']}%, "
             f"알림 {d['alerts']}" for d in mon) or "(모니터링 데이터 없음)"
-        return self._chat(system, facts)
+        return self._chat(system, facts, stage="analyze")
 
     @traceable(run_type="llm", name="openai_fast.chat")
     async def chat(self, query: str, history: list[dict], on_token=None) -> tuple[str, dict]:
@@ -198,7 +207,7 @@ class OpenAIFastLLM(OpenAILLM):
         rendered = "\n".join(f"{m['role']}: {m['content']}" for m in history[-10:])
         user = (f"## 지금까지의 대화\n{rendered or '(없음)'}\n\n"
                 f"## 사용자의 새 메시지\n{query}")
-        content, usage = self._chat(system, user)
+        content, usage = self._chat(system, user, stage="chat")
         usage["prompt"] = f"[SYSTEM]\n{system}\n\n[USER]\n{user}"
         if on_token is not None:
             on_token(content)
@@ -231,7 +240,7 @@ class OpenAIQualityLLM(OpenAILLM):
         user = f"## 사용자 요청\n{query}\n\n## 수집된 사실\n" + "\n".join(facts)
         if feedback:
             user += f"\n\n## 이전 초안에 대한 검증 반려 사유 (반드시 반영)\n{feedback}"
-        content, usage = self._chat(system, user)
+        content, usage = self._chat(system, user, stage="write")
         usage["prompt"] = f"[SYSTEM]\n{system}\n\n[USER]\n{user}"
         if on_token is not None:
             on_token(content)

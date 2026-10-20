@@ -17,6 +17,8 @@ from pathlib import Path
 import httpx
 from langsmith import traceable
 
+from .resilience import PermanentError, call_async, call_sync, max_tokens
+
 OLLAMA_URL = "http://127.0.0.1:11434/api/chat"
 
 
@@ -91,58 +93,78 @@ class OllamaLLM:
         self.model = model
         self.usd_per_1k = usd_per_1k_tokens
 
-    def _chat(self, system: str, user: str, schema: dict | None = None) -> tuple[str, dict]:
-        payload = {
+    def _payload(self, system: str, user: str, stream: bool, json_output: bool) -> dict:
+        # think=False: qwen3 추론 모드를 끈다 — 모순된 프롬프트에서 thinking만 수천 토큰
+        # 생성하고 답변은 0자인 채로 timeout까지 가던 문제(실측: plan 4000토큰 전부 thinking)
+        # num_predict: 출력 토큰 상한 — 상한이 없어 끝없이 생성하던 문제를 막는다
+        return {
             "model": self.model,
             "messages": [{"role": "system", "content": system},
                          {"role": "user", "content": user}],
-            "stream": False,
-            "options": {"temperature": 0.0},
+            "stream": stream,
+            "think": False,
+            "options": {"temperature": 0.0, "num_predict": max_tokens(json_output)},
         }
+
+    def _chat(self, system: str, user: str, schema: dict | None = None,
+              stage: str = "chat") -> tuple[str, dict]:
+        payload = self._payload(system, user, stream=False, json_output=schema is not None)
         if schema is not None:
             payload["format"] = schema
-        resp = httpx.post(OLLAMA_URL, json=payload, timeout=300.0)
-        resp.raise_for_status()
-        data = resp.json()
+
+        def attempt(timeout: float) -> dict:
+            resp = httpx.post(OLLAMA_URL, json=payload, timeout=timeout)
+            resp.raise_for_status()
+            return resp.json()
+
+        # 단계별 타임아웃·재시도·시간 예산은 resilience가 맡는다 (baseline: timeout 300초 1회)
+        data, retries = call_sync(stage, attempt)
         content = data["message"]["content"]
         tokens = (data.get("prompt_eval_count") or 0) + (data.get("eval_count") or 0)
-        usage = {"model": self.name, "tokens": tokens,
+        usage = {"model": self.name, "tokens": tokens, "retries": retries,
                  "usd": round(tokens / 1000 * self.usd_per_1k, 6)}
         return content, usage
 
-    async def _chat_stream(self, system: str, user: str, on_token=None) -> tuple[str, dict]:
+    async def _chat_stream(self, system: str, user: str, on_token=None,
+                           stage: str = "write") -> tuple[str, dict]:
         """사용자 대면 텍스트(최종 답변류) 전용 — Ollama NDJSON 스트림을 토큰 단위로
         받아 on_token(조각)을 즉시 호출해 SSE로 실시간 중계할 수 있게 한다. 분류/계획
         등 JSON 스키마 출력(route/plan/analyze)은 부분 출력이 의미가 없어 그대로 _chat을
         쓴다."""
-        payload = {
-            "model": self.model,
-            "messages": [{"role": "system", "content": system},
-                         {"role": "user", "content": user}],
-            "stream": True,
-            "options": {"temperature": 0.0},
-        }
-        chunks: list[str] = []
-        usage = {"model": self.name, "tokens": 0, "usd": 0.0}
-        async with httpx.AsyncClient(timeout=300.0) as client:
-            async with client.stream("POST", OLLAMA_URL, json=payload) as resp:
-                resp.raise_for_status()
-                async for line in resp.aiter_lines():
-                    if not line:
-                        continue
-                    data = json.loads(line)
-                    piece = data.get("message", {}).get("content", "")
-                    if piece:
-                        chunks.append(piece)
-                        if on_token is not None:
-                            on_token(piece)
-                    if data.get("done"):
-                        tokens = ((data.get("prompt_eval_count") or 0)
-                                  + (data.get("eval_count") or 0))
-                        usage = {"model": self.name, "tokens": tokens,
-                                 "usd": round(tokens / 1000 * self.usd_per_1k, 6)}
+        payload = self._payload(system, user, stream=True, json_output=False)
+
+        async def attempt(timeout: float) -> tuple[str, dict]:
+            chunks: list[str] = []
+            usage = {"model": self.name, "tokens": 0, "usd": 0.0}
+            try:
+                async with httpx.AsyncClient(timeout=timeout) as client:
+                    async with client.stream("POST", OLLAMA_URL, json=payload) as resp:
+                        resp.raise_for_status()
+                        async for line in resp.aiter_lines():
+                            if not line:
+                                continue
+                            data = json.loads(line)
+                            piece = data.get("message", {}).get("content", "")
+                            if piece:
+                                chunks.append(piece)
+                                if on_token is not None:
+                                    on_token(piece)
+                            if data.get("done"):
+                                tokens = ((data.get("prompt_eval_count") or 0)
+                                          + (data.get("eval_count") or 0))
+                                usage = {"model": self.name, "tokens": tokens,
+                                         "usd": round(tokens / 1000 * self.usd_per_1k, 6)}
+            except Exception as exc:
+                # 이미 사용자에게 흘려보낸 토큰이 있으면 재시도하면 답변이 중복된다
+                if chunks:
+                    raise PermanentError(f"스트리밍 도중 실패: {exc!r}") from exc
+                raise
+            return "".join(chunks), usage
+
+        (text, usage), retries = await call_async(stage, attempt)
+        usage["retries"] = retries
         usage["prompt"] = f"[SYSTEM]\n{system}\n\n[USER]\n{user}"
-        return "".join(chunks), usage
+        return text, usage
 
 
 class OllamaFastLLM(OllamaLLM):
@@ -154,7 +176,7 @@ class OllamaFastLLM(OllamaLLM):
                   "장애·성능 저하·지연·진단·모니터링·티켓 등 운영 이슈면 route=incident, "
                   "인사·잡담·일반 질문이면 route=chat. "
                   "needs_analysis는 패턴 비교/통계 분석이 꼭 필요할 때만 true.")
-        content, usage = self._chat(system, query, schema=ROUTE_SCHEMA)
+        content, usage = self._chat(system, query, schema=ROUTE_SCHEMA, stage="route")
         try:
             raw = json.loads(content)
             route = raw.get("route") if raw.get("route") in ("chat", "incident") else None
@@ -176,7 +198,7 @@ class OllamaFastLLM(OllamaLLM):
                   "언급되지 않았으면 auth-service를 기본으로 조사하라). "
                   "패턴 분석이 꼭 필요하다고 판단되면 agent=analysis task를 추가해도 된다.")
         user = f"## 표준 절차\n{procedure_prompt}\n\n## 사용자 요청\n{query}"
-        content, usage = self._chat(system, user, schema=PLAN_SCHEMA)
+        content, usage = self._chat(system, user, schema=PLAN_SCHEMA, stage="plan")
 
         # 소형 모델 출력에 대한 코드 레벨 정규화 — 스키마는 강제돼도 내용은 흔들릴 수
         # 있으므로(대상 시스템 오타, task 누락/중복) 실행 가능한 형태로 보정한다.
@@ -223,7 +245,7 @@ class OllamaFastLLM(OllamaLLM):
         facts = "\n".join(
             f"- {d['system_name']}: 상태={d['status']}, CPU {d['cpu_percent']}%, "
             f"알림 {d['alerts']}" for d in mon) or "(모니터링 데이터 없음)"
-        return self._chat(system, facts)
+        return self._chat(system, facts, stage="analyze")
 
     @traceable(run_type="llm", name="ollama_fast.chat")
     async def chat(self, query: str, history: list[dict], on_token=None) -> tuple[str, dict]:
@@ -232,7 +254,7 @@ class OllamaFastLLM(OllamaLLM):
         rendered = "\n".join(f"{m['role']}: {m['content']}" for m in history[-10:])
         user = (f"## 지금까지의 대화\n{rendered or '(없음)'}\n\n"
                 f"## 사용자의 새 메시지\n{query}")
-        return await self._chat_stream(system, user, on_token=on_token)
+        return await self._chat_stream(system, user, on_token=on_token, stage="chat")
 
 
 class OllamaQualityLLM(OllamaLLM):
@@ -258,4 +280,4 @@ class OllamaQualityLLM(OllamaLLM):
         user = f"## 사용자 요청\n{query}\n\n## 수집된 사실\n" + "\n".join(facts)
         if feedback:
             user += f"\n\n## 이전 초안에 대한 검증 반려 사유 (반드시 반영)\n{feedback}"
-        return await self._chat_stream(system, user, on_token=on_token)
+        return await self._chat_stream(system, user, on_token=on_token, stage="write")
