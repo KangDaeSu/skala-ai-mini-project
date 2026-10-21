@@ -19,6 +19,7 @@ baseline 대비 바뀐 점:
 """
 import asyncio
 import os
+import re
 import time
 from functools import partial
 from typing import TypedDict
@@ -37,6 +38,9 @@ from .systems import KNOWN_SYSTEMS, no_data_answer, notices_for, prompt_label, r
 # runbook 선택의 1·2위 유사도 차가 이보다 작으면 "불확실" — alert를 더해 한 번 더 검색한다.
 # 기준값 근거(OpenAI 실측): 틀린 선택은 차이가 0.003, 맞힌 선택은 모두 0.01 이상이었다.
 RAG_MIN_MARGIN = float(os.environ.get("RAG_MIN_MARGIN", 0.01))
+
+# 비교 분석을 요청하는 표현 — "같이 확인해줘"처럼 함께 조회만 하라는 표현은 넣지 않는다
+_COMPARE_PATTERN = re.compile(r"공통|비교|둘 다|동시에|연관|상관|패턴")
 
 
 class AgentState(TypedDict, total=False):
@@ -185,15 +189,19 @@ async def plan_node(state: AgentState, deps: SupervisorDeps) -> dict:
 async def gate_node(state: AgentState, deps: SupervisorDeps) -> dict:
     """Wave 6 — 권위 게이트: 분석 에이전트를 부를지 프롬프트가 아니라 코드로 확정한다.
 
-    LLM이 needs_analysis=True라고 해도, 비교할 시스템이 2개 이상일 때만 분석한다.
+    복잡한 질문 = 조사할 시스템이 2개 이상이고, 질문에 비교 표현(공통·비교·둘 다 …)이 있을 때.
+    LLM의 needs_analysis는 참고로만 기록한다 — 소형 모델은 단순 질문에도 True를 자주 냈다(실측).
     (단순 질문 → monitoring·runbook 에이전트만 / 복잡한 질문 → + analysis 에이전트)"""
     tasks = state["tasks"]
     systems = sum(1 for t in tasks if t["agent"] == "research")
-    complex_query = state.get("needs_analysis", False) and systems >= 2
+    complex_query = systems >= 2 and bool(_COMPARE_PATTERN.search(state["query"]))
+    if complex_query and not any(t["agent"] == "analysis" for t in tasks):
+        tasks = tasks + [{"id": "task-analysis", "agent": "analysis",
+                          "kind": "pattern-analysis", "status": "pending"}]
     kept = tasks if complex_query else [t for t in tasks if t["agent"] != "analysis"]
     removed = len(tasks) - len(kept)
-    event = {"type": "GateApplied", "removed_analysis_tasks": removed,
-             "complex": complex_query, "systems": systems}
+    event = {"type": "GateApplied", "removed_analysis_tasks": removed, "complex": complex_query,
+             "systems": systems, "llm_needs_analysis": state.get("needs_analysis", False)}
     return {"tasks": kept, "gate_removed": removed, "events": state["events"] + [event]}
 
 

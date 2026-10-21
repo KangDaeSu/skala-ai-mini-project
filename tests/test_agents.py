@@ -117,3 +117,17 @@ def test_one_failed_system_does_not_drop_the_others():
     notices = [c["data"] for c in result["collected"] if c["source"] == "notice"]
     assert notices == ["cache-service 모니터링 상태를 조회하지 못했습니다 (MCP 호출 실패)"]
     assert "payments-service" in result["final"]
+
+
+def test_two_systems_without_comparison_words_stay_simple():
+    """시스템이 2개여도 비교를 요청하지 않으면(타임아웃 문의) 분석 에이전트를 부르지 않는다."""
+    result = _run("gateway-service에서 payments-service로 가는 요청 장애",
+                  fast=AnalyzingLLM("fake", 0.0), retriever=FakeRetriever())
+    gate = next(e for e in result["events"] if e["type"] == "GateApplied")
+    assert gate["complex"] is False and gate["llm_needs_analysis"] is True
+    assert "analysis" not in _agents(result)
+
+
+def test_comparison_request_calls_analysis_even_if_llm_says_no():
+    result = _run("payments-service랑 cache-service 장애 공통 원인 진단", retriever=FakeRetriever())
+    assert _agents(result)[-1] == "analysis"
