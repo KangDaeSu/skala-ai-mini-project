@@ -50,7 +50,8 @@ def main() -> None:
         "# 최종 Before / After 비교 (OpenAI)", "",
         f"- 모델: fast=`{a_meta[0]['fast_llm']}`, quality=`{a_meta[0]['quality_llm']}`",
         f"- Before 커밋 `{b_meta[0]['git_rev']}` (runbook 선택: keyword) · "
-        f"After 커밋 `{a_meta[0]['git_rev']}` (runbook 선택: `{a_meta[0].get('runbook_classifier')}`)",
+        f"After 커밋 정상 `{a_meta[0]['git_rev']}` · 장애 주입 `{a_chaos_meta[0]['git_rev']}` "
+        f"(runbook 선택: `{a_meta[0].get('runbook_classifier')}`)",
         f"- 정상 모드: 21건 × 3회 · 장애 주입: 16건 × 2회, `{a_chaos_meta[0].get('chaos_rates')}` "
         f"seed={a_chaos_meta[0].get('chaos_seed')} (Before와 동일)", "",
         "## 1. 장애 주입 모드 — 신뢰성", "",

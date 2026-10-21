@@ -6,8 +6,8 @@
   "repeat": 3,
   "fast_llm": "openai:gpt-4o-mini",
   "quality_llm": "openai:gpt-4o",
-  "git_rev": "f585c7b",
-  "started_at": "2026-10-20T15:32:48",
+  "git_rev": "0f4b46e",
+  "started_at": "2026-10-21T11:41:14",
   "runbook_classifier": "rag(openai:text-embedding-3-small)"
  },
  "overall": {
@@ -16,19 +16,19 @@
   "faults_injected": 0,
   "faulted_runs": 0,
   "success_when_faulted": "-",
-  "latency_max_all": 8.73,
+  "latency_max_all": 8.61,
   "runs": 63,
   "success": "63/63 (100%)",
   "route_acc": "63/63 (100%)",
   "target_acc": "54/54 (100%)",
   "runbook_acc": "42/45 (93%)",
   "reply_acc": "3/3 (100%)",
-  "latency_p50": 5.68,
-  "latency_p95": 7.59,
-  "latency_max": 8.73,
-  "avg_llm_calls": 3.19,
-  "avg_tokens": 1090.3,
-  "total_tokens": 68689,
+  "latency_p50": 4.93,
+  "latency_p95": 6.67,
+  "latency_max": 8.61,
+  "avg_llm_calls": 2.86,
+  "avg_tokens": 998.3,
+  "total_tokens": 62891,
   "retries": 0,
   "avg_validation_attempts": 0.9
  },
@@ -39,19 +39,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 7.63,
+   "latency_max_all": 6.69,
    "runs": 21,
    "success": "21/21 (100%)",
    "route_acc": "21/21 (100%)",
    "target_acc": "21/21 (100%)",
    "runbook_acc": "21/21 (100%)",
    "reply_acc": "-",
-   "latency_p50": 6.17,
-   "latency_p95": 7.22,
-   "latency_max": 7.63,
-   "avg_llm_calls": 3.67,
-   "avg_tokens": 1303.4,
-   "total_tokens": 27371,
+   "latency_p50": 5.47,
+   "latency_p95": 6.51,
+   "latency_max": 6.69,
+   "avg_llm_calls": 3.14,
+   "avg_tokens": 1189.2,
+   "total_tokens": 24974,
    "retries": 0,
    "avg_validation_attempts": 1
   },
@@ -61,19 +61,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 2.04,
+   "latency_max_all": 2.25,
    "runs": 9,
    "success": "9/9 (100%)",
    "route_acc": "9/9 (100%)",
    "target_acc": "9/9 (100%)",
    "runbook_acc": "-",
    "reply_acc": "-",
-   "latency_p50": 1.87,
-   "latency_p95": 2.01,
-   "latency_max": 2.04,
+   "latency_p50": 2.03,
+   "latency_p95": 2.24,
+   "latency_max": 2.25,
    "avg_llm_calls": 2,
-   "avg_tokens": 474.3,
-   "total_tokens": 4269,
+   "avg_tokens": 473.9,
+   "total_tokens": 4265,
    "retries": 0,
    "avg_validation_attempts": 1
   },
@@ -83,16 +83,16 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 1.84,
+   "latency_max_all": 1.8,
    "runs": 6,
    "success": "6/6 (100%)",
    "route_acc": "6/6 (100%)",
    "target_acc": "-",
    "runbook_acc": "-",
    "reply_acc": "3/3 (100%)",
-   "latency_p50": 1.71,
-   "latency_p95": 1.82,
-   "latency_max": 1.84,
+   "latency_p50": 1.67,
+   "latency_p95": 1.77,
+   "latency_max": 1.8,
    "avg_llm_calls": 2,
    "avg_tokens": 241,
    "total_tokens": 1446,
@@ -105,19 +105,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 7.21,
+   "latency_max_all": 8.61,
    "runs": 6,
    "success": "6/6 (100%)",
    "route_acc": "6/6 (100%)",
    "target_acc": "6/6 (100%)",
    "runbook_acc": "3/6 (50%)",
    "reply_acc": "-",
-   "latency_p50": 6.89,
-   "latency_p95": 7.17,
-   "latency_max": 7.21,
-   "avg_llm_calls": 3.67,
-   "avg_tokens": 1444.3,
-   "total_tokens": 8666,
+   "latency_p50": 6.55,
+   "latency_p95": 8.25,
+   "latency_max": 8.61,
+   "avg_llm_calls": 3.5,
+   "avg_tokens": 1411.2,
+   "total_tokens": 8467,
    "retries": 0,
    "avg_validation_attempts": 1
   },
@@ -127,19 +127,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 5.42,
+   "latency_max_all": 6.15,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "3/3 (100%)",
    "reply_acc": "-",
-   "latency_p50": 5.18,
-   "latency_p95": 5.4,
-   "latency_max": 5.42,
+   "latency_p50": 5.81,
+   "latency_p95": 6.12,
+   "latency_max": 6.15,
    "avg_llm_calls": 3,
-   "avg_tokens": 1148,
-   "total_tokens": 3444,
+   "avg_tokens": 1120.7,
+   "total_tokens": 3362,
    "retries": 0,
    "avg_validation_attempts": 1
   },
@@ -149,19 +149,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 8.73,
+   "latency_max_all": 5.92,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "-",
    "runbook_acc": "-",
    "reply_acc": "-",
-   "latency_p50": 8.4,
-   "latency_p95": 8.7,
-   "latency_max": 8.73,
-   "avg_llm_calls": 4,
-   "avg_tokens": 2039,
-   "total_tokens": 6117,
+   "latency_p50": 5.56,
+   "latency_p95": 5.88,
+   "latency_max": 5.92,
+   "avg_llm_calls": 3,
+   "avg_tokens": 1408.7,
+   "total_tokens": 4226,
    "retries": 0,
    "avg_validation_attempts": 1
   },
@@ -171,19 +171,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 6.72,
+   "latency_max_all": 6.17,
    "runs": 15,
    "success": "15/15 (100%)",
    "route_acc": "15/15 (100%)",
    "target_acc": "15/15 (100%)",
    "runbook_acc": "15/15 (100%)",
    "reply_acc": "-",
-   "latency_p50": 5.64,
-   "latency_p95": 6.41,
-   "latency_max": 6.72,
-   "avg_llm_calls": 3.4,
-   "avg_tokens": 1158.4,
-   "total_tokens": 17376,
+   "latency_p50": 4.72,
+   "latency_p95": 5.89,
+   "latency_max": 6.17,
+   "avg_llm_calls": 3,
+   "avg_tokens": 1076.7,
+   "total_tokens": 16151,
    "retries": 0,
    "avg_validation_attempts": 1
   }
@@ -195,19 +195,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 6.02,
+   "latency_max_all": 5.77,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "3/3 (100%)",
    "reply_acc": "-",
-   "latency_p50": 5.78,
-   "latency_p95": 6.0,
-   "latency_max": 6.02,
-   "avg_llm_calls": 4,
-   "avg_tokens": 1241,
-   "total_tokens": 3723,
+   "latency_p50": 4.98,
+   "latency_p95": 5.69,
+   "latency_max": 5.77,
+   "avg_llm_calls": 3,
+   "avg_tokens": 1133.7,
+   "total_tokens": 3401,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [
@@ -224,19 +224,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 6.64,
+   "latency_max_all": 5.72,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "3/3 (100%)",
    "reply_acc": "-",
-   "latency_p50": 6.41,
-   "latency_p95": 6.62,
-   "latency_max": 6.64,
-   "avg_llm_calls": 4,
-   "avg_tokens": 1322.7,
-   "total_tokens": 3968,
+   "latency_p50": 5.54,
+   "latency_p95": 5.7,
+   "latency_max": 5.72,
+   "avg_llm_calls": 3,
+   "avg_tokens": 1150,
+   "total_tokens": 3450,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [
@@ -253,19 +253,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 5.74,
+   "latency_max_all": 5.47,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "3/3 (100%)",
    "reply_acc": "-",
-   "latency_p50": 5.35,
-   "latency_p95": 5.7,
-   "latency_max": 5.74,
+   "latency_p50": 4.97,
+   "latency_p95": 5.42,
+   "latency_max": 5.47,
    "avg_llm_calls": 3,
-   "avg_tokens": 1135.3,
-   "total_tokens": 3406,
+   "avg_tokens": 1046.3,
+   "total_tokens": 3139,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [
@@ -282,19 +282,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 7.22,
+   "latency_max_all": 6.69,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "3/3 (100%)",
    "reply_acc": "-",
-   "latency_p50": 6.68,
-   "latency_p95": 7.17,
-   "latency_max": 7.22,
-   "avg_llm_calls": 4,
-   "avg_tokens": 1527.7,
-   "total_tokens": 4583,
+   "latency_p50": 5.6,
+   "latency_p95": 6.58,
+   "latency_max": 6.69,
+   "avg_llm_calls": 3,
+   "avg_tokens": 1280,
+   "total_tokens": 3840,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [
@@ -312,19 +312,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 6.85,
+   "latency_max_all": 6.51,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "3/3 (100%)",
    "reply_acc": "-",
-   "latency_p50": 6.17,
-   "latency_p95": 6.78,
-   "latency_max": 6.85,
-   "avg_llm_calls": 3.67,
-   "avg_tokens": 1295,
-   "total_tokens": 3885,
+   "latency_p50": 4.94,
+   "latency_p95": 6.35,
+   "latency_max": 6.51,
+   "avg_llm_calls": 3,
+   "avg_tokens": 1212.7,
+   "total_tokens": 3638,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [
@@ -342,19 +342,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 7.63,
+   "latency_max_all": 6.47,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "3/3 (100%)",
    "reply_acc": "-",
-   "latency_p50": 6.79,
-   "latency_p95": 7.55,
-   "latency_max": 7.63,
+   "latency_p50": 6.11,
+   "latency_p95": 6.43,
+   "latency_max": 6.47,
    "avg_llm_calls": 4,
-   "avg_tokens": 1426.7,
-   "total_tokens": 4280,
+   "avg_tokens": 1365.7,
+   "total_tokens": 4097,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [
@@ -372,19 +372,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 5.79,
+   "latency_max_all": 5.66,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "3/3 (100%)",
    "reply_acc": "-",
-   "latency_p50": 5.36,
-   "latency_p95": 5.75,
-   "latency_max": 5.79,
+   "latency_p50": 4.9,
+   "latency_p95": 5.58,
+   "latency_max": 5.66,
    "avg_llm_calls": 3,
-   "avg_tokens": 1175.3,
-   "total_tokens": 3526,
+   "avg_tokens": 1136.3,
+   "total_tokens": 3409,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [
@@ -401,19 +401,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 1.96,
+   "latency_max_all": 2.14,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "-",
    "reply_acc": "-",
-   "latency_p50": 1.89,
-   "latency_p95": 1.95,
-   "latency_max": 1.96,
+   "latency_p50": 2.0,
+   "latency_p95": 2.13,
+   "latency_max": 2.14,
    "avg_llm_calls": 2,
-   "avg_tokens": 466,
-   "total_tokens": 1398,
+   "avg_tokens": 465.3,
+   "total_tokens": 1396,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [],
@@ -426,16 +426,16 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 1.72,
+   "latency_max_all": 1.8,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "-",
    "runbook_acc": "-",
    "reply_acc": "-",
-   "latency_p50": 1.68,
-   "latency_p95": 1.72,
-   "latency_max": 1.72,
+   "latency_p50": 1.65,
+   "latency_p95": 1.79,
+   "latency_max": 1.8,
    "avg_llm_calls": 2,
    "avg_tokens": 237,
    "total_tokens": 711,
@@ -451,16 +451,16 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 1.84,
+   "latency_max_all": 1.7,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "-",
    "runbook_acc": "-",
    "reply_acc": "3/3 (100%)",
-   "latency_p50": 1.75,
-   "latency_p95": 1.83,
-   "latency_max": 1.84,
+   "latency_p50": 1.69,
+   "latency_p95": 1.7,
+   "latency_max": 1.7,
    "avg_llm_calls": 2,
    "avg_tokens": 245,
    "total_tokens": 735,
@@ -476,16 +476,16 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 1.87,
+   "latency_max_all": 2.25,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "-",
    "reply_acc": "-",
-   "latency_p50": 1.87,
-   "latency_p95": 1.87,
-   "latency_max": 1.87,
+   "latency_p50": 2.23,
+   "latency_p95": 2.25,
+   "latency_max": 2.25,
    "avg_llm_calls": 2,
    "avg_tokens": 467.7,
    "total_tokens": 1403,
@@ -501,19 +501,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 2.04,
+   "latency_max_all": 2.22,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "-",
    "reply_acc": "-",
-   "latency_p50": 1.78,
-   "latency_p95": 2.01,
-   "latency_max": 2.04,
+   "latency_p50": 2.03,
+   "latency_p95": 2.2,
+   "latency_max": 2.22,
    "avg_llm_calls": 2,
-   "avg_tokens": 489.3,
-   "total_tokens": 1468,
+   "avg_tokens": 488.7,
+   "total_tokens": 1466,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [],
@@ -526,19 +526,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 7.21,
+   "latency_max_all": 8.61,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "0/3 (0%)",
    "reply_acc": "-",
-   "latency_p50": 6.78,
-   "latency_p95": 7.17,
-   "latency_max": 7.21,
-   "avg_llm_calls": 3.33,
-   "avg_tokens": 1470.7,
-   "total_tokens": 4412,
+   "latency_p50": 6.7,
+   "latency_p95": 8.42,
+   "latency_max": 8.61,
+   "avg_llm_calls": 3,
+   "avg_tokens": 1318,
+   "total_tokens": 3954,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [
@@ -557,19 +557,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 7.05,
+   "latency_max_all": 7.16,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "3/3 (100%)",
    "reply_acc": "-",
-   "latency_p50": 7.0,
-   "latency_p95": 7.04,
-   "latency_max": 7.05,
+   "latency_p50": 6.41,
+   "latency_p95": 7.08,
+   "latency_max": 7.16,
    "avg_llm_calls": 4,
-   "avg_tokens": 1418,
-   "total_tokens": 4254,
+   "avg_tokens": 1504.3,
+   "total_tokens": 4513,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [
@@ -587,19 +587,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 5.42,
+   "latency_max_all": 6.15,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "3/3 (100%)",
    "reply_acc": "-",
-   "latency_p50": 5.18,
-   "latency_p95": 5.4,
-   "latency_max": 5.42,
+   "latency_p50": 5.81,
+   "latency_p95": 6.12,
+   "latency_max": 6.15,
    "avg_llm_calls": 3,
-   "avg_tokens": 1148,
-   "total_tokens": 3444,
+   "avg_tokens": 1120.7,
+   "total_tokens": 3362,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [
@@ -616,19 +616,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 8.73,
+   "latency_max_all": 5.92,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "-",
    "runbook_acc": "-",
    "reply_acc": "-",
-   "latency_p50": 8.4,
-   "latency_p95": 8.7,
-   "latency_max": 8.73,
-   "avg_llm_calls": 4,
-   "avg_tokens": 2039,
-   "total_tokens": 6117,
+   "latency_p50": 5.56,
+   "latency_p95": 5.88,
+   "latency_max": 5.92,
+   "avg_llm_calls": 3,
+   "avg_tokens": 1408.7,
+   "total_tokens": 4226,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [
@@ -650,19 +650,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 4.63,
+   "latency_max_all": 5.77,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "3/3 (100%)",
    "reply_acc": "-",
-   "latency_p50": 4.36,
-   "latency_p95": 4.6,
-   "latency_max": 4.63,
+   "latency_p50": 4.38,
+   "latency_p95": 5.63,
+   "latency_max": 5.77,
    "avg_llm_calls": 3,
-   "avg_tokens": 991.3,
-   "total_tokens": 2974,
+   "avg_tokens": 940,
+   "total_tokens": 2820,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [
@@ -679,19 +679,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 5.99,
+   "latency_max_all": 5.45,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "3/3 (100%)",
    "reply_acc": "-",
-   "latency_p50": 5.95,
-   "latency_p95": 5.99,
-   "latency_max": 5.99,
-   "avg_llm_calls": 4,
-   "avg_tokens": 1221,
-   "total_tokens": 3663,
+   "latency_p50": 4.82,
+   "latency_p95": 5.39,
+   "latency_max": 5.45,
+   "avg_llm_calls": 3,
+   "avg_tokens": 1169,
+   "total_tokens": 3507,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [
@@ -708,19 +708,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 6.72,
+   "latency_max_all": 4.46,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "3/3 (100%)",
    "reply_acc": "-",
-   "latency_p50": 6.28,
-   "latency_p95": 6.68,
-   "latency_max": 6.72,
-   "avg_llm_calls": 4,
-   "avg_tokens": 1175.7,
-   "total_tokens": 3527,
+   "latency_p50": 4.22,
+   "latency_p95": 4.44,
+   "latency_max": 4.46,
+   "avg_llm_calls": 3,
+   "avg_tokens": 1007.7,
+   "total_tokens": 3023,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [
@@ -737,19 +737,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 5.64,
+   "latency_max_all": 6.17,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "3/3 (100%)",
    "reply_acc": "-",
-   "latency_p50": 5.6,
-   "latency_p95": 5.64,
-   "latency_max": 5.64,
+   "latency_p50": 5.47,
+   "latency_p95": 6.1,
+   "latency_max": 6.17,
    "avg_llm_calls": 3,
-   "avg_tokens": 1207,
-   "total_tokens": 3621,
+   "avg_tokens": 1141.7,
+   "total_tokens": 3425,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [
@@ -766,19 +766,19 @@
    "faults_injected": 0,
    "faulted_runs": 0,
    "success_when_faulted": "-",
-   "latency_max_all": 5.8,
+   "latency_max_all": 4.85,
    "runs": 3,
    "success": "3/3 (100%)",
    "route_acc": "3/3 (100%)",
    "target_acc": "3/3 (100%)",
    "runbook_acc": "3/3 (100%)",
    "reply_acc": "-",
-   "latency_p50": 5.78,
-   "latency_p95": 5.8,
-   "latency_max": 5.8,
+   "latency_p50": 4.33,
+   "latency_p95": 4.8,
+   "latency_max": 4.85,
    "avg_llm_calls": 3,
-   "avg_tokens": 1197,
-   "total_tokens": 3591,
+   "avg_tokens": 1125.3,
+   "total_tokens": 3376,
    "retries": 0,
    "avg_validation_attempts": 1,
    "last_monitored": [
@@ -797,39 +797,32 @@
    "rep": 1,
    "faults": [],
    "success": true,
-   "elapsed_s": 5.78,
+   "elapsed_s": 5.77,
    "error": null,
-   "llm_calls": 4,
+   "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1265,
+   "tokens": 1150,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 156,
-     "sec": 0.85
+     "sec": 0.98
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 371,
-     "sec": 1.16
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 117,
-     "sec": 0.78
+     "sec": 1.15
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 621,
-     "sec": 1.89
+     "tokens": 623,
+     "sec": 2.62
     }
    ],
    "route": "incident",
@@ -843,16 +836,16 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.4977,
-   "rag_margin": 0.08,
-   "embed_tokens": 53,
+   "rag_score": 0.51,
+   "rag_margin": 0.0868,
+   "embed_tokens": 33,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003202,
-   "reply": "1) 참고: payments-service의 상태가 저하되었으며, CPU 사용률이 97.8%로 급증하였고, 메모리 사용률은 58.4%입니다. 알림으로는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 발생했습니다.\n\n2) 원인 분석:\n   - 최근 로그에서 반복 호출이나 배치 작업 중복 실행 같은 특정 요청 패턴은 발견되지 않았습니다.\n   - CPU 사용률이 90%를 넘고 지속되고 있으므로, 오토스케일링 그룹에서 인스턴스를 추가로 띄워 부하를 분산하는 것이 필요합니다.\n\n3) 대응 조치:\n   - 오토스케일링 그룹에서 인스턴스를 한 대 더 추가하여 부하를 분산합니다.\n   - 정상화 후 프로파일링 결과를 바탕으로 핫스팟 코드를 식별하고 최적화 작업을 등록합니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003194,
+   "reply": "1) 모니터링 결과 payments-service의 상태가 저하되었으며, CPU 사용률이 89.1%로 높게 나타났습니다. 메모리 사용률은 54.0%로 상대적으로 안정적입니다. 알림으로는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 수신되었습니다.\n\n2) Runbook에 따라 CPU 사용률 급증 대응 절차를 검토한 결과, 현재 CPU 사용률이 90%에 근접하고 있으며, 지속적으로 높은 상태를 유지하고 있습니다. 따라서, 오토스케일링 그룹에서 인스턴스를 추가하여 부하를 분산시키는 것이 필요합니다.\n\n3) 추가적으로, 최근 로그를 확인하여 반복 호출이나 배치 작업 중복 실행과 같은 특정 요청 패턴이 원인인지 분석이 필요합니다. 만약 급증이 특정 배포 직후 시작된 경우, 해당 배포를 롤백하고 원인 분석을 별도로 진행해야 합니다. 정상화 후에는 프로파일링 결과를 바탕으로 핫스팟 코드를 식별하여 최적화 작업을 등록해야 합니다."
   },
   {
    "id": "r2",
@@ -860,39 +853,32 @@
    "rep": 1,
    "faults": [],
    "success": true,
-   "elapsed_s": 6.41,
+   "elapsed_s": 5.72,
    "error": null,
-   "llm_calls": 4,
+   "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1328,
+   "tokens": 1141,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 148,
-     "sec": 0.82
+     "sec": 0.94
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 355,
-     "sec": 1.25
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 112,
-     "sec": 0.73
+     "sec": 1.33
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 713,
-     "sec": 2.55
+     "tokens": 638,
+     "sec": 3.02
     }
    ],
    "route": "incident",
@@ -906,16 +892,16 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.4938,
-   "rag_margin": 0.1166,
-   "embed_tokens": 36,
+   "rag_score": 0.5122,
+   "rag_margin": 0.1069,
+   "embed_tokens": 21,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003657,
-   "reply": "1) 현재 cache-service의 상태는 'degraded'이며, CPU 사용률은 49.6%, 메모리 사용률은 92.8%로 확인되었습니다. 알림으로는 'memory usage climbing steadily over 6h'와 'heap near limit'이 발생하였습니다.\n\n2) 메모리 사용률이 90% 이상으로 OOM 직전 상태이므로, 서비스 중단을 막기 위해 해당 프로세스를 즉시 재시작하는 것이 필요합니다. 이는 임시 조치임을 기록해두어야 합니다.\n\n3) 메모리 누수의 원인을 파악하기 위해 힙 덤프 또는 프로파일링 도구를 사용하여 어떤 객체가 계속 쌓이는지 확인해야 합니다. 또한, 최근 배포에서 캐시 무제한 증가, 커넥션 미반환, 이벤트 리스너 중복 등록 같은 패턴이 있었는지 점검해야 합니다. 현재 수집된 정보에 따르면 특이 패턴은 발견되지 않았습니다. \n\n추가적인 조치로, 원인이 된 배포가 확인되면 롤백을 고려하고, 컨테이너 메모리 상한선을 재확인하여 재발 시 더 빨리 감지되도록 조정해야 합니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003265,
+   "reply": "1) 현재 cache-service의 상태는 'degraded'이며, CPU 사용률은 49.1%, 메모리 사용률은 92.6%로 확인되었습니다. 알림으로는 'memory usage climbing steadily over 6h'와 'heap near limit'가 발생하였습니다.\n\n2) 메모리 사용률이 90% 이상으로 OOM 직전 상태이므로, 해당 프로세스를 즉시 재시작하여 서비스 중단을 방지해야 합니다. 이는 임시 조치임을 기록해두어야 합니다.\n\n3) 이후, 힙 덤프 또는 프로파일링 도구를 사용하여 어떤 객체가 계속 쌓이고 있는지 확인하고, 캐시 무제한 증가, 커넥션 미반환, 이벤트 리스너 중복 등록 같은 패턴이 최근 배포에 있었는지 점검해야 합니다. 원인이 된 배포가 발견되면 롤백을 고려하고, 컨테이너 메모리 상한선을 재확인하여 재발 시 더 빨리 감지되도록 조정해야 합니다."
   },
   {
    "id": "r3",
@@ -923,32 +909,32 @@
    "rep": 1,
    "faults": [],
    "success": true,
-   "elapsed_s": 5.35,
+   "elapsed_s": 4.97,
    "error": null,
    "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1130,
+   "tokens": 1042,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 149,
-     "sec": 1.12
+     "sec": 0.92
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 338,
-     "sec": 0.9
+     "sec": 1.33
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 643,
-     "sec": 2.25
+     "tokens": 555,
+     "sec": 2.33
     }
    ],
    "route": "incident",
@@ -962,16 +948,16 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.5313,
-   "rag_margin": 0.1536,
-   "embed_tokens": 42,
+   "rag_score": 0.549,
+   "rag_margin": 0.152,
+   "embed_tokens": 26,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003288,
-   "reply": "1) 참고: log-service의 상태는 'degraded'이며, CPU 사용률은 23.0%, 메모리 사용률은 36.5%입니다. 현재 알림은 두 건으로, 'disk usage 95% on /var/log'와 'disk space low'입니다.\n\n2) 대응 절차:\n   - 디스크 사용률이 95%로 임계 수준(90% 이상)을 초과하였음을 확인했습니다.\n   - 로그 파일, 임시 파일, 오래된 백업 등 안전하게 삭제할 수 있는 항목을 정리하여 여유 공간을 확보해야 합니다.\n   - 특정 프로세스가 비정상적으로 로그를 쌓고 있는지 확인하고, 필요 시 로그 레벨을 낮추거나 로테이션 주기를 단축해야 합니다.\n   - 임시 조치로도 부족할 경우, 볼륨을 확장하거나 추가 스토리지를 연결하는 방안을 고려해야 합니다.\n\n3) 정상화 후 조치:\n   - 로그 보존 정책과 디스크 사용률 알림 임계값을 재검토하여 조기에 감지될 수 있도록 조정해야 합니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.002848,
+   "reply": "1) 모니터링 결과, log-service의 디스크 사용률이 95%로 임계 수준(90% 이상)을 초과하여 상태가 'degraded'로 나타났습니다.\n\n2) 디스크 공간 확보를 위해 로그 파일, 임시 파일, 오래된 백업 등 안전하게 삭제 가능한 항목을 정리하여 여유 공간을 확보해야 합니다.\n\n3) 로그 파일이 비정상적으로 쌓이는 경우, 로그 레벨을 낮추거나 로테이션 주기를 단축하여 로그 생성량을 줄이는 조치를 고려해야 합니다. 임시 조치로도 부족할 경우, 볼륨 확장이나 추가 스토리지 연결을 검토해야 합니다. 정상화 후에는 로그 보존 정책과 디스크 사용률 알림 임계값을 재검토하여 조기 감지가 가능하도록 조정해야 합니다."
   },
   {
    "id": "r4",
@@ -979,39 +965,32 @@
    "rep": 1,
    "faults": [],
    "success": true,
-   "elapsed_s": 6.68,
+   "elapsed_s": 6.69,
    "error": null,
-   "llm_calls": 4,
+   "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1553,
+   "tokens": 1360,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
-     "tokens": 150,
-     "sec": 0.9
+     "tokens": 152,
+     "sec": 0.97
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
-     "tokens": 382,
-     "sec": 1.2
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 182,
-     "sec": 0.91
+     "tokens": 363,
+     "sec": 1.3
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 839,
-     "sec": 2.61
+     "tokens": 845,
+     "sec": 4.03
     }
    ],
    "route": "incident",
@@ -1026,16 +1005,16 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.4074,
-   "rag_margin": 0.0511,
-   "embed_tokens": 60,
+   "rag_score": 0.3964,
+   "rag_margin": 0.0378,
+   "embed_tokens": 23,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.004301,
-   "reply": "1) 현재 gateway-service와 payments-service 모두 상태가 저하된 것으로 확인되었습니다. gateway-service에서는 'upstream timeout to payments-service (504)'와 'network packet loss 3%' 알림이 발생하였고, payments-service에서는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow' 알림이 발생하였습니다.\n\n2) 네트워크 타임아웃과 관련된 문제로, gateway-service에서 payments-service로의 요청이 타임아웃되고 있습니다. 이는 네트워크 패킷 손실과 payments-service의 CPU 과부하가 원인일 가능성이 높습니다.\n\n3) 대응 절차로는 다음을 권장합니다:\n   - get_monitoring_status를 통해 타임아웃 발생 시스템 간 호출을 확인하였습니다.\n   - DNS 해석 실패, 방화벽/보안그룹 변경, 로드밸런서 헬스체크 실패 등의 최근 변경 사항을 점검해야 합니다.\n   - 특정 리전/가용영역에서만 발생하는 경우 해당 구간을 우회하는 라우팅으로 임시 전환을 고려합니다.\n   - 타임아웃 값이 너무 짧아 정상 응답도 실패로 처리되는 경우라면 임계값을 임시 상향하여 2차 피해를 줄입니다.\n   - 정상화 후 네트워크 경로 기록을 남기고, 재발 방지를 위해 헬스체크 주기와 재시도 정책을 재검토합니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.004302,
+   "reply": "1) 현재 gateway-service에서 payments-service로의 요청이 타임아웃되고 있으며, 모니터링 결과 두 서비스 모두 'degraded' 상태로 확인되었습니다. gateway-service에서는 'upstream timeout to payments-service (504)'와 'network packet loss 3%' 알림이 발생하였고, payments-service에서는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow' 알림이 발생하였습니다.\n\n2) 문제의 원인으로는 payments-service의 높은 CPU 사용률(95.5%)과 네트워크 패킷 손실(3%)이 주요 요인으로 보입니다. 따라서, payments-service의 CPU 부하를 줄이기 위한 조치가 필요합니다. 또한, 네트워크 패킷 손실 문제를 해결하기 위해 네트워크 경로를 점검하고, 필요시 라우팅을 조정해야 합니다.\n\n3) runbook에 따라, 네트워크 타임아웃 문제를 해결하기 위해 다음 절차를 수행해야 합니다:\n   - get_monitoring_status를 통해 타임아웃 발생 시스템을 확인하였으므로, 다음으로 DNS 해석 실패, 방화벽/보안그룹 변경, 로드밸런서 헬스체크 실패 중 최근 변경 사항이 있었는지 점검합니다.\n   - 특정 리전/가용영역에서만 발생하는 문제라면 해당 구간을 우회하는 라우팅으로 임시 전환합니다.\n   - 타임아웃 값이 너무 짧아 정상 응답도 실패로 처리되는 경우라면 임계값을 임시 상향하여 2차 피해를 줄입니다.\n   - 문제 해결 후 네트워크 경로 기록을 남기고, 재발 방지를 위해 헬스체크 주기와 재시도 정책을 재검토합니다."
   },
   {
    "id": "r5",
@@ -1043,32 +1022,32 @@
    "rep": 1,
    "faults": [],
    "success": true,
-   "elapsed_s": 6.17,
+   "elapsed_s": 4.94,
    "error": null,
    "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1194,
+   "tokens": 1180,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 153,
-     "sec": 0.82
+     "sec": 0.91
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 367,
-     "sec": 1.68
+     "sec": 1.32
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 674,
-     "sec": 2.64
+     "tokens": 660,
+     "sec": 2.28
     }
    ],
    "route": "incident",
@@ -1083,16 +1062,16 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.5411,
-   "rag_margin": 0.0818,
-   "embed_tokens": 57,
+   "rag_score": 0.5817,
+   "rag_margin": 0.1195,
+   "embed_tokens": 26,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003448,
-   "reply": "1) web-01의 상태는 'healthy'이며, CPU 사용률은 32.9%로 급증 상태가 아님을 확인했습니다. 메모리 사용률은 47.4%이며, 알림은 없습니다.\n\n2) auth-service의 상태는 'degraded'로, CPU 사용률이 84.8%로 높고, 메모리 사용률은 64.4%입니다. 알림은 2건이 있으며, 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'가 보고되었습니다.\n\n3) web-01의 CPU 사용률은 급증 상태가 아니므로 추가 조치는 필요하지 않습니다. auth-service의 경우, CPU 사용률이 90%를 넘지 않으므로 오토스케일링 조치는 필요하지 않지만, 'connection pool 92% used' 상태로 인해 커넥션 풀 사용률을 모니터링하고 필요 시 조정이 필요합니다. 추가로, 'p95 latency' 문제를 해결하기 위해 성능 최적화가 필요할 수 있습니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003378,
+   "reply": "1) web-01의 CPU 사용률은 35.9%로 정상 범위 내에 있으며, 상태는 'healthy'로 확인되었습니다. 따라서 web-01의 CPU 급증 문제는 현재 발생하지 않은 것으로 판단됩니다.\n\n2) auth-service의 상태는 'degraded'로 확인되었으며, CPU 사용률은 77.6%입니다. 메모리 사용률은 60.8%이며, 두 건의 알림이 발생했습니다. 알림 내용은 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'입니다. 이는 auth-service의 성능 저하와 커넥션 풀 사용률이 높은 상태를 나타냅니다.\n\n3) auth-service의 문제 해결을 위해 다음 조치를 고려해야 합니다:\n   - p95 latency가 임계값을 초과하므로, 성능 저하 원인을 분석하고 필요한 최적화 작업을 수행합니다.\n   - 커넥션 풀 사용률이 92%로 높으므로, 커넥션 풀 크기를 조정하거나 부하 분산을 위한 추가적인 인스턴스 배포를 검토합니다."
   },
   {
    "id": "r6",
@@ -1100,39 +1079,39 @@
    "rep": 1,
    "faults": [],
    "success": true,
-   "elapsed_s": 6.26,
+   "elapsed_s": 6.47,
    "error": null,
    "llm_calls": 4,
    "llm_failed_calls": 0,
-   "tokens": 1424,
+   "tokens": 1393,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 152,
-     "sec": 0.85
+     "sec": 1.07
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
-     "tokens": 405,
-     "sec": 1.4
+     "tokens": 386,
+     "sec": 1.3
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 149,
-     "sec": 0.85
+     "sec": 0.68
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 718,
-     "sec": 2.11
+     "tokens": 706,
+     "sec": 2.48
     }
    ],
    "route": "incident",
@@ -1149,14 +1128,14 @@
    "classifier": "rag",
    "rag_score": 0.3789,
    "rag_margin": 0.0261,
-   "embed_tokens": 70,
+   "embed_tokens": 105,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
    "replan_rounds": 1,
-   "cost_usd_virtual": 0.003696,
-   "reply": "1) payments-service와 cache-service 모두 상태가 저하된 것으로 확인되었습니다. payments-service는 CPU 사용률이 90.3%로 높고, cache-service는 메모리 사용률이 89.3%로 높습니다.\n\n2) payments-service의 알림은 CPU 사용률이 91%로 임계치를 초과했으며, 특정 인스턴스가 응답이 느리다는 것입니다. cache-service의 알림은 메모리 사용률이 6시간 동안 꾸준히 증가하고 있으며, 힙 메모리가 한계에 가까워졌다는 것입니다.\n\n3) 공통 원인 분석 결과, 두 서비스 간의 직접적인 공통 원인은 발견되지 않았습니다. payments-service는 CPU 과부하가 주요 문제로 보이며, cache-service는 메모리 사용률 증가가 문제입니다. 각각의 문제에 대해 별도의 대응이 필요합니다. cache-service의 경우 메모리 누수 가능성을 염두에 두고 runbook에 따라 추가 조사가 필요합니다."
+   "cost_usd_virtual": 0.003633,
+   "reply": "1) payments-service와 cache-service 모두 상태가 저하된 것으로 확인되었습니다. payments-service는 CPU 사용률이 91.6%로 높고, cache-service는 메모리 사용률이 87.9%로 높습니다.\n\n2) payments-service의 경우, CPU 사용률이 91%로 임계치(80%)를 초과하여 알림이 발생하였고, 특정 인스턴스가 응답이 느리다는 알림이 추가로 발생했습니다.\n\n3) cache-service의 경우, 메모리 사용률이 꾸준히 증가하고 있으며, 힙 메모리가 한계에 가까워졌다는 알림이 발생했습니다. 이는 메모리 누수와 관련된 문제일 가능성이 있습니다.\n\n결론적으로, 두 서비스의 저하 원인은 각각 다를 가능성이 높습니다. payments-service는 CPU 과부하가 주요 원인으로 보이며, cache-service는 메모리 누수와 관련된 문제가 있을 수 있습니다. 공통 원인보다는 각각의 서비스에 대한 개별적인 조치가 필요할 것으로 판단됩니다."
   },
   {
    "id": "r7",
@@ -1164,11 +1143,1825 @@
    "rep": 1,
    "faults": [],
    "success": true,
-   "elapsed_s": 5.36,
+   "elapsed_s": 4.69,
    "error": null,
    "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1156,
+   "tokens": 1144,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 147,
+     "sec": 1.12
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 334,
+     "sec": 0.89
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 663,
+     "sec": 2.27
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "auth-service"
+   ],
+   "runbooks": [
+    "high-latency"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.3997,
+   "rag_margin": 0.0322,
+   "embed_tokens": 20,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003387,
+   "reply": "1) 모니터링 결과, auth-service의 상태가 'degraded'로 확인되었으며, CPU 사용률은 78.2%, 메모리 사용률은 61.1%로 나타났습니다. 또한, 두 가지 알림이 발생하였으며, 이는 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'입니다.\n\n2) Runbook에 따라, p95 지연시간이 임계치(1.0s)를 초과하고 커넥션 풀 사용률이 90%를 넘었으므로, 커넥션 풀 크기를 늘리거나 느린 쿼리/외부 호출에 타임아웃을 설정해야 합니다.\n\n3) 5분 내에 p95 지연시간이 임계치 아래로 내려오지 않을 경우, 캐시 계층 또는 읽기 복제본으로 트래픽을 분산하여 문제를 해결해야 합니다. 이후, 정상화가 되면 느린 쿼리 로그를 분석하여 근본 원인을 문서화하고 후속 최적화 티켓을 등록해야 합니다."
+  },
+  {
+   "id": "r8",
+   "category": "unknown-system",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 2.14,
+   "error": null,
+   "llm_calls": 2,
+   "llm_failed_calls": 0,
+   "tokens": 464,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 140,
+     "sec": 0.92
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 324,
+     "sec": 1.18
+    }
+   ],
+   "route": "incident",
+   "monitored": [],
+   "runbooks": [],
+   "route_ok": true,
+   "targets_ok": true,
+   "classifier": null,
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 7e-05,
+   "reply": "1) billing-service은(는) 모니터링 대상 시스템이 아니어서 상태를 조회할 수 없습니다\n2) 현재 모니터링 대상 시스템: auth-service, cache-service, gateway-service, log-service, payments-service, web-01\n3) 위 목록의 시스템명으로 다시 요청해 주시면 상태 조회와 대응 절차를 안내하겠습니다."
+  },
+  {
+   "id": "r9",
+   "category": "chat",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 1.53,
+   "error": null,
+   "llm_calls": 2,
+   "llm_failed_calls": 0,
+   "tokens": 237,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 140,
+     "sec": 0.79
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 97,
+     "sec": 0.73
+    }
+   ],
+   "route": "chat",
+   "monitored": [],
+   "runbooks": [],
+   "route_ok": true,
+   "classifier": null,
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 0,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 3.6e-05,
+   "reply": "안녕하세요! 저는 당신의 비서입니다. 도움이 필요하시면 말씀해 주세요."
+  },
+  {
+   "id": "r10",
+   "category": "chat",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 1.69,
+   "error": null,
+   "llm_calls": 2,
+   "llm_failed_calls": 0,
+   "tokens": 245,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 141,
+     "sec": 0.84
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 104,
+     "sec": 0.83
+    }
+   ],
+   "route": "chat",
+   "monitored": [],
+   "runbooks": [],
+   "route_ok": true,
+   "reply_ok": true,
+   "classifier": null,
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 0,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 3.7e-05,
+   "reply": "민수님입니다!"
+  },
+  {
+   "id": "s1",
+   "category": "unknown-system",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 2.23,
+   "error": null,
+   "llm_calls": 2,
+   "llm_failed_calls": 0,
+   "tokens": 467,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 141,
+     "sec": 0.86
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 326,
+     "sec": 1.32
+    }
+   ],
+   "route": "incident",
+   "monitored": [],
+   "runbooks": [],
+   "route_ok": true,
+   "targets_ok": true,
+   "classifier": null,
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 7e-05,
+   "reply": "1) order-service은(는) 모니터링 대상 시스템이 아니어서 상태를 조회할 수 없습니다\n2) 현재 모니터링 대상 시스템: auth-service, cache-service, gateway-service, log-service, payments-service, web-01\n3) 위 목록의 시스템명으로 다시 요청해 주시면 상태 조회와 대응 절차를 안내하겠습니다."
+  },
+  {
+   "id": "s2",
+   "category": "unknown-system",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 2.22,
+   "error": null,
+   "llm_calls": 2,
+   "llm_failed_calls": 0,
+   "tokens": 488,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 148,
+     "sec": 0.92
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 340,
+     "sec": 1.26
+    }
+   ],
+   "route": "incident",
+   "monitored": [],
+   "runbooks": [],
+   "route_ok": true,
+   "targets_ok": true,
+   "classifier": null,
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 7.3e-05,
+   "reply": "1) inventory-service은(는) 모니터링 대상 시스템이 아니어서 상태를 조회할 수 없습니다\n2) 현재 모니터링 대상 시스템: auth-service, cache-service, gateway-service, log-service, payments-service, web-01\n3) 위 목록의 시스템명으로 다시 요청해 주시면 상태 조회와 대응 절차를 안내하겠습니다."
+  },
+  {
+   "id": "s3",
+   "category": "multi-system",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 8.61,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1358,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 146,
+     "sec": 1.33
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 393,
+     "sec": 1.6
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 819,
+     "sec": 5.09
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "auth-service",
+    "payments-service",
+    "cache-service"
+   ],
+   "runbooks": [
+    "network-timeout"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": false,
+   "classifier": "rag",
+   "rag_score": 0.3269,
+   "rag_margin": 0.026,
+   "embed_tokens": 20,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.004176,
+   "reply": "1) auth-service, payments-service, cache-service 모두 상태가 저하되었습니다. 각 서비스의 모니터링 결과는 다음과 같습니다:\n   - auth-service: CPU 사용률 78.3%, 메모리 사용률 61.1%, 주요 알림으로는 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'가 있습니다.\n   - payments-service: CPU 사용률 94.2%, 메모리 사용률 56.6%, 주요 알림으로는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 있습니다.\n   - cache-service: CPU 사용률 44.2%, 메모리 사용률 90.1%, 주요 알림으로는 'memory usage climbing steadily over 6h'와 'heap near limit'가 있습니다.\n\n2) 각 서비스의 상태 저하 원인으로는 높은 CPU 및 메모리 사용률과 관련된 경고가 있습니다. 특히, auth-service와 payments-service는 CPU 사용률이 높고, cache-service는 메모리 사용률이 높습니다.\n\n3) 네트워크 타임아웃 관련 문제는 현재 수집된 정보에 포함되어 있지 않으므로, runbook의 네트워크 타임아웃 대응 절차는 이번 상황에 적용되지 않습니다. 각 서비스의 리소스 사용률을 최적화하고, 알림에 명시된 문제를 해결하는 것이 우선입니다."
+  },
+  {
+   "id": "s4",
+   "category": "multi-system",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 6.41,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1486,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 153,
+     "sec": 0.82
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 384,
+     "sec": 1.25
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 148,
+     "sec": 0.76
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 801,
+     "sec": 3.17
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "gateway-service",
+    "log-service"
+   ],
+   "runbooks": [
+    "disk-full"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.4952,
+   "rag_margin": 0.0333,
+   "embed_tokens": 29,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.004108,
+   "reply": "1) **Gateway-service 문제**: 현재 gateway-service는 'degraded' 상태이며, CPU 사용률은 37.4%, 메모리 사용률은 48.7%입니다. 알림으로는 'upstream timeout to payments-service (504)'와 'network packet loss 3%'가 발생했습니다. 이는 payments-service와의 연결 문제 및 네트워크 패킷 손실로 인해 타임아웃이 발생했음을 나타냅니다.\n\n2) **Log-service 문제**: log-service 역시 'degraded' 상태로, CPU 사용률은 25.5%, 메모리 사용률은 37.8%입니다. 디스크 사용량이 95%로 매우 높아 'disk usage 95% on /var/log'와 'disk space low' 경고가 발생했습니다. 이는 디스크 공간 부족 문제로 인해 서비스 성능에 영향을 미칠 수 있습니다.\n\n3) **대응 조치**:\n   - **Gateway-service**: 네트워크 연결 문제를 해결하기 위해 네트워크 상태를 점검하고, payments-service와의 연결을 확인해야 합니다. 패킷 손실 문제를 해결하기 위해 네트워크 장비 및 설정을 점검합니다.\n   - **Log-service**: 디스크 용량 부족 문제를 해결하기 위해 runbook 절차에 따라 불필요한 로그 파일 및 임시 파일을 삭제하여 디스크 공간을 확보합니다. 로그 레벨 조정 및 로테이션 주기 단축을 고려하고, 필요 시 볼륨 확장이나 추가 스토리지 연결을 검토합니다. 이후 로그 보존 정책과 디스크 사용률 알림 임계값을 재검토하여 조기 감지가 가능하도록 조정합니다."
+  },
+  {
+   "id": "s5",
+   "category": "single-system",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 5.81,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1118,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 145,
+     "sec": 0.95
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 334,
+     "sec": 1.46
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 639,
+     "sec": 3.0
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "cache-service"
+   ],
+   "runbooks": [
+    "memory-leak"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.5353,
+   "rag_margin": 0.1683,
+   "embed_tokens": 20,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003267,
+   "reply": "1) 현재 cache-service의 상태는 'degraded'이며, CPU 사용률은 47.8%, 메모리 사용률은 91.9%로 확인되었습니다. 알림으로는 'memory usage climbing steadily over 6h'와 'heap near limit'가 발생했습니다.\n\n2) 메모리 사용률이 90% 이상으로 OOM 직전 상태이므로, 서비스 중단을 막기 위해 해당 프로세스를 즉시 재시작해야 합니다. 이는 임시 조치임을 기록해두어야 합니다.\n\n3) 이후, 힙 덤프 또는 프로파일링 도구를 사용하여 어떤 객체가 계속 쌓이고 있는지 확인해야 합니다. 또한, 캐시 무제한 증가, 커넥션 미반환, 이벤트 리스너 중복 등록 같은 패턴이 최근 배포에 있었는지 점검해야 합니다. 원인이 된 배포가 발견되면 롤백을 고려하고, 컨테이너 메모리 상한선을 재확인하여 재발 시 더 빨리 감지되도록 조정해야 합니다."
+  },
+  {
+   "id": "s6",
+   "category": "no-system",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 5.92,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1494,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 148,
+     "sec": 0.75
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 452,
+     "sec": 1.97
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 894,
+     "sec": 2.57
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "gateway-service",
+    "log-service",
+    "cache-service",
+    "auth-service",
+    "payments-service",
+    "web-01"
+   ],
+   "runbooks": [
+    "network-timeout"
+   ],
+   "route_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.3636,
+   "rag_margin": 0.0163,
+   "embed_tokens": 149,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.00456,
+   "reply": "1) 현재 서비스가 느린 원인은 여러 서비스의 상태가 저하된 것과 관련이 있습니다. 특히, gateway-service와 payments-service에서 네트워크 타임아웃과 패킷 손실이 발생하고 있습니다. gateway-service는 'upstream timeout to payments-service (504)'와 'network packet loss 3%' 알림이 있으며, payments-service는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow' 알림이 있습니다.\n\n2) log-service와 cache-service에서도 각각 'disk usage 95% on /var/log', 'disk space low', 'memory usage climbing steadily over 6h', 'heap near limit' 등의 문제가 보고되어 있습니다. 이는 시스템 성능 저하에 기여할 수 있습니다.\n\n3) auth-service는 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used' 알림이 있어 응답 지연이 발생하고 있습니다. 이러한 문제들은 전체 서비스의 성능 저하에 영향을 미치고 있습니다. 각 서비스의 문제를 해결하기 위해 관련된 알림을 우선적으로 처리하고, 네트워크 타임아웃 대응 절차에 따라 문제를 해결해야 합니다."
+  },
+  {
+   "id": "b1",
+   "category": "runbook",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 4.38,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 956,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 146,
+     "sec": 0.9
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 334,
+     "sec": 1.19
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 476,
+     "sec": 1.89
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "web-01"
+   ],
+   "runbooks": [
+    "cpu-spike"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.6311,
+   "rag_margin": 0.1623,
+   "embed_tokens": 18,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.002452,
+   "reply": "1) 현재 web-01의 CPU 사용률은 33.6%로, 급증 상태가 아님을 확인했습니다. 따라서 CPU 급증 원인 진단 절차를 진행할 필요가 없습니다.\n\n2) 모니터링 결과, web-01의 상태는 'healthy'로 나타났으며, 메모리 사용률은 47.8%입니다. 알림도 0건으로, 시스템에 이상 징후는 없습니다.\n\n3) 추가적인 조치가 필요하지 않으며, 시스템 상태를 지속적으로 모니터링하여 이상 징후가 발생할 경우에 대비합니다."
+  },
+  {
+   "id": "b2",
+   "category": "runbook",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 4.72,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1162,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 152,
+     "sec": 0.71
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 366,
+     "sec": 1.18
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 644,
+     "sec": 2.44
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "web-01"
+   ],
+   "runbooks": [
+    "memory-leak"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.5916,
+   "rag_margin": 0.2358,
+   "embed_tokens": 28,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003298,
+   "reply": "1) 현재 web-01의 메모리 사용량은 50.9%로, 메모리 누수로 의심할 만한 수준의 지속적인 증가가 확인되지 않았습니다. 모니터링 상태는 'healthy'로 보고되며, 알림도 발생하지 않았습니다.\n\n2) 메모리 사용률이 90% 이상으로 증가하여 OOM 상황이 발생할 경우, 해당 프로세스를 즉시 재시작하여 서비스 중단을 방지해야 합니다. 이는 임시 조치임을 기록해두어야 합니다.\n\n3) 메모리 사용률이 계속 증가하는 추세가 확인되면, 힙 덤프 또는 프로파일링 도구를 사용하여 어떤 객체가 계속 쌓이는지 확인하고, 최근 배포에서 캐시 무제한 증가, 커넥션 미반환, 이벤트 리스너 중복 등록 같은 패턴이 있었는지 점검해야 합니다. 원인이 된 배포가 확인되면 롤백을 고려하고, 컨테이너 메모리 상한선을 재확인하여 재발 시 더 빨리 감지되도록 조정해야 합니다."
+  },
+  {
+   "id": "b3",
+   "category": "runbook",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 4.46,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1003,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 153,
+     "sec": 0.89
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 388,
+     "sec": 1.43
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 462,
+     "sec": 1.74
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "payments-service"
+   ],
+   "runbooks": [
+    "db-down"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.4406,
+   "rag_margin": 0.061,
+   "embed_tokens": 29,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.002391,
+   "reply": "1) 현재 payments-service의 상태는 'degraded'이며, CPU 사용률이 94.3%로 높고 메모리 사용률은 56.7%입니다. 모니터링 알림으로는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 감지되었습니다.\n\n2) DB 연결이 끊기고 리플리케이션이 멈춘 상황에 따라, runbook에 명시된 절차에 따라 커넥션 풀과 리플리케이션 상태를 점검하고 필요 시 failover 노드로 전환해야 합니다.\n\n3) 서비스가 정상화된 후에는 원인 분석과 재발 방지 대책을 문서화해야 합니다."
+  },
+  {
+   "id": "b4",
+   "category": "runbook",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 5.47,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1130,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 147,
+     "sec": 1.16
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 334,
+     "sec": 0.89
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 649,
+     "sec": 3.02
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "gateway-service"
+   ],
+   "runbooks": [
+    "network-timeout"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.518,
+   "rag_margin": 0.1222,
+   "embed_tokens": 17,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003317,
+   "reply": "1) 모니터링 결과, gateway-service의 상태가 'degraded'로 확인되었으며, CPU 사용률은 29.9%, 메모리 사용률은 45.0%로 나타났습니다. 알림으로는 'upstream timeout to payments-service (504)'와 'network packet loss 3%'가 보고되었습니다.\n\n2) Runbook에 따라, 먼저 get_monitoring_status를 통해 payments-service로의 호출에서 타임아웃이 발생하고 있음을 확인했습니다. \n\n3) 네트워크 패킷 손실이 3%로 보고되었으므로, 네트워크 경로에 문제가 있을 가능성이 있습니다. DNS 해석 실패, 방화벽/보안그룹 변경, 로드밸런서 헬스체크 실패 등의 최근 변경 사항을 점검하고, 특정 리전/가용영역에서만 발생하는지 확인하여 필요 시 라우팅을 임시 전환하는 조치를 고려해야 합니다. 또한, 타임아웃 값이 너무 짧아 정상 응답도 실패로 처리되는 경우라면 임계값을 임시 상향하여 2차 피해를 줄이는 방안을 검토해야 합니다."
+  },
+  {
+   "id": "b5",
+   "category": "runbook",
+   "rep": 1,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 4.33,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1139,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 150,
+     "sec": 0.79
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 340,
+     "sec": 0.97
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 649,
+     "sec": 2.17
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "auth-service"
+   ],
+   "runbooks": [
+    "disk-full"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.4139,
+   "rag_margin": 0.0255,
+   "embed_tokens": 23,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003318,
+   "reply": "1) auth-service의 모니터링 상태를 확인한 결과, 현재 상태는 'degraded'이며 CPU 사용률은 79.6%, 메모리 사용률은 61.8%입니다. 또한, 두 건의 알림이 발생했으며, 이는 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'입니다.\n\n2) 디스크 용량 부족 문제를 해결하기 위해 runbook에 따라 다음 절차를 수행해야 합니다:\n   - 서버의 디스크 사용률을 확인하여 임계 수준(90% 이상)인지 판단합니다.\n   - 로그 파일, 임시 파일, 오래된 백업 등 안전하게 삭제할 수 있는 항목을 정리하여 즉시 여유 공간을 확보합니다.\n   - 특정 프로세스가 비정상적으로 로그를 쌓고 있는 경우, 로그 레벨을 낮추거나 로테이션 주기를 단축합니다.\n   - 임시 조치로도 부족할 경우, 볼륨을 확장하거나 추가 스토리지를 연결합니다.\n\n3) 문제 해결 후, 로그 보존 정책과 디스크 사용률 알림 임계값을 재검토하여 조기에 감지될 수 있도록 조정합니다."
+  },
+  {
+   "id": "r1",
+   "category": "regression",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 4.98,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1136,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 156,
+     "sec": 0.83
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 390,
+     "sec": 1.58
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 590,
+     "sec": 2.18
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "payments-service"
+   ],
+   "runbooks": [
+    "cpu-spike"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.51,
+   "rag_margin": 0.0868,
+   "embed_tokens": 33,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003031,
+   "reply": "1) 모니터링 결과 payments-service의 상태가 'degraded'로 확인되었으며, CPU 사용률이 93.0%로 급증하였습니다. 메모리 사용률은 56.0%로 상대적으로 안정적입니다. 알림으로는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 발생하였습니다.\n\n2) Runbook에 따라 CPU 사용률 급증의 원인을 파악하기 위해 최근 로그를 분석해야 합니다. 반복 호출이나 배치 작업 중복 실행과 같은 특정 요청 패턴이 있는지 확인이 필요합니다.\n\n3) 현재 CPU 사용률이 90%를 넘고 지속되고 있으므로, 오토스케일링 그룹에서 인스턴스를 한 대 더 추가하여 부하를 분산시키는 조치를 취해야 합니다. 이후 정상화가 이루어지면 프로파일링 결과를 바탕으로 핫스팟 코드를 식별하고 최적화 작업을 등록해야 합니다."
+  },
+  {
+   "id": "r2",
+   "category": "regression",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 5.54,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1150,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 148,
+     "sec": 0.82
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 355,
+     "sec": 1.13
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 647,
+     "sec": 3.17
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "cache-service"
+   ],
+   "runbooks": [
+    "memory-leak"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.5122,
+   "rag_margin": 0.1069,
+   "embed_tokens": 21,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.00331,
+   "reply": "1) 현재 cache-service의 상태는 'degraded'이며, CPU 사용률은 49.7%, 메모리 사용률은 92.8%로 확인되었습니다. 알림으로는 'memory usage climbing steadily over 6h'와 'heap near limit'이 발생했습니다.\n\n2) 메모리 사용률이 90% 이상으로 OOM(Out Of Memory) 상태에 근접해 있으므로, 서비스 중단을 막기 위해 해당 프로세스를 즉시 재시작해야 합니다. 이는 임시 조치임을 기록해두어야 합니다.\n\n3) 이후, 힙 덤프 또는 프로파일링 도구를 사용하여 어떤 객체가 계속 쌓이고 있는지 확인해야 합니다. 또한, 캐시 무제한 증가, 커넥션 미반환, 이벤트 리스너 중복 등록 같은 패턴이 최근 배포에 있었는지 점검해야 합니다. 원인이 된 배포가 발견되면 롤백을 고려하고, 컨테이너 메모리 상한선을 재확인하여 재발 시 더 빨리 감지되도록 조정해야 합니다."
+  },
+  {
+   "id": "r3",
+   "category": "regression",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 5.47,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1083,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 149,
+     "sec": 0.98
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 338,
+     "sec": 1.37
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 596,
+     "sec": 2.72
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "log-service"
+   ],
+   "runbooks": [
+    "disk-full"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.549,
+   "rag_margin": 0.152,
+   "embed_tokens": 26,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003053,
+   "reply": "1) 모니터링 결과, log-service의 디스크 사용률이 95%로 임계 수준(90% 이상)을 초과하여 상태가 'degraded'로 나타났습니다. 이는 'disk usage 95% on /var/log' 및 'disk space low' 알림으로 확인되었습니다.\n\n2) 디스크 공간을 확보하기 위해 로그 파일, 임시 파일, 오래된 백업 등 안전하게 삭제할 수 있는 항목을 정리하여 여유 공간을 즉시 확보해야 합니다.\n\n3) 만약 특정 프로세스가 비정상적으로 로그를 쌓고 있다면, 로그 레벨을 낮추거나 로테이션 주기를 단축하여 로그 생성량을 줄이는 조치를 고려해야 합니다. 임시 조치로도 부족할 경우, 볼륨을 확장하거나 추가 스토리지를 연결하는 방안을 검토해야 합니다. 정상화 후에는 로그 보존 정책과 디스크 사용률 알림 임계값을 재검토하여 조기에 감지될 수 있도록 조정해야 합니다."
+  },
+  {
+   "id": "r4",
+   "category": "regression",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 4.67,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1227,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 152,
+     "sec": 0.88
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 382,
+     "sec": 1.31
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 693,
+     "sec": 2.08
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "gateway-service",
+    "payments-service"
+   ],
+   "runbooks": [
+    "network-timeout"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.3964,
+   "rag_margin": 0.0378,
+   "embed_tokens": 23,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003545,
+   "reply": "1) 모니터링 결과, gateway-service에서 payments-service로의 요청이 타임아웃되고 있으며, 이는 'upstream timeout to payments-service (504)'와 'network packet loss 3%' 알림으로 확인되었습니다. payments-service의 CPU 사용률이 95.2%로 매우 높아 성능 저하가 발생하고 있습니다.\n\n2) 네트워크 타임아웃 대응 절차에 따라, 현재 시스템 간 호출에서 타임아웃이 발생하는 것을 확인하였습니다. DNS 해석 실패, 방화벽/보안그룹 변경, 로드밸런서 헬스체크 실패 등의 최근 변경 사항은 수집된 정보에 포함되어 있지 않으므로 추가 점검이 필요합니다.\n\n3) payments-service의 높은 CPU 사용률로 인해 응답이 느려지고 있는 것으로 보입니다. 임시 조치로 타임아웃 값을 상향 조정하여 정상 응답이 실패로 처리되지 않도록 하고, 네트워크 경로 기록을 남겨 향후 재발 방지를 위한 헬스체크 주기와 재시도 정책을 재검토해야 합니다."
+  },
+  {
+   "id": "r5",
+   "category": "regression",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 6.51,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1275,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 153,
+     "sec": 1.44
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 387,
+     "sec": 1.4
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 735,
+     "sec": 3.25
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "web-01",
+    "auth-service"
+   ],
+   "runbooks": [
+    "cpu-spike"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.5817,
+   "rag_margin": 0.1195,
+   "embed_tokens": 26,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003756,
+   "reply": "1) **web-01 상태 확인**:  \n   - web-01의 CPU 사용률은 32.1%로 정상 범위 내에 있으며, 시스템 상태는 'healthy'로 보고되었습니다. 따라서 web-01의 CPU 급증 문제는 현재 발생하지 않고 있습니다.\n\n2) **auth-service 상태 확인**:  \n   - auth-service의 상태는 'degraded'로 보고되었으며, CPU 사용률은 78.8%입니다.  \n   - 메모리 사용률은 61.4%이며, 두 건의 알림이 발생했습니다:  \n     - 'p95 latency 2.4s (threshold 1.0s)'  \n     - 'connection pool 92% used'  \n   - 이는 auth-service의 성능 저하와 관련된 문제로 보입니다.\n\n3) **대응 조치**:  \n   - auth-service의 CPU 사용률이 90%를 넘지 않았으므로, 현재로서는 오토스케일링 조치가 필요하지 않습니다.  \n   - connection pool 사용률이 92%로 높으므로, 커넥션 풀 크기를 조정하거나 트래픽 패턴을 분석하여 최적화가 필요할 수 있습니다.  \n   - p95 latency가 임계값을 초과하므로, 성능 저하 원인을 분석하고 대응 방안을 마련해야 합니다.  \n   - 추가적인 로그 분석을 통해 반복 호출이나 배치 작업 중복 실행 여부를 확인하고, 필요 시 최적화 작업을 진행해야 합니다."
+  },
+  {
+   "id": "r6",
+   "category": "regression",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 5.69,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1355,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 152,
+     "sec": 0.93
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 386,
+     "sec": 1.43
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 149,
+     "sec": 0.69
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 668,
+     "sec": 1.97
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "payments-service",
+    "cache-service"
+   ],
+   "runbooks": [
+    "memory-leak"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.3789,
+   "rag_margin": 0.0261,
+   "embed_tokens": 105,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.003443,
+   "reply": "1) payments-service와 cache-service 모두 상태가 저하된 것으로 확인되었습니다. payments-service는 CPU 사용률이 93.9%로 높고, cache-service는 메모리 사용률이 90.1%로 높습니다.\n\n2) payments-service의 알림은 CPU 사용률 초과와 특정 인스턴스의 응답 지연과 관련이 있으며, cache-service의 알림은 메모리 사용률이 지속적으로 증가하고 힙 메모리가 한계에 도달한 것과 관련이 있습니다.\n\n3) 공통 원인 분석 결과, 두 서비스 간의 직접적인 공통 원인은 발견되지 않았습니다. payments-service는 CPU 사용률 문제, cache-service는 메모리 사용 문제로 각각 다른 원인에 의해 저하된 것으로 보입니다. 추가적인 조치로는 각각의 서비스에 대해 개별적인 문제 해결 절차를 따르는 것이 필요합니다."
+  },
+  {
+   "id": "r7",
+   "category": "regression",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 5.66,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1134,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 147,
+     "sec": 2.06
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 334,
+     "sec": 1.01
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 653,
+     "sec": 2.19
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "auth-service"
+   ],
+   "runbooks": [
+    "high-latency"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.3997,
+   "rag_margin": 0.0322,
+   "embed_tokens": 20,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003337,
+   "reply": "1) 모니터링 결과, auth-service의 상태가 'degraded'로 확인되었으며, CPU 사용률은 76.8%, 메모리 사용률은 60.4%로 나타났습니다. 또한, p95 지연시간이 2.4초로 임계치인 1.0초를 초과하고 있으며, 커넥션 풀 사용률이 92%로 높은 상태입니다.\n\n2) Runbook에 따라, 커넥션 풀 사용률이 90%를 초과하였으므로 풀 크기를 늘리거나 느린 쿼리/외부 호출에 타임아웃을 설정하는 조치를 고려해야 합니다.\n\n3) 5분 내에 p95 지연시간이 임계치 아래로 내려오지 않을 경우, 캐시 계층 또는 읽기 복제본으로 트래픽을 분산하는 추가 조치를 취해야 합니다. 이후, 정상화가 이루어지면 느린 쿼리 로그를 분석하여 근본 원인을 문서화하고 후속 최적화 티켓을 등록해야 합니다."
+  },
+  {
+   "id": "r8",
+   "category": "unknown-system",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 1.94,
+   "error": null,
+   "llm_calls": 2,
+   "llm_failed_calls": 0,
+   "tokens": 466,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 142,
+     "sec": 0.86
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 324,
+     "sec": 1.05
+    }
+   ],
+   "route": "incident",
+   "monitored": [],
+   "runbooks": [],
+   "route_ok": true,
+   "targets_ok": true,
+   "classifier": null,
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 7e-05,
+   "reply": "1) billing-service은(는) 모니터링 대상 시스템이 아니어서 상태를 조회할 수 없습니다\n2) 현재 모니터링 대상 시스템: auth-service, cache-service, gateway-service, log-service, payments-service, web-01\n3) 위 목록의 시스템명으로 다시 요청해 주시면 상태 조회와 대응 절차를 안내하겠습니다."
+  },
+  {
+   "id": "r9",
+   "category": "chat",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 1.65,
+   "error": null,
+   "llm_calls": 2,
+   "llm_failed_calls": 0,
+   "tokens": 237,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 140,
+     "sec": 0.91
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 97,
+     "sec": 0.73
+    }
+   ],
+   "route": "chat",
+   "monitored": [],
+   "runbooks": [],
+   "route_ok": true,
+   "classifier": null,
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 0,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 3.6e-05,
+   "reply": "안녕하세요! 저는 당신의 비서입니다. 도움이 필요하시면 말씀해 주세요."
+  },
+  {
+   "id": "r10",
+   "category": "chat",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 1.7,
+   "error": null,
+   "llm_calls": 2,
+   "llm_failed_calls": 0,
+   "tokens": 245,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 141,
+     "sec": 0.86
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 104,
+     "sec": 0.82
+    }
+   ],
+   "route": "chat",
+   "monitored": [],
+   "runbooks": [],
+   "route_ok": true,
+   "reply_ok": true,
+   "classifier": null,
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 0,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 3.7e-05,
+   "reply": "민수님입니다!"
+  },
+  {
+   "id": "s1",
+   "category": "unknown-system",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 2.25,
+   "error": null,
+   "llm_calls": 2,
+   "llm_failed_calls": 0,
+   "tokens": 467,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 141,
+     "sec": 0.89
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 326,
+     "sec": 1.32
+    }
+   ],
+   "route": "incident",
+   "monitored": [],
+   "runbooks": [],
+   "route_ok": true,
+   "targets_ok": true,
+   "classifier": null,
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 7e-05,
+   "reply": "1) order-service은(는) 모니터링 대상 시스템이 아니어서 상태를 조회할 수 없습니다\n2) 현재 모니터링 대상 시스템: auth-service, cache-service, gateway-service, log-service, payments-service, web-01\n3) 위 목록의 시스템명으로 다시 요청해 주시면 상태 조회와 대응 절차를 안내하겠습니다."
+  },
+  {
+   "id": "s2",
+   "category": "unknown-system",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 2.03,
+   "error": null,
+   "llm_calls": 2,
+   "llm_failed_calls": 0,
+   "tokens": 488,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 148,
+     "sec": 0.88
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 340,
+     "sec": 1.11
+    }
+   ],
+   "route": "incident",
+   "monitored": [],
+   "runbooks": [],
+   "route_ok": true,
+   "targets_ok": true,
+   "classifier": null,
+   "rag_score": null,
+   "rag_margin": null,
+   "embed_tokens": 0,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 7.3e-05,
+   "reply": "1) inventory-service은(는) 모니터링 대상 시스템이 아니어서 상태를 조회할 수 없습니다\n2) 현재 모니터링 대상 시스템: auth-service, cache-service, gateway-service, log-service, payments-service, web-01\n3) 위 목록의 시스템명으로 다시 요청해 주시면 상태 조회와 대응 절차를 안내하겠습니다."
+  },
+  {
+   "id": "s3",
+   "category": "multi-system",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 5.09,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1238,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 146,
+     "sec": 1.01
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 374,
+     "sec": 1.21
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 718,
+     "sec": 2.46
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "auth-service",
+    "payments-service",
+    "cache-service"
+   ],
+   "runbooks": [
+    "network-timeout"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": false,
+   "classifier": "rag",
+   "rag_score": 0.3269,
+   "rag_margin": 0.026,
+   "embed_tokens": 20,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003668,
+   "reply": "1) auth-service의 상태는 'degraded'이며, CPU 사용률은 75.6%, 메모리 사용률은 59.8%입니다. 알림으로는 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'가 보고되었습니다.\n\n2) payments-service의 상태는 'degraded'이며, CPU 사용률은 88.1%, 메모리 사용률은 53.5%입니다. 알림으로는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 보고되었습니다.\n\n3) cache-service의 상태는 'degraded'이며, CPU 사용률은 39.3%, 메모리 사용률은 87.7%입니다. 알림으로는 'memory usage climbing steadily over 6h'와 'heap near limit'가 보고되었습니다.\n\n각 서비스의 성능 저하 원인을 분석하고, 필요한 조치를 취하여 성능을 개선해야 합니다."
+  },
+  {
+   "id": "s4",
+   "category": "multi-system",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 7.16,
+   "error": null,
+   "llm_calls": 4,
+   "llm_failed_calls": 0,
+   "tokens": 1544,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 153,
+     "sec": 0.79
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 384,
+     "sec": 1.56
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 148,
+     "sec": 0.87
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 859,
+     "sec": 3.53
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "gateway-service",
+    "log-service"
+   ],
+   "runbooks": [
+    "disk-full"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.4952,
+   "rag_margin": 0.0333,
+   "embed_tokens": 29,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.004398,
+   "reply": "1) **gateway-service 문제 분석 및 대응:**\n   - 상태: degraded\n   - CPU 사용률: 32.2%\n   - 메모리 사용률: 46.1%\n   - 알림: 'upstream timeout to payments-service (504)', 'network packet loss 3%'\n   - 조치: \n     - 네트워크 패킷 손실 문제를 해결하기 위해 네트워크 연결 상태를 점검하고, 필요 시 네트워크 장비를 재부팅하거나 설정을 조정합니다.\n     - payments-service와의 연결 타임아웃 문제를 해결하기 위해 해당 서비스의 상태를 점검하고, 필요 시 서비스 재시작 또는 성능 최적화를 검토합니다.\n\n2) **log-service 문제 분석 및 대응:**\n   - 상태: degraded\n   - CPU 사용률: 18.4%\n   - 메모리 사용률: 34.2%\n   - 알림: 'disk usage 95% on /var/log', 'disk space low'\n   - 조치:\n     - 디스크 사용률이 95%로 임계 수준을 초과하였으므로, runbook 절차에 따라 안전하게 삭제 가능한 로그 파일, 임시 파일, 오래된 백업 등을 정리하여 여유 공간을 확보합니다.\n     - 로그 파일이 비정상적으로 쌓이는 경우 로그 레벨을 낮추거나 로테이션 주기를 단축하여 로그 생성량을 줄입니다.\n     - 임시 조치로도 부족할 경우, 볼륨 확장 또는 추가 스토리지 연결을 고려합니다.\n     - 문제 해결 후, 로그 보존 정책과 디스크 사용률 알림 임계값을 재검토하여 조기 감지 체계를 강화합니다.\n\n3) **추가 조치:**\n   - 두 서비스 모두 상태가 degraded로 나타나므로, 전체 시스템의 성능 및 안정성을 점검하고, 필요 시 추가적인 최적화 및 모니터링 강화 조치를 시행합니다."
+  },
+  {
+   "id": "s5",
+   "category": "single-system",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 5.09,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1124,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 145,
+     "sec": 0.87
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 334,
+     "sec": 1.02
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 645,
+     "sec": 2.79
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "cache-service"
+   ],
+   "runbooks": [
+    "memory-leak"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.5353,
+   "rag_margin": 0.1683,
+   "embed_tokens": 20,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003297,
+   "reply": "1) 현재 cache-service의 메모리 사용률이 88.0%로, 힙 메모리가 한계에 가까워지고 있습니다. 모니터링 상태는 'degraded'이며, 관련 알림으로 'memory usage climbing steadily over 6h'와 'heap near limit'이 발생했습니다.\n\n2) 메모리 사용률이 90%에 도달하기 전에, OOM(Out Of Memory) 상태를 방지하기 위해 해당 프로세스를 즉시 재시작하는 것이 필요합니다. 이는 임시 조치임을 기록해두어야 합니다.\n\n3) 이후, 힙 덤프 또는 프로파일링 도구를 사용하여 어떤 객체가 계속 쌓이고 있는지 확인하고, 캐시 무제한 증가, 커넥션 미반환, 이벤트 리스너 중복 등록 같은 패턴이 최근 배포에 있었는지 점검해야 합니다. 문제가 된 배포가 확인되면 롤백을 고려하고, 컨테이너 메모리 상한선을 재확인하여 재발 시 더 빨리 감지되도록 조정해야 합니다."
+  },
+  {
+   "id": "s6",
+   "category": "no-system",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 5.38,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1271,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 148,
+     "sec": 0.83
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 374,
+     "sec": 1.24
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 749,
+     "sec": 2.53
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "gateway-service",
+    "log-service"
+   ],
+   "runbooks": [
+    "network-timeout"
+   ],
+   "route_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.3617,
+   "rag_margin": 0.0129,
+   "embed_tokens": 83,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 1,
+   "cost_usd_virtual": 0.003823,
+   "reply": "1) gateway-service에서 'upstream timeout to payments-service (504)'와 'network packet loss 3%' 알림이 발생하여 서비스가 느려진 원인으로 추정됩니다. 이는 네트워크 타임아웃 및 패킷 손실과 관련이 있습니다.\n\n2) log-service에서는 'disk usage 95% on /var/log'와 'disk space low' 알림이 발생하여 로그 저장 공간 부족으로 인한 성능 저하가 우려됩니다.\n\n3) 네트워크 타임아웃 문제에 대한 대응으로, runbook에 따라 다음 절차를 수행해야 합니다:\n   - get_monitoring_status를 사용하여 어떤 시스템 간 호출에서 타임아웃이 발생하는지 확인합니다.\n   - DNS 해석 실패, 방화벽/보안그룹 변경, 로드밸런서 헬스체크 실패 중 최근 변경 사항이 있었는지 점검합니다.\n   - 특정 리전/가용영역에서만 발생하면 해당 구간을 우회하는 라우팅으로 임시 전환합니다.\n   - 타임아웃 값이 너무 짧아 정상 응답도 실패로 처리되는 경우라면 임계값을 임시 상향해 2차 피해를 줄입니다.\n   - 정상화 후 네트워크 경로 기록을 남기고, 재발 방지를 위해 헬스체크 주기와 재시도 정책을 재검토합니다."
+  },
+  {
+   "id": "b1",
+   "category": "runbook",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 3.73,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 914,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 146,
+     "sec": 0.89
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 334,
+     "sec": 1.2
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 434,
+     "sec": 1.24
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "web-01"
+   ],
+   "runbooks": [
+    "cpu-spike"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.6311,
+   "rag_margin": 0.1623,
+   "embed_tokens": 18,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.002242,
+   "reply": "1) 현재 web-01의 CPU 사용률은 41.4%로, 급증 상태가 아님을 확인했습니다.  \n2) 모니터링 결과, web-01의 상태는 'healthy'로 나타났으며, 알림도 발생하지 않았습니다.  \n3) 따라서, 현재로서는 CPU 급증 원인 진단이 필요하지 않으며, 추가적인 조치도 요구되지 않습니다."
+  },
+  {
+   "id": "b2",
+   "category": "runbook",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 5.45,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1160,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 152,
+     "sec": 0.85
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 366,
+     "sec": 1.25
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 642,
+     "sec": 2.63
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "web-01"
+   ],
+   "runbooks": [
+    "memory-leak"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.5916,
+   "rag_margin": 0.2358,
+   "embed_tokens": 28,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003288,
+   "reply": "1) 현재 web-01의 메모리 사용량은 49.3%로, 메모리 누수로 인한 OOM 상태는 아닌 것으로 보입니다. 메모리 사용량이 꾸준히 증가하는지 추세를 확인하기 위해 추가적인 모니터링이 필요합니다.\n\n2) 메모리 사용량이 90% 이상으로 증가할 경우, 해당 프로세스를 즉시 재시작하여 서비스 중단을 방지해야 합니다. 이는 임시 조치임을 기록해두어야 합니다.\n\n3) 메모리 사용량 증가의 원인을 파악하기 위해 힙 덤프 또는 프로파일링 도구를 사용하여 어떤 객체가 계속 쌓이는지 확인해야 합니다. 최근 배포에서 캐시 무제한 증가, 커넥션 미반환, 이벤트 리스너 중복 등록 같은 패턴이 있었는지 점검해야 합니다.\n\n4) 만약 원인이 된 배포가 확인되면 롤백을 고려하고, 컨테이너 메모리 상한선을 재확인하여 재발 시 더 빨리 감지될 수 있도록 조정해야 합니다."
+  },
+  {
+   "id": "b3",
+   "category": "runbook",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 4.05,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1003,
+   "llm_detail": [
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 155,
+     "sec": 0.94
+    },
+    {
+     "model": "openai:gpt-4o-mini",
+     "ok": true,
+     "error": null,
+     "tokens": 388,
+     "sec": 1.28
+    },
+    {
+     "model": "openai:gpt-4o",
+     "ok": true,
+     "error": null,
+     "tokens": 460,
+     "sec": 1.43
+    }
+   ],
+   "route": "incident",
+   "monitored": [
+    "payments-service"
+   ],
+   "runbooks": [
+    "db-down"
+   ],
+   "route_ok": true,
+   "targets_ok": true,
+   "runbook_ok": true,
+   "classifier": "rag",
+   "rag_score": 0.4406,
+   "rag_margin": 0.061,
+   "embed_tokens": 29,
+   "degraded": 0,
+   "degraded_stages": [],
+   "retry_count": 0,
+   "validation_attempts": 1,
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.002381,
+   "reply": "1) 현재 payments-service의 상태는 'degraded'이며, CPU 사용률은 89.3%, 메모리 사용률은 54.2%로 확인되었습니다. 모니터링 알림으로는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 발생했습니다.\n\n2) DB 연결이 끊기고 리플리케이션이 멈춘 상황에 따라, runbook에 명시된 절차에 따라 커넥션 풀과 리플리케이션 상태를 점검하고 필요 시 failover 노드로 전환해야 합니다.\n\n3) 서비스가 정상화된 후에는 원인 분석과 재발 방지 대책을 문서화해야 합니다."
+  },
+  {
+   "id": "b4",
+   "category": "runbook",
+   "rep": 2,
+   "faults": [],
+   "success": true,
+   "elapsed_s": 6.17,
+   "error": null,
+   "llm_calls": 3,
+   "llm_failed_calls": 0,
+   "tokens": 1170,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
@@ -1188,709 +2981,8 @@
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 675,
-     "sec": 2.38
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "auth-service"
-   ],
-   "runbooks": [
-    "high-latency"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.4223,
-   "rag_margin": 0.0476,
-   "embed_tokens": 45,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003447,
-   "reply": "1) 현재 auth-service의 상태는 'degraded'이며, CPU 사용률은 75.6%, 메모리 사용률은 59.8%입니다. 알림으로는 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'가 발생했습니다.\n\n2) Runbook에 따라, p95 지연시간이 임계치(1.0s)를 초과하고 커넥션 풀 사용률이 90%를 넘었습니다. 따라서, 커넥션 풀 크기를 늘리거나 느린 쿼리/외부 호출에 타임아웃을 설정하는 조치가 필요합니다.\n\n3) 5분 내에 p95 지연시간이 임계치 아래로 내려오지 않으면, 캐시 계층 또는 읽기 복제본으로 트래픽을 분산하는 추가 조치를 고려해야 합니다. 이후, 정상화가 되면 느린 쿼리 로그를 분석하여 근본 원인을 문서화하고 후속 최적화 티켓을 등록해야 합니다."
-  },
-  {
-   "id": "r8",
-   "category": "unknown-system",
-   "rep": 1,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 1.75,
-   "error": null,
-   "llm_calls": 2,
-   "llm_failed_calls": 0,
-   "tokens": 466,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 142,
-     "sec": 0.77
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 324,
-     "sec": 0.96
-    }
-   ],
-   "route": "incident",
-   "monitored": [],
-   "runbooks": [],
-   "route_ok": true,
-   "targets_ok": true,
-   "classifier": null,
-   "rag_score": null,
-   "rag_margin": null,
-   "embed_tokens": 0,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 0,
-   "cost_usd_virtual": 7e-05,
-   "reply": "1) billing-service은(는) 모니터링 대상 시스템이 아니어서 상태를 조회할 수 없습니다\n2) 현재 모니터링 대상 시스템: auth-service, cache-service, gateway-service, log-service, payments-service, web-01\n3) 위 목록의 시스템명으로 다시 요청해 주시면 상태 조회와 대응 절차를 안내하겠습니다."
-  },
-  {
-   "id": "r9",
-   "category": "chat",
-   "rep": 1,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 1.72,
-   "error": null,
-   "llm_calls": 2,
-   "llm_failed_calls": 0,
-   "tokens": 237,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 140,
-     "sec": 0.9
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 97,
-     "sec": 0.81
-    }
-   ],
-   "route": "chat",
-   "monitored": [],
-   "runbooks": [],
-   "route_ok": true,
-   "classifier": null,
-   "rag_score": null,
-   "rag_margin": null,
-   "embed_tokens": 0,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 0,
-   "replan_rounds": 0,
-   "cost_usd_virtual": 3.6e-05,
-   "reply": "안녕하세요! 저는 당신의 비서입니다. 도움이 필요하시면 말씀해 주세요."
-  },
-  {
-   "id": "r10",
-   "category": "chat",
-   "rep": 1,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 1.75,
-   "error": null,
-   "llm_calls": 2,
-   "llm_failed_calls": 0,
-   "tokens": 245,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 141,
-     "sec": 0.95
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 104,
-     "sec": 0.79
-    }
-   ],
-   "route": "chat",
-   "monitored": [],
-   "runbooks": [],
-   "route_ok": true,
-   "reply_ok": true,
-   "classifier": null,
-   "rag_score": null,
-   "rag_margin": null,
-   "embed_tokens": 0,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 0,
-   "replan_rounds": 0,
-   "cost_usd_virtual": 3.7e-05,
-   "reply": "민수님입니다!"
-  },
-  {
-   "id": "s1",
-   "category": "unknown-system",
-   "rep": 1,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 1.87,
-   "error": null,
-   "llm_calls": 2,
-   "llm_failed_calls": 0,
-   "tokens": 469,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 143,
-     "sec": 0.8
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 326,
-     "sec": 1.04
-    }
-   ],
-   "route": "incident",
-   "monitored": [],
-   "runbooks": [],
-   "route_ok": true,
-   "targets_ok": true,
-   "classifier": null,
-   "rag_score": null,
-   "rag_margin": null,
-   "embed_tokens": 0,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 0,
-   "cost_usd_virtual": 7e-05,
-   "reply": "1) order-service은(는) 모니터링 대상 시스템이 아니어서 상태를 조회할 수 없습니다\n2) 현재 모니터링 대상 시스템: auth-service, cache-service, gateway-service, log-service, payments-service, web-01\n3) 위 목록의 시스템명으로 다시 요청해 주시면 상태 조회와 대응 절차를 안내하겠습니다."
-  },
-  {
-   "id": "s2",
-   "category": "unknown-system",
-   "rep": 1,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 1.78,
-   "error": null,
-   "llm_calls": 2,
-   "llm_failed_calls": 0,
-   "tokens": 490,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 150,
-     "sec": 0.84
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 340,
-     "sec": 0.91
-    }
-   ],
-   "route": "incident",
-   "monitored": [],
-   "runbooks": [],
-   "route_ok": true,
-   "targets_ok": true,
-   "classifier": null,
-   "rag_score": null,
-   "rag_margin": null,
-   "embed_tokens": 0,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 0,
-   "cost_usd_virtual": 7.3e-05,
-   "reply": "1) inventory-service은(는) 모니터링 대상 시스템이 아니어서 상태를 조회할 수 없습니다\n2) 현재 모니터링 대상 시스템: auth-service, cache-service, gateway-service, log-service, payments-service, web-01\n3) 위 목록의 시스템명으로 다시 요청해 주시면 상태 조회와 대응 절차를 안내하겠습니다."
-  },
-  {
-   "id": "s3",
-   "category": "multi-system",
-   "rep": 1,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 6.2,
-   "error": null,
-   "llm_calls": 3,
-   "llm_failed_calls": 0,
-   "tokens": 1408,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 146,
-     "sec": 0.8
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 374,
-     "sec": 1.28
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 888,
-     "sec": 2.81
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "auth-service",
-    "payments-service",
-    "cache-service"
-   ],
-   "runbooks": [
-    "network-timeout"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": false,
-   "classifier": "rag",
-   "rag_score": 0.3208,
-   "rag_margin": 0.0026,
-   "embed_tokens": 80,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.004518,
-   "reply": "1) 현재 auth-service, payments-service, cache-service 모두 성능 저하 상태입니다. 각 서비스의 상태는 다음과 같습니다:\n   - auth-service: CPU 사용률 80.7%, 메모리 사용률 62.4%, 주요 알림으로는 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'가 있습니다.\n   - payments-service: CPU 사용률 96.8%, 메모리 사용률 57.9%, 주요 알림으로는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 있습니다.\n   - cache-service: CPU 사용률 39.0%, 메모리 사용률 87.5%, 주요 알림으로는 'memory usage climbing steadily over 6h'와 'heap near limit'가 있습니다.\n\n2) 각 서비스의 성능 저하 원인은 다음과 같습니다:\n   - auth-service는 높은 CPU 사용률과 연결 풀 사용률이 주요 원인으로 보입니다.\n   - payments-service는 높은 CPU 사용률과 특정 인스턴스의 응답 지연이 문제입니다.\n   - cache-service는 메모리 사용률이 높아지고 있으며, 힙 메모리가 한계에 가까워지고 있습니다.\n\n3) 네트워크 타임아웃 관련 문제는 현재 수집된 정보에 포함되어 있지 않으므로, runbook의 네트워크 타임아웃 대응 절차는 이번 상황에 적용되지 않습니다. 각 서비스의 성능 저하 문제를 해결하기 위해 리소스 확장, 인스턴스 재배포, 메모리 최적화 등의 조치를 고려해야 합니다."
-  },
-  {
-   "id": "s4",
-   "category": "multi-system",
-   "rep": 1,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 5.82,
-   "error": null,
-   "llm_calls": 4,
-   "llm_failed_calls": 0,
-   "tokens": 1421,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 153,
-     "sec": 0.84
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 384,
-     "sec": 1.2
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 148,
-     "sec": 0.62
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 736,
-     "sec": 2.18
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "gateway-service",
-    "log-service"
-   ],
-   "runbooks": [
-    "disk-full"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.459,
-   "rag_margin": 0.0099,
-   "embed_tokens": 62,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003783,
-   "reply": "1) **Gateway-service 상태**: 현재 상태는 'degraded'이며, CPU 사용률은 28.3%, 메모리 사용률은 44.2%입니다. 알림으로는 'upstream timeout to payments-service (504)'와 'network packet loss 3%'가 발생했습니다.\n\n2) **Log-service 상태**: 현재 상태는 'degraded'이며, CPU 사용률은 25.3%, 메모리 사용률은 37.6%입니다. 알림으로는 '/var/log의 디스크 사용률이 95%'와 '디스크 공간 부족' 경고가 발생했습니다.\n\n3) **대응 절차**:\n   - Gateway-service의 경우, 네트워크 패킷 손실과 payments-service로의 타임아웃 문제를 해결하기 위해 네트워크 상태를 점검하고, 관련 서비스의 연결 상태를 확인해야 합니다.\n   - Log-service의 경우, 디스크 사용률이 95%로 임계 수준을 초과했으므로, runbook에 따라 불필요한 로그 파일 및 임시 파일을 정리하여 디스크 공간을 확보해야 합니다. 필요 시, 로그 레벨 조정 및 로테이션 주기 단축을 고려하고, 추가 스토리지 연결을 검토해야 합니다."
-  },
-  {
-   "id": "s5",
-   "category": "single-system",
-   "rep": 1,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 4.84,
-   "error": null,
-   "llm_calls": 3,
-   "llm_failed_calls": 0,
-   "tokens": 1144,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 145,
-     "sec": 0.88
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 334,
-     "sec": 1.05
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 665,
-     "sec": 1.9
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "cache-service"
-   ],
-   "runbooks": [
-    "memory-leak"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.5115,
-   "rag_margin": 0.1677,
-   "embed_tokens": 35,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003397,
-   "reply": "1) 현재 cache-service의 상태는 'degraded'이며, CPU 사용률은 43.9%, 메모리 사용률은 90.0%로 확인되었습니다. 알림으로는 'memory usage climbing steadily over 6h'와 'heap near limit'가 발생했습니다.\n\n2) 메모리 사용률이 90% 이상으로 OOM 직전 상태이므로, 서비스 중단을 막기 위해 해당 프로세스를 즉시 재시작해야 합니다. 이는 임시 조치임을 기록해두어야 합니다.\n\n3) 이후, 힙 덤프 또는 프로파일링 도구를 사용하여 어떤 객체가 계속 쌓이고 있는지 확인해야 합니다. 또한, 캐시 무제한 증가, 커넥션 미반환, 이벤트 리스너 중복 등록 같은 패턴이 최근 배포에 있었는지 점검해야 합니다. 원인이 된 배포가 발견되면 롤백을 고려하고, 컨테이너 메모리 상한선을 재확인하여 재발 시 더 빨리 감지되도록 조정해야 합니다."
-  },
-  {
-   "id": "s6",
-   "category": "no-system",
-   "rep": 1,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 8.73,
-   "error": null,
-   "llm_calls": 4,
-   "llm_failed_calls": 0,
-   "tokens": 2138,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 148,
-     "sec": 0.87
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 452,
-     "sec": 2.1
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 325,
-     "sec": 1.11
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 1213,
-     "sec": 3.52
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "gateway-service",
-    "auth-service",
-    "cache-service",
-    "log-service",
-    "payments-service",
-    "web-01"
-   ],
-   "runbooks": [
-    "network-timeout"
-   ],
-   "route_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.3658,
-   "rag_margin": 0.0203,
-   "embed_tokens": 124,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.006204,
-   "reply": "1) 현재 모니터링된 모든 서비스가 'degraded' 상태로 확인되었습니다. 이는 서비스 성능 저하의 주요 원인으로 보입니다. 특히, gateway-service와 payments-service에서 네트워크 타임아웃 및 패킷 손실 문제가 발생하고 있습니다. \n\n2) 각 서비스의 상태는 다음과 같습니다:\n   - **gateway-service**: CPU 28.1%, 메모리 44.0%, 알림 ['upstream timeout to payments-service (504)', 'network packet loss 3%']\n   - **auth-service**: CPU 85.0%, 메모리 64.5%, 알림 ['p95 latency 2.4s (threshold 1.0s)', 'connection pool 92% used']\n   - **cache-service**: CPU 39.3%, 메모리 87.7%, 알림 ['memory usage climbing steadily over 6h', 'heap near limit']\n   - **log-service**: CPU 18.7%, 메모리 34.3%, 알림 ['disk usage 95% on /var/log', 'disk space low']\n   - **payments-service**: CPU 90.3%, 메모리 54.7%, 알림 ['CPU 91% (threshold 80%)', 'payments-service-3 instance responding slow']\n   - **web-01**: 상태=healthy, CPU 33.8%, 메모리 47.9%, 알림 없음\n\n3) 네트워크 타임아웃 및 패킷 손실 문제에 대한 대응으로는 다음과 같은 조치가 필요합니다:\n   - get_monitoring_status를 통해 타임아웃 발생 시스템 간 호출을 확인합니다.\n   - 최근 DNS 해석 실패, 방화벽/보안그룹 변경, 로드밸런서 헬스체크 실패 여부를 점검합니다.\n   - 특정 리전/가용영역에서만 발생 시 해당 구간을 우회하는 라우팅으로 임시 전환합니다.\n   - 타임아웃 값이 너무 짧은 경우 임계값을 임시 상향하여 2차 피해를 줄입니다.\n   - 정상화 후 네트워크 경로 기록을 남기고, 재발 방지를 위해 헬스체크 주기와 재시도 정책을 재검토합니다."
-  },
-  {
-   "id": "b1",
-   "category": "runbook",
-   "rep": 1,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 4.63,
-   "error": null,
-   "llm_calls": 3,
-   "llm_failed_calls": 0,
-   "tokens": 997,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 146,
-     "sec": 0.88
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 334,
-     "sec": 0.92
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 517,
-     "sec": 1.81
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "web-01"
-   ],
-   "runbooks": [
-    "cpu-spike"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.5588,
-   "rag_margin": 0.1375,
-   "embed_tokens": 24,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.002657,
-   "reply": "1) 참고: 현재 web-01의 상태는 'healthy'이며, CPU 사용률은 36.4%로 급증 상태가 아님. 메모리 사용률은 49.2%이며, 알림은 0건으로 기록됨.\n\n2) 수집된 데이터에 따르면, web-01의 CPU 사용률은 급증 상태가 아니므로 추가적인 진단이나 조치는 필요하지 않음.\n\n3) 만약 향후 CPU 사용률이 급증할 경우, runbook에 따라 모니터링 상태 확인, 로그 분석, 오토스케일링, 배포 롤백, 프로파일링 및 최적화 작업을 진행해야 함."
-  },
-  {
-   "id": "b2",
-   "category": "runbook",
-   "rep": 1,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 5.38,
-   "error": null,
-   "llm_calls": 4,
-   "llm_failed_calls": 0,
-   "tokens": 1229,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 152,
-     "sec": 0.9
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 366,
-     "sec": 1.06
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 98,
-     "sec": 0.57
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 613,
-     "sec": 1.88
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "web-01"
-   ],
-   "runbooks": [
-    "memory-leak"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.5247,
-   "rag_margin": 0.1841,
-   "embed_tokens": 34,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003158,
-   "reply": "1) 현재 web-01의 상태는 'healthy'로 보고되었으며, CPU 사용률은 33.2%, 메모리 사용률은 47.6%로 확인되었습니다. 알림은 발생하지 않았습니다. \n\n2) 메모리 사용률이 47.6%로, OOM 직전 상태(90% 이상)에는 해당하지 않으므로 즉각적인 프로세스 재시작은 필요하지 않습니다. \n\n3) 메모리 사용량 증가가 지속적인지 확인하기 위해 'get_monitoring_status'를 통해 메모리 사용률 추세를 모니터링해야 합니다. 현재 수집된 데이터로는 메모리 누수의 증거가 발견되지 않았으며, 특이 패턴도 감지되지 않았습니다. 추가적인 모니터링과 분석이 필요합니다."
-  },
-  {
-   "id": "b3",
-   "category": "runbook",
-   "rep": 1,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 6.28,
-   "error": null,
-   "llm_calls": 4,
-   "llm_failed_calls": 0,
-   "tokens": 1166,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 155,
-     "sec": 0.91
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 388,
-     "sec": 1.38
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 117,
-     "sec": 0.74
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 506,
-     "sec": 2.21
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "payments-service"
-   ],
-   "runbooks": [
-    "db-down"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.4061,
-   "rag_margin": 0.0354,
-   "embed_tokens": 49,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.002629,
-   "reply": "1) 현재 payments-service의 상태는 'degraded'로 확인되었으며, CPU 사용률은 95.7%, 메모리 사용률은 57.3%입니다. 모니터링 알림으로는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 발생했습니다.\n\n2) DB 연결 끊김 및 리플리케이션 중단 문제에 대한 대응으로, runbook에 따라 커넥션 풀과 리플리케이션 상태를 점검하고 필요 시 failover 노드로 전환해야 합니다.\n\n3) 서비스 정상화 후에는 원인 분석과 재발 방지 대책을 문서화해야 합니다. 현재까지의 패턴 분석에서는 특이 패턴이 발견되지 않았습니다."
-  },
-  {
-   "id": "b4",
-   "category": "runbook",
-   "rep": 1,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 5.29,
-   "error": null,
-   "llm_calls": 3,
-   "llm_failed_calls": 0,
-   "tokens": 1197,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 147,
-     "sec": 0.84
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 334,
-     "sec": 1.13
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 716,
-     "sec": 2.29
+     "tokens": 689,
+     "sec": 3.86
     }
    ],
    "route": "incident",
@@ -1904,49 +2996,49 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.5062,
-   "rag_margin": 0.1303,
-   "embed_tokens": 34,
+   "rag_score": 0.518,
+   "rag_margin": 0.1222,
+   "embed_tokens": 17,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003652,
-   "reply": "1) 현재 gateway-service의 상태는 'degraded'로 확인되었으며, CPU 사용률은 35.5%, 메모리 사용률은 47.7%입니다. 알림으로는 'upstream timeout to payments-service (504)'와 'network packet loss 3%'가 발생했습니다.\n\n2) 문제의 원인은 payments-service로의 업스트림 타임아웃과 네트워크 패킷 손실로 추정됩니다. 따라서, 네트워크 타임아웃 대응 절차에 따라 다음 단계를 수행해야 합니다:\n   - get_monitoring_status를 사용하여 타임아웃이 발생하는 시스템 간 호출을 확인합니다.\n   - DNS 해석 실패, 방화벽/보안그룹 변경, 로드밸런서 헬스체크 실패 중 최근 변경 사항이 있었는지 점검합니다.\n   - 특정 리전/가용영역에서만 발생하는 경우 해당 구간을 우회하는 라우팅으로 임시 전환합니다.\n   - 타임아웃 값이 너무 짧아 정상 응답도 실패로 처리되는 경우라면 임계값을 임시 상향해 2차 피해를 줄입니다.\n\n3) 문제 해결 후에는 네트워크 경로 기록을 남기고, 재발 방지를 위해 헬스체크 주기와 재시도 정책을 재검토해야 합니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003517,
+   "reply": "1) 모니터링 결과, gateway-service의 상태가 'degraded'로 확인되었으며, CPU 사용률은 28.5%, 메모리 사용률은 44.3%입니다. 알림으로는 'upstream timeout to payments-service (504)'와 'network packet loss 3%'가 발생했습니다.\n\n2) 'upstream timeout to payments-service (504)' 알림을 통해 payments-service와의 호출에서 타임아웃이 발생하고 있음을 확인했습니다. 이는 네트워크 타임아웃 대응 절차의 첫 번째 단계에 해당합니다.\n\n3) 네트워크 타임아웃 대응 절차에 따라, DNS 해석 실패, 방화벽/보안그룹 변경, 로드밸런서 헬스체크 실패 중 최근 변경 사항이 있었는지 점검해야 합니다. 또한, 특정 리전/가용영역에서만 발생하는지 확인하고, 필요시 해당 구간을 우회하는 라우팅으로 임시 전환해야 합니다. 타임아웃 값이 너무 짧아 정상 응답도 실패로 처리되는 경우라면 임계값을 임시 상향해 2차 피해를 줄이는 조치를 고려해야 합니다. 정상화 후에는 네트워크 경로 기록을 남기고, 헬스체크 주기와 재시도 정책을 재검토해야 합니다."
   },
   {
    "id": "b5",
    "category": "runbook",
-   "rep": 1,
+   "rep": 2,
    "faults": [],
    "success": true,
-   "elapsed_s": 5.51,
+   "elapsed_s": 4.85,
    "error": null,
    "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1195,
+   "tokens": 1142,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 150,
-     "sec": 0.82
+     "sec": 0.96
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 340,
-     "sec": 0.98
+     "sec": 0.94
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 705,
-     "sec": 2.63
+     "tokens": 652,
+     "sec": 2.56
     }
    ],
    "route": "incident",
@@ -1960,56 +3052,49 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.3907,
-   "rag_margin": 0.0199,
-   "embed_tokens": 48,
+   "rag_score": 0.4139,
+   "rag_margin": 0.0255,
+   "embed_tokens": 23,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003598,
-   "reply": "1) 참고: 현재 auth-service의 디스크 사용률에 대한 구체적인 수치는 수집되지 않았습니다. 그러나 디스크가 꽉 찼다는 알림이 있어 디스크 용량 부족 문제로 판단됩니다.\n\n2) 대응 절차:\n   - 모니터링 상태를 확인한 결과, auth-service는 degraded 상태이며 CPU 사용률은 79.6%, 메모리 사용률은 61.8%입니다. 알림으로는 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'가 있습니다.\n   - 디스크 사용률이 임계 수준(90% 이상)인지 확인할 필요가 있습니다. 현재 수집된 정보로는 디스크 사용률이 제공되지 않았으므로, 추가 확인이 필요합니다.\n   - 로그 파일, 임시 파일, 오래된 백업 등을 정리하여 여유 공간을 확보합니다.\n   - 로그 레벨을 낮추거나 로테이션 주기를 단축하여 로그 파일의 비정상적인 증가를 방지합니다.\n   - 필요 시, 볼륨을 확장하거나 추가 스토리지를 연결하여 임시 조치를 취합니다.\n\n3) 후속 조치:\n   - 정상화 후, 로그 보존 정책과 디스크 사용률 알림 임계값을 재검토하여 조기에 감지될 수 있도록 조정합니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003333,
+   "reply": "1) 현재 auth-service의 상태는 'degraded'이며, CPU 사용률은 75.1%, 메모리 사용률은 59.5%입니다. 알림으로는 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'가 있습니다.\n\n2) 디스크 용량 부족 문제를 해결하기 위해, 먼저 서버의 디스크 사용률을 확인하여 임계 수준(90% 이상)인지 판단해야 합니다. 수집된 데이터에는 디스크 사용률 정보가 없으므로, 이 정보를 추가로 수집해야 합니다.\n\n3) 디스크 사용률이 임계 수준에 도달했다면, 로그 파일, 임시 파일, 오래된 백업 등을 정리하여 여유 공간을 확보합니다. 또한, 특정 프로세스가 비정상적으로 로그를 쌓고 있는지 확인하고, 필요시 로그 레벨을 낮추거나 로테이션 주기를 단축합니다. 임시 조치로도 부족할 경우, 볼륨을 확장하거나 추가 스토리지를 연결하는 방안을 고려합니다. 정상화 후에는 로그 보존 정책과 디스크 사용률 알림 임계값을 재검토하여 조기에 감지될 수 있도록 조정합니다."
   },
   {
    "id": "r1",
    "category": "regression",
-   "rep": 2,
+   "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 5.68,
+   "elapsed_s": 4.8,
    "error": null,
-   "llm_calls": 4,
+   "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1263,
+   "tokens": 1115,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
-     "tokens": 156,
-     "sec": 0.95
+     "tokens": 154,
+     "sec": 0.77
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 371,
-     "sec": 1.05
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 117,
-     "sec": 0.77
+     "sec": 1.37
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 619,
-     "sec": 1.84
+     "tokens": 590,
+     "sec": 2.26
     }
    ],
    "route": "incident",
@@ -2023,56 +3108,49 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.4977,
-   "rag_margin": 0.08,
-   "embed_tokens": 53,
+   "rag_score": 0.51,
+   "rag_margin": 0.0868,
+   "embed_tokens": 33,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003192,
-   "reply": "1) 참고: 현재 payments-service의 상태는 'degraded'이며, CPU 사용률은 97.8%로 높고 메모리 사용률은 58.4%입니다. 알림은 두 건 발생했으며, 각각 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'입니다.\n\n2) 원인 분석:\n   - 최근 로그에서 반복 호출이나 배치 작업 중복 실행 같은 특정 요청 패턴은 발견되지 않았습니다.\n   - CPU 사용률이 90%를 넘고 지속되고 있으므로, 오토스케일링 그룹에서 인스턴스를 한 대 더 추가하여 부하를 분산하는 것이 필요합니다.\n\n3) 대응 조치:\n   - 오토스케일링 그룹에서 인스턴스를 추가하여 부하를 분산합니다.\n   - 정상화 후 프로파일링 결과를 바탕으로 핫스팟 코드를 식별하고 최적화 작업을 등록합니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003029,
+   "reply": "1) 모니터링 결과 payments-service의 상태가 'degraded'로 확인되었으며, CPU 사용률이 99.0%로 급증하였습니다. 메모리 사용률은 59.0%로 상대적으로 안정적입니다. 알림으로는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 발생하였습니다.\n\n2) Runbook에 따라 CPU 사용률 급증의 원인을 파악하기 위해 최근 로그를 분석해야 합니다. 반복 호출이나 배치 작업 중복 실행과 같은 특정 요청 패턴이 있는지 확인이 필요합니다.\n\n3) 현재 CPU 사용률이 90%를 넘고 지속되고 있으므로, 오토스케일링 그룹에서 인스턴스를 한 대 더 추가하여 부하를 분산시키는 조치를 취해야 합니다. 이후 정상화가 이루어지면 프로파일링 결과를 바탕으로 핫스팟 코드를 식별하고 최적화 작업을 등록해야 합니다."
   },
   {
    "id": "r2",
    "category": "regression",
-   "rep": 2,
+   "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 6.27,
+   "elapsed_s": 5.05,
    "error": null,
-   "llm_calls": 4,
+   "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1320,
+   "tokens": 1159,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 148,
-     "sec": 0.84
+     "sec": 0.89
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 355,
-     "sec": 1.26
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 112,
-     "sec": 0.69
+     "sec": 1.21
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 705,
-     "sec": 2.4
+     "tokens": 656,
+     "sec": 2.56
     }
    ],
    "route": "incident",
@@ -2086,49 +3164,49 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.4938,
-   "rag_margin": 0.1166,
-   "embed_tokens": 36,
+   "rag_score": 0.5122,
+   "rag_margin": 0.1069,
+   "embed_tokens": 21,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003617,
-   "reply": "1) 현재 cache-service의 상태는 'degraded'이며, CPU 사용률은 45.1%, 메모리 사용률은 90.5%로 확인되었습니다. 알림으로는 'memory usage climbing steadily over 6h'와 'heap near limit'가 발생했습니다.\n\n2) 메모리 사용률이 90% 이상으로 OOM 직전 상태이므로, 서비스 중단을 막기 위해 해당 프로세스를 즉시 재시작하는 것이 필요합니다. 이는 임시 조치임을 기록해두어야 합니다.\n\n3) 이후, 힙 덤프 또는 프로파일링 도구를 사용하여 어떤 객체가 계속 쌓이고 있는지 확인해야 합니다. 또한, 캐시 무제한 증가, 커넥션 미반환, 이벤트 리스너 중복 등록 같은 패턴이 최근 배포에 있었는지 점검해야 합니다. 현재 수집된 정보에 따르면 특이 패턴은 발견되지 않았습니다. \n\n추가적인 조치로, 원인이 된 배포가 확인되면 롤백을 고려하고, 컨테이너 메모리 상한선을 재확인하여 재발 시 더 빨리 감지되도록 조정하는 것이 필요합니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003355,
+   "reply": "1) 현재 cache-service의 메모리 사용률이 88.2%로 높으며, 'memory usage climbing steadily over 6h'와 'heap near limit'이라는 두 가지 알림이 발생했습니다. 이는 메모리 누수 가능성을 시사합니다.\n\n2) 메모리 사용률이 90%에 근접하지는 않았으나, 지속적인 증가 추세가 관찰되므로, OOM 상황을 방지하기 위해 프로세스를 재시작하는 것이 고려될 수 있습니다. 이는 임시 조치임을 기록해야 합니다.\n\n3) 메모리 누수의 원인을 파악하기 위해 힙 덤프 또는 프로파일링 도구를 사용하여 어떤 객체가 계속 쌓이고 있는지 확인해야 합니다. 또한, 최근 배포에서 캐시 무제한 증가, 커넥션 미반환, 이벤트 리스너 중복 등록과 같은 패턴이 있었는지 점검해야 합니다. 원인이 된 배포가 확인되면 롤백을 고려하고, 컨테이너 메모리 상한선을 재확인하여 재발 시 더 빨리 감지되도록 조정해야 합니다."
   },
   {
    "id": "r3",
    "category": "regression",
-   "rep": 2,
+   "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 5.11,
+   "elapsed_s": 4.43,
    "error": null,
    "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1128,
+   "tokens": 1014,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 149,
-     "sec": 0.93
+     "sec": 0.9
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 338,
-     "sec": 0.91
+     "sec": 1.02
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 641,
-     "sec": 2.27
+     "tokens": 527,
+     "sec": 2.11
     }
    ],
    "route": "incident",
@@ -2142,56 +3220,49 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.5313,
-   "rag_margin": 0.1536,
-   "embed_tokens": 42,
+   "rag_score": 0.549,
+   "rag_margin": 0.152,
+   "embed_tokens": 26,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003278,
-   "reply": "1) 참고: log-service의 상태는 'degraded'이며, CPU 사용률은 18.4%, 메모리 사용률은 34.2%입니다. 현재 알림은 두 건으로, 'disk usage 95% on /var/log'와 'disk space low'입니다.\n\n2) 디스크 사용률이 95%로 임계 수준(90% 이상)을 초과하였으므로, 다음 조치를 수행해야 합니다:\n   - 로그 파일, 임시 파일, 오래된 백업 등 안전하게 삭제할 수 있는 항목을 정리하여 즉시 여유 공간을 확보합니다.\n   - 특정 프로세스가 비정상적으로 로그를 쌓고 있는지 확인하고, 필요 시 로그 레벨을 낮추거나 로테이션 주기를 단축합니다.\n\n3) 임시 조치로도 디스크 공간 확보가 충분하지 않을 경우, 볼륨을 확장하거나 추가 스토리지를 연결하는 방안을 고려합니다. 정상화 후에는 로그 보존 정책과 디스크 사용률 알림 임계값을 재검토하여 조기에 감지될 수 있도록 조정합니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.002708,
+   "reply": "1) 모니터링 결과, log-service의 디스크 사용률이 95%로 임계 수준(90% 이상)을 초과하여 상태가 'degraded'로 나타났습니다.\n\n2) 디스크 공간 확보를 위해 로그 파일, 임시 파일, 오래된 백업 등 안전하게 삭제 가능한 항목을 정리하여 여유 공간을 확보해야 합니다.\n\n3) 만약 특정 프로세스가 비정상적으로 로그를 쌓고 있다면, 로그 레벨을 낮추거나 로테이션 주기를 단축하여 로그 생성량을 줄이는 조치를 고려해야 합니다. 추가적인 조치가 필요할 경우, 볼륨 확장이나 추가 스토리지 연결을 검토해야 합니다."
   },
   {
    "id": "r4",
    "category": "regression",
-   "rep": 2,
+   "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 6.53,
+   "elapsed_s": 5.6,
    "error": null,
-   "llm_calls": 4,
+   "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1523,
+   "tokens": 1253,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
-     "tokens": 150,
-     "sec": 0.74
+     "tokens": 152,
+     "sec": 0.91
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
-     "tokens": 382,
-     "sec": 1.25
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 182,
-     "sec": 0.9
+     "tokens": 363,
+     "sec": 1.76
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 809,
-     "sec": 2.61
+     "tokens": 738,
+     "sec": 2.53
     }
    ],
    "route": "incident",
@@ -2206,35 +3277,35 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.4074,
-   "rag_margin": 0.0511,
-   "embed_tokens": 60,
+   "rag_score": 0.3964,
+   "rag_margin": 0.0378,
+   "embed_tokens": 23,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.004151,
-   "reply": "1) 현재 gateway-service와 payments-service 모두 상태가 저하된 것으로 확인되었습니다. gateway-service에서는 'upstream timeout to payments-service (504)'와 'network packet loss 3%' 알림이 발생하였고, payments-service에서는 CPU 사용률이 96.7%로 높으며 'payments-service-3 instance responding slow' 알림이 발생하였습니다.\n\n2) 네트워크 타임아웃과 관련된 문제로, gateway-service에서 payments-service로의 요청이 타임아웃되고 있습니다. 이는 네트워크 패킷 손실과 payments-service의 CPU 과부하가 원인일 가능성이 높습니다.\n\n3) 대응 절차로는 다음을 권장합니다:\n   - 네트워크 경로에서의 패킷 손실 문제를 해결하기 위해 네트워크 설정을 점검하고, 필요시 라우팅을 임시 전환합니다.\n   - payments-service의 CPU 과부하를 완화하기 위해 인스턴스 추가나 부하 분산을 고려합니다.\n   - 타임아웃 임계값을 임시로 상향 조정하여 정상 응답이 실패로 처리되지 않도록 조치합니다.\n   - 문제 해결 후 네트워크 경로 기록을 남기고, 헬스체크 주기와 재시도 정책을 재검토하여 재발 방지를 위한 조치를 취합니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003767,
+   "reply": "1) 현재 gateway-service에서 payments-service로의 요청이 타임아웃되고 있으며, 모니터링 결과 두 서비스 모두 'degraded' 상태로 확인되었습니다. gateway-service에서는 'upstream timeout to payments-service (504)'와 'network packet loss 3%' 알림이 발생하였고, payments-service에서는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow' 알림이 발생하였습니다.\n\n2) 문제 해결을 위해 다음 조치를 권장합니다:\n   - get_monitoring_status를 통해 타임아웃이 발생하는 시스템 간 호출을 확인하였습니다.\n   - DNS 해석 실패, 방화벽/보안그룹 변경, 로드밸런서 헬스체크 실패 등 최근 변경 사항을 점검합니다.\n   - 특정 리전/가용영역에서만 문제가 발생하는 경우 해당 구간을 우회하는 라우팅으로 임시 전환합니다.\n   - 타임아웃 값이 너무 짧아 정상 응답도 실패로 처리되는 경우라면 임계값을 임시 상향하여 2차 피해를 줄입니다.\n\n3) 문제 해결 후, 네트워크 경로 기록을 남기고 재발 방지를 위해 헬스체크 주기와 재시도 정책을 재검토할 것을 권장합니다."
   },
   {
    "id": "r5",
    "category": "regression",
-   "rep": 2,
+   "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 6.85,
+   "elapsed_s": 4.93,
    "error": null,
-   "llm_calls": 4,
+   "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1356,
+   "tokens": 1183,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 153,
-     "sec": 0.95
+     "sec": 0.85
     },
     {
      "model": "openai:gpt-4o-mini",
@@ -2244,18 +3315,11 @@
      "sec": 1.43
     },
     {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 140,
-     "sec": 0.97
-    },
-    {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 676,
-     "sec": 2.49
+     "tokens": 643,
+     "sec": 2.24
     }
    ],
    "route": "incident",
@@ -2270,56 +3334,56 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.5411,
-   "rag_margin": 0.0818,
-   "embed_tokens": 57,
+   "rag_score": 0.5817,
+   "rag_margin": 0.1195,
+   "embed_tokens": 26,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003482,
-   "reply": "1) web-01의 상태는 'healthy'이며, CPU 사용률은 31.4%로 급증 상태가 아님을 확인했습니다. 메모리 사용률은 46.7%이며, 알림은 없습니다.\n\n2) auth-service의 상태는 'degraded'로, CPU 사용률은 79.9%입니다. 메모리 사용률은 62.0%이며, 알림은 2건이 있습니다. 알림 내용은 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'입니다.\n\n3) web-01의 CPU 사용률은 급증 상태가 아니므로 추가 조치는 필요하지 않습니다. auth-service의 경우, CPU 사용률이 79.9%로 아직 급증 대응 절차의 기준인 90%를 넘지 않았으나, 커넥션 풀 사용률이 92%로 높아 주의가 필요합니다. 추가적인 모니터링과 필요 시 오토스케일링 또는 최적화 작업을 고려해야 합니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003296,
+   "reply": "1) web-01의 상태는 'healthy'로 확인되었으며, CPU 사용률은 35.5%로 급증 상태가 아님을 확인했습니다. 메모리 사용률은 48.7%이며, 관련 알림은 없습니다.\n\n2) auth-service의 상태는 'degraded'로 확인되었으며, CPU 사용률은 79.6%입니다. 메모리 사용률은 61.8%이며, 두 건의 알림이 있습니다: 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'입니다.\n\n3) auth-service의 CPU 사용률이 90%를 넘지 않았으므로, 오토스케일링 그룹에서 인스턴스를 추가로 띄우는 조치는 필요하지 않습니다. 그러나, 커넥션 풀 사용률이 92%로 높아 관련 최적화 작업이 필요할 수 있습니다. 추가적인 로그 분석을 통해 반복 호출이나 배치 작업 중복 실행 여부를 확인하고, 필요 시 최적화 작업을 진행해야 합니다."
   },
   {
    "id": "r6",
    "category": "regression",
-   "rep": 2,
+   "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 7.63,
+   "elapsed_s": 6.11,
    "error": null,
    "llm_calls": 4,
    "llm_failed_calls": 0,
-   "tokens": 1421,
+   "tokens": 1349,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 152,
-     "sec": 1.06
+     "sec": 0.9
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
-     "tokens": 405,
-     "sec": 1.67
+     "tokens": 386,
+     "sec": 1.27
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 149,
-     "sec": 0.94
+     "sec": 0.8
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 715,
-     "sec": 2.92
+     "tokens": 662,
+     "sec": 2.4
     }
    ],
    "route": "incident",
@@ -2336,47 +3400,47 @@
    "classifier": "rag",
    "rag_score": 0.3789,
    "rag_margin": 0.0261,
-   "embed_tokens": 70,
+   "embed_tokens": 105,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
    "replan_rounds": 1,
-   "cost_usd_virtual": 0.003681,
-   "reply": "1) payments-service와 cache-service 모두 상태가 저하된 것으로 확인되었습니다. payments-service는 CPU 사용률이 91.3%로 높고, cache-service는 메모리 사용률이 88.6%로 높습니다. \n\n2) payments-service의 경우, CPU 사용률이 임계치(80%)를 초과하여 알림이 발생하였고, 특정 인스턴스가 응답이 느리다는 알림이 추가로 발생했습니다. \n\n3) cache-service의 경우, 메모리 사용률이 꾸준히 증가하고 있으며, 힙 메모리가 한계에 도달했다는 알림이 발생했습니다. 이는 메모리 누수와 관련된 문제일 가능성이 있습니다. \n\n공통 원인으로는 두 서비스 모두 자원 사용률이 높다는 점이 있지만, 각각의 자원(CPU와 메모리) 사용률이 다르므로 직접적인 공통 원인은 확인되지 않았습니다. 추가적인 분석이 필요할 수 있습니다."
+   "cost_usd_virtual": 0.003413,
+   "reply": "1) payments-service와 cache-service 모두 상태가 저하된 것으로 확인되었습니다. payments-service는 CPU 사용률이 94.6%로 높고, cache-service는 메모리 사용률이 90.9%로 높습니다.\n\n2) payments-service의 주요 문제는 CPU 사용률이 91%로 임계값(80%)을 초과하고, 특정 인스턴스가 응답이 느린 상태입니다. 반면, cache-service는 메모리 사용률이 꾸준히 증가하고 있으며, 힙 메모리가 한계에 도달하고 있습니다.\n\n3) 공통 원인 분석 결과, 두 서비스 간의 직접적인 공통 원인은 발견되지 않았습니다. payments-service는 CPU 과부하가 주요 문제인 반면, cache-service는 메모리 누수 가능성이 있습니다. 각각의 문제에 대해 별도의 대응이 필요합니다."
   },
   {
    "id": "r7",
    "category": "regression",
-   "rep": 2,
+   "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 5.34,
+   "elapsed_s": 4.9,
    "error": null,
    "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1183,
+   "tokens": 1131,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 147,
-     "sec": 0.8
+     "sec": 0.88
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 334,
-     "sec": 1.06
+     "sec": 0.95
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 702,
-     "sec": 2.42
+     "tokens": 650,
+     "sec": 2.68
     }
    ],
    "route": "incident",
@@ -2390,24 +3454,24 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.4223,
-   "rag_margin": 0.0476,
-   "embed_tokens": 45,
+   "rag_score": 0.3997,
+   "rag_margin": 0.0322,
+   "embed_tokens": 20,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003582,
-   "reply": "1) 참고: 현재 모니터링 대상은 auth-service이며, 상태는 'degraded'로 확인되었습니다. CPU 사용률은 76.2%, 메모리 사용률은 60.1%입니다. 알림으로는 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'가 있습니다.\n\n2) 대응 절차:\n   - p95 지연시간이 2.4초로 임계치인 1.0초를 초과하고 있습니다.\n   - 커넥션 풀 사용률이 92%로 90%를 초과하고 있습니다. 따라서, 커넥션 풀 크기를 늘리거나 느린 쿼리/외부 호출에 타임아웃을 설정해야 합니다.\n\n3) 추가 조치:\n   - 5분 내 p95 지연시간이 임계치 아래로 내려오지 않으면 캐시 계층 또는 읽기 복제본으로 트래픽을 분산하는 방안을 고려해야 합니다.\n   - 정상화 후에는 느린 쿼리 로그를 분석하여 근본 원인을 문서화하고, 후속 최적화 티켓을 등록해야 합니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003322,
+   "reply": "1) 모니터링 결과, auth-service의 상태가 저하(degraded)되었으며, CPU 사용률은 81.5%, 메모리 사용률은 62.7%로 확인되었습니다. 또한, p95 지연시간이 2.4초로 임계치인 1.0초를 초과하였고, 커넥션 풀 사용률이 92%로 나타났습니다.\n\n2) Runbook에 따라, 커넥션 풀 사용률이 90%를 초과하였으므로 풀 크기를 늘리거나 느린 쿼리/외부 호출에 타임아웃을 설정하는 조치가 필요합니다.\n\n3) 5분 내에 p95 지연시간이 임계치 아래로 내려오지 않을 경우, 캐시 계층 또는 읽기 복제본으로 트래픽을 분산하는 추가 조치를 고려해야 합니다. 이후, 정상화가 이루어지면 느린 쿼리 로그를 분석하여 근본 원인을 문서화하고 최적화 티켓을 등록해야 합니다."
   },
   {
    "id": "r8",
    "category": "unknown-system",
-   "rep": 2,
+   "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 1.89,
+   "elapsed_s": 2.0,
    "error": null,
    "llm_calls": 2,
    "llm_failed_calls": 0,
@@ -2418,14 +3482,14 @@
      "ok": true,
      "error": null,
      "tokens": 142,
-     "sec": 0.87
+     "sec": 0.99
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 324,
-     "sec": 0.99
+     "sec": 0.98
     }
    ],
    "route": "incident",
@@ -2448,10 +3512,10 @@
   {
    "id": "r9",
    "category": "chat",
-   "rep": 2,
+   "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 1.68,
+   "elapsed_s": 1.8,
    "error": null,
    "llm_calls": 2,
    "llm_failed_calls": 0,
@@ -2469,7 +3533,7 @@
      "ok": true,
      "error": null,
      "tokens": 97,
-     "sec": 0.82
+     "sec": 0.93
     }
    ],
    "route": "chat",
@@ -2491,10 +3555,10 @@
   {
    "id": "r10",
    "category": "chat",
-   "rep": 2,
+   "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 1.84,
+   "elapsed_s": 1.65,
    "error": null,
    "llm_calls": 2,
    "llm_failed_calls": 0,
@@ -2505,14 +3569,14 @@
      "ok": true,
      "error": null,
      "tokens": 141,
-     "sec": 1.01
+     "sec": 0.87
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 104,
-     "sec": 0.82
+     "sec": 0.78
     }
    ],
    "route": "chat",
@@ -2535,28 +3599,28 @@
   {
    "id": "s1",
    "category": "unknown-system",
-   "rep": 2,
+   "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 1.87,
+   "elapsed_s": 1.92,
    "error": null,
    "llm_calls": 2,
    "llm_failed_calls": 0,
-   "tokens": 467,
+   "tokens": 469,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
-     "tokens": 141,
-     "sec": 0.85
+     "tokens": 143,
+     "sec": 0.98
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 326,
-     "sec": 0.99
+     "sec": 0.92
     }
    ],
    "route": "incident",
@@ -2579,10 +3643,10 @@
   {
    "id": "s2",
    "category": "unknown-system",
-   "rep": 2,
+   "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 2.04,
+   "elapsed_s": 1.94,
    "error": null,
    "llm_calls": 2,
    "llm_failed_calls": 0,
@@ -2593,14 +3657,14 @@
      "ok": true,
      "error": null,
      "tokens": 150,
-     "sec": 0.91
+     "sec": 0.87
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 340,
-     "sec": 1.1
+     "sec": 1.04
     }
    ],
    "route": "incident",
@@ -2623,42 +3687,35 @@
   {
    "id": "s3",
    "category": "multi-system",
-   "rep": 2,
+   "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 7.21,
+   "elapsed_s": 6.7,
    "error": null,
-   "llm_calls": 4,
+   "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1557,
+   "tokens": 1358,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 146,
-     "sec": 0.91
+     "sec": 0.93
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 393,
-     "sec": 1.61
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 191,
-     "sec": 0.71
+     "sec": 1.65
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 827,
-     "sec": 3.0
+     "tokens": 819,
+     "sec": 3.73
     }
    ],
    "route": "incident",
@@ -2674,1203 +3731,16 @@
    "targets_ok": true,
    "runbook_ok": false,
    "classifier": "rag",
-   "rag_score": 0.3208,
-   "rag_margin": 0.0026,
-   "embed_tokens": 80,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.004245,
-   "reply": "1) 현재 auth-service, payments-service, cache-service 모두 성능 저하 상태입니다. 각 서비스의 상태는 다음과 같습니다:\n   - auth-service: CPU 사용률 82.3%, 메모리 사용률 63.1%, 주요 알림으로는 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'가 있습니다.\n   - payments-service: CPU 사용률 94.3%, 메모리 사용률 56.6%, 주요 알림으로는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 있습니다.\n   - cache-service: CPU 사용률 41.3%, 메모리 사용률 88.6%, 주요 알림으로는 'memory usage climbing steadily over 6h'와 'heap near limit'가 있습니다.\n\n2) 네트워크 타임아웃 관련 증상은 현재 보고되지 않았으며, runbook에 따른 네트워크 타임아웃 대응 절차는 적용되지 않았습니다.\n\n3) 특이 패턴은 발견되지 않았으며, 각 서비스의 성능 저하 원인을 파악하고 대응하기 위해 추가적인 조사가 필요합니다. 각 서비스의 리소스 사용률을 모니터링하고, 필요 시 리소스 확장이나 최적화 작업을 고려해야 합니다."
-  },
-  {
-   "id": "s4",
-   "category": "multi-system",
-   "rep": 2,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 7.0,
-   "error": null,
-   "llm_calls": 4,
-   "llm_failed_calls": 0,
-   "tokens": 1375,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 153,
-     "sec": 1.32
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 384,
-     "sec": 1.28
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 148,
-     "sec": 0.94
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 690,
-     "sec": 2.47
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "gateway-service",
-    "log-service"
-   ],
-   "runbooks": [
-    "disk-full"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.459,
-   "rag_margin": 0.0099,
-   "embed_tokens": 62,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003553,
-   "reply": "1) 현재 gateway-service와 log-service 모두 상태가 'degraded'로 확인되었습니다. gateway-service는 'upstream timeout to payments-service (504)'와 'network packet loss 3%' 알림이 발생하였고, log-service는 '/var/log' 디스크 사용률이 95%로 'disk usage 95% on /var/log'와 'disk space low' 알림이 발생하였습니다.\n\n2) gateway-service의 타임아웃 문제는 payments-service와의 연결에서 발생한 것으로 보이며, 네트워크 패킷 손실이 3% 발생하고 있습니다. 이는 네트워크 연결 문제로 인한 것으로 추정됩니다.\n\n3) log-service의 디스크 경고는 디스크 사용률이 95%에 도달하여 발생한 것으로, runbook에 따라 디스크 용량 부족 대응 절차를 수행해야 합니다. 우선적으로 로그 파일, 임시 파일, 오래된 백업 등을 정리하여 여유 공간을 확보하고, 필요 시 볼륨 확장이나 추가 스토리지 연결을 고려해야 합니다."
-  },
-  {
-   "id": "s5",
-   "category": "single-system",
-   "rep": 2,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 5.18,
-   "error": null,
-   "llm_calls": 3,
-   "llm_failed_calls": 0,
-   "tokens": 1143,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 147,
-     "sec": 0.93
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 334,
-     "sec": 1.02
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 662,
-     "sec": 2.22
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "cache-service"
-   ],
-   "runbooks": [
-    "memory-leak"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.5115,
-   "rag_margin": 0.1677,
-   "embed_tokens": 35,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003382,
-   "reply": "1) 현재 cache-service의 상태는 'degraded'이며, CPU 사용률은 45.4%, 메모리 사용률은 90.7%로 확인되었습니다. 알림으로는 'memory usage climbing steadily over 6h'와 'heap near limit'가 발생했습니다.\n\n2) 메모리 사용률이 90% 이상으로 OOM 직전 상태이므로, 서비스 중단을 막기 위해 해당 프로세스를 즉시 재시작해야 합니다. 이는 임시 조치임을 기록해두어야 합니다.\n\n3) 이후, 힙 덤프 또는 프로파일링 도구를 사용하여 어떤 객체가 계속 쌓이고 있는지 확인하고, 캐시 무제한 증가, 커넥션 미반환, 이벤트 리스너 중복 등록 같은 패턴이 최근 배포에 있었는지 점검해야 합니다. 원인이 된 배포가 발견되면 롤백을 고려하고, 컨테이너 메모리 상한선을 재확인하여 재발 시 더 빨리 감지되도록 조정해야 합니다."
-  },
-  {
-   "id": "s6",
-   "category": "no-system",
-   "rep": 2,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 8.07,
-   "error": null,
-   "llm_calls": 4,
-   "llm_failed_calls": 0,
-   "tokens": 1926,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 148,
-     "sec": 0.87
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 452,
-     "sec": 2.03
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 311,
-     "sec": 1.0
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 1015,
-     "sec": 3.14
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "gateway-service",
-    "auth-service",
-    "cache-service",
-    "log-service",
-    "payments-service",
-    "web-01"
-   ],
-   "runbooks": [
-    "network-timeout"
-   ],
-   "route_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.3658,
-   "rag_margin": 0.0203,
-   "embed_tokens": 124,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.005212,
-   "reply": "1) 현재 모니터링된 서비스 중 gateway-service, auth-service, cache-service, log-service, payments-service가 모두 'degraded' 상태입니다. 이는 전체적인 서비스 성능 저하의 원인으로 작용할 수 있습니다.\n\n2) 각 서비스의 주요 문제는 다음과 같습니다:\n   - **gateway-service**: 'upstream timeout to payments-service (504)' 및 'network packet loss 3%' 알림이 발생했습니다.\n   - **auth-service**: 'p95 latency 2.4s (threshold 1.0s)' 및 'connection pool 92% used' 알림이 발생했습니다.\n   - **cache-service**: 'memory usage climbing steadily over 6h' 및 'heap near limit' 알림이 발생했습니다.\n   - **log-service**: 'disk usage 95% on /var/log' 및 'disk space low' 알림이 발생했습니다.\n   - **payments-service**: 'CPU 91% (threshold 80%)' 및 'payments-service-3 instance responding slow' 알림이 발생했습니다.\n\n3) 네트워크 타임아웃 및 패킷 손실 문제는 gateway-service와 payments-service 간의 통신에서 발생하고 있으며, 이는 네트워크 타임아웃 대응 절차에 따라 점검이 필요합니다. 또한, 전체적으로 CPU 사용량이 높은 서비스가 다수 존재하여 시스템 자원 부족이 의심되므로, 자원 할당 및 최적화가 필요합니다."
-  },
-  {
-   "id": "b1",
-   "category": "runbook",
-   "rep": 2,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 4.36,
-   "error": null,
-   "llm_calls": 3,
-   "llm_failed_calls": 0,
-   "tokens": 997,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 146,
-     "sec": 0.95
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 334,
-     "sec": 0.89
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 517,
-     "sec": 1.58
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "web-01"
-   ],
-   "runbooks": [
-    "cpu-spike"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.5588,
-   "rag_margin": 0.1375,
-   "embed_tokens": 24,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.002657,
-   "reply": "1) 참고: 현재 web-01의 상태는 'healthy'이며, CPU 사용률은 32.6%로 급증 상태가 아님. 메모리 사용률은 47.3%이며, 알림은 0건으로 보고됨.\n\n2) 수집된 데이터에 따르면, web-01의 CPU 사용률은 급증 상태가 아니므로, 추가적인 진단이나 조치는 필요하지 않음.\n\n3) 만약 향후 CPU 사용률이 급증할 경우, runbook에 따라 모니터링 상태 확인, 로그 분석, 오토스케일링, 배포 롤백, 프로파일링 등의 절차를 수행할 수 있음."
-  },
-  {
-   "id": "b2",
-   "category": "runbook",
-   "rep": 2,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 5.99,
-   "error": null,
-   "llm_calls": 4,
-   "llm_failed_calls": 0,
-   "tokens": 1220,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 152,
-     "sec": 0.79
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 366,
-     "sec": 1.09
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 98,
-     "sec": 0.88
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 604,
-     "sec": 2.18
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "web-01"
-   ],
-   "runbooks": [
-    "memory-leak"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.5247,
-   "rag_margin": 0.1841,
-   "embed_tokens": 34,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003113,
-   "reply": "1) 현재 web-01의 상태는 'healthy'로 보고되었으며, CPU 사용률은 37.0%, 메모리 사용률은 49.5%로 확인되었습니다. 알림은 발생하지 않았습니다.\n\n2) 메모리 사용률이 49.5%로, OOM 직전 상태(90% 이상)에 해당하지 않으므로 즉각적인 프로세스 재시작은 필요하지 않습니다.\n\n3) 메모리 사용량이 계속 증가하는지에 대한 추세 분석이 필요합니다. 현재 수집된 데이터로는 메모리 누수의 증거가 확인되지 않았으며, 특이 패턴도 발견되지 않았습니다. 추가적인 모니터링을 통해 메모리 사용률의 추세를 지속적으로 관찰해야 합니다."
-  },
-  {
-   "id": "b3",
-   "category": "runbook",
-   "rep": 2,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 6.72,
-   "error": null,
-   "llm_calls": 4,
-   "llm_failed_calls": 0,
-   "tokens": 1195,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 153,
-     "sec": 0.89
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 388,
-     "sec": 1.83
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 117,
-     "sec": 0.97
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 537,
-     "sec": 2.02
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "payments-service"
-   ],
-   "runbooks": [
-    "db-down"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.4061,
-   "rag_margin": 0.0354,
-   "embed_tokens": 49,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.002784,
-   "reply": "1) 현재 payments-service의 상태는 'degraded'로 확인되었으며, CPU 사용률은 92.2%, 메모리 사용률은 55.6%입니다. 모니터링 알림으로는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 감지되었습니다.\n\n2) DB 연결 끊김 및 리플리케이션 중단 문제에 대해 runbook에 따라 다음 절차를 수행해야 합니다:\n   - 모니터링 알람을 통해 장애를 인지하고 현재 상태를 확인합니다.\n   - 커넥션 풀 및 리플리케이션 상태를 점검하고, 필요 시 failover 노드로 전환합니다.\n\n3) 서비스가 정상화된 후에는 원인 분석과 재발 방지 대책을 문서화해야 합니다. 현재까지의 패턴 분석에서는 특이 패턴이 발견되지 않았습니다."
-  },
-  {
-   "id": "b4",
-   "category": "runbook",
-   "rep": 2,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 5.6,
-   "error": null,
-   "llm_calls": 3,
-   "llm_failed_calls": 0,
-   "tokens": 1207,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 147,
-     "sec": 0.82
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 334,
-     "sec": 1.13
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 726,
-     "sec": 2.58
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "gateway-service"
-   ],
-   "runbooks": [
-    "network-timeout"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.5062,
-   "rag_margin": 0.1303,
-   "embed_tokens": 34,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003702,
-   "reply": "1) 현재 gateway-service의 상태는 'degraded'이며, CPU 사용률은 27.9%, 메모리 사용률은 44.0%입니다. 알림으로는 'upstream timeout to payments-service (504)'와 'network packet loss 3%'가 보고되었습니다.\n\n2) 문제의 원인은 payments-service로의 업스트림 타임아웃과 네트워크 패킷 손실로 추정됩니다. 이는 네트워크 타임아웃 및 패킷 손실과 관련된 문제로 보입니다.\n\n3) 대응 절차에 따라 다음을 수행해야 합니다:\n   - get_monitoring_status를 사용하여 어떤 시스템 간 호출에서 타임아웃이 발생하는지 확인합니다.\n   - DNS 해석 실패, 방화벽/보안그룹 변경, 로드밸런서 헬스체크 실패 중 최근 변경 사항이 있었는지 점검합니다.\n   - 특정 리전/가용영역에서만 발생하는 경우 해당 구간을 우회하는 라우팅으로 임시 전환합니다.\n   - 타임아웃 값이 너무 짧아 정상 응답도 실패로 처리되는 경우라면 임계값을 임시 상향해 2차 피해를 줄입니다.\n   - 정상화 후 네트워크 경로 기록을 남기고, 재발 방지를 위해 헬스체크 주기와 재시도 정책을 재검토합니다."
-  },
-  {
-   "id": "b5",
-   "category": "runbook",
-   "rep": 2,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 5.78,
-   "error": null,
-   "llm_calls": 3,
-   "llm_failed_calls": 0,
-   "tokens": 1165,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 150,
-     "sec": 0.9
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 340,
-     "sec": 1.11
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 675,
-     "sec": 2.74
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "auth-service"
-   ],
-   "runbooks": [
-    "disk-full"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.3907,
-   "rag_margin": 0.0199,
-   "embed_tokens": 48,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003448,
-   "reply": "1) 참고: 현재 auth-service의 상태는 'degraded'이며, CPU 사용률은 82.3%, 메모리 사용률은 63.1%입니다. 알림으로는 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'가 있습니다. 디스크 사용률에 대한 구체적인 수치는 수집되지 않았습니다.\n\n2) 대응 절차:\n   - 디스크 사용률이 임계 수준(90% 이상)인지 확인해야 합니다. 현재 디스크 사용률 데이터는 수집되지 않았으므로, 직접 확인이 필요합니다.\n   - 디스크 공간 확보를 위해 로그 파일, 임시 파일, 오래된 백업 등을 정리하여 여유 공간을 확보합니다.\n   - 특정 프로세스가 비정상적으로 로그를 쌓고 있는지 확인하고, 필요 시 로그 레벨을 낮추거나 로테이션 주기를 단축합니다.\n   - 임시 조치로도 부족할 경우, 볼륨을 확장하거나 추가 스토리지를 연결합니다.\n\n3) 정상화 후에는 로그 보존 정책과 디스크 사용률 알림 임계값을 재검토하여 조기에 감지될 수 있도록 조정합니다."
-  },
-  {
-   "id": "r1",
-   "category": "regression",
-   "rep": 3,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 6.02,
-   "error": null,
-   "llm_calls": 4,
-   "llm_failed_calls": 0,
-   "tokens": 1195,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 154,
-     "sec": 1.02
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 371,
-     "sec": 1.1
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 117,
-     "sec": 0.78
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 553,
-     "sec": 2.12
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "payments-service"
-   ],
-   "runbooks": [
-    "cpu-spike"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.4977,
-   "rag_margin": 0.08,
-   "embed_tokens": 53,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.002862,
-   "reply": "1) 현재 payments-service의 상태는 'degraded'이며, CPU 사용률은 94.6%로 높은 상태입니다. 메모리 사용률은 56.8%입니다. 알림으로는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 발생했습니다.\n\n2) 최근 로그에서 반복 호출이나 배치 작업 중복 실행과 같은 특정 요청 패턴은 발견되지 않았습니다.\n\n3) CPU 사용률이 90%를 넘고 지속되고 있으므로, 오토스케일링 그룹에서 인스턴스를 한 대 더 추가하여 부하를 분산시키는 조치를 권장합니다."
-  },
-  {
-   "id": "r2",
-   "category": "regression",
-   "rep": 3,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 6.64,
-   "error": null,
-   "llm_calls": 4,
-   "llm_failed_calls": 0,
-   "tokens": 1320,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 148,
-     "sec": 0.94
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 355,
-     "sec": 1.16
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 112,
-     "sec": 0.81
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 705,
-     "sec": 2.76
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "cache-service"
-   ],
-   "runbooks": [
-    "memory-leak"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.4938,
-   "rag_margin": 0.1166,
-   "embed_tokens": 36,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003617,
-   "reply": "1) 현재 cache-service의 상태는 'degraded'이며, CPU 사용률은 40.3%, 메모리 사용률은 88.2%로 확인되었습니다. 알림으로는 'memory usage climbing steadily over 6h'와 'heap near limit'이 발생하였습니다.\n\n2) 메모리 사용률이 88.2%로 OOM 직전 상태(90% 이상)에 근접하고 있으므로, 서비스 중단을 막기 위해 해당 프로세스를 즉시 재시작하는 것이 필요합니다. 이는 임시 조치임을 기록해두어야 합니다.\n\n3) 이후, 힙 덤프 또는 프로파일링 도구를 사용하여 어떤 객체가 계속 쌓이고 있는지 확인해야 합니다. 또한, 캐시 무제한 증가, 커넥션 미반환, 이벤트 리스너 중복 등록 같은 패턴이 최근 배포에 있었는지 점검해야 합니다. 현재 수집된 정보에 따르면 특이 패턴은 발견되지 않았습니다. 원인이 된 배포가 확인되면 롤백을 고려하고, 컨테이너 메모리 상한선을 재확인하여 재발 시 더 빨리 감지되도록 조정해야 합니다."
-  },
-  {
-   "id": "r3",
-   "category": "regression",
-   "rep": 3,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 5.74,
-   "error": null,
-   "llm_calls": 3,
-   "llm_failed_calls": 0,
-   "tokens": 1148,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 149,
-     "sec": 1.06
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 338,
-     "sec": 1.02
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 661,
-     "sec": 2.68
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "log-service"
-   ],
-   "runbooks": [
-    "disk-full"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.5313,
-   "rag_margin": 0.1536,
-   "embed_tokens": 42,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003378,
-   "reply": "1) 참고: log-service의 상태는 'degraded'이며, CPU 사용률은 28.0%, 메모리 사용률은 39.0%입니다. 현재 알림은 두 건으로, 'disk usage 95% on /var/log'와 'disk space low'입니다.\n\n2) 대응 절차:\n   - 현재 log-service의 디스크 사용률이 95%로 임계 수준(90% 이상)을 초과하였음을 확인했습니다.\n   - 우선적으로 로그 파일, 임시 파일, 오래된 백업 등 안전하게 삭제할 수 있는 항목을 정리하여 여유 공간을 확보해야 합니다.\n   - 특정 프로세스가 비정상적으로 로그를 쌓고 있는지 확인하고, 필요 시 로그 레벨을 낮추거나 로테이션 주기를 단축해야 합니다.\n   - 임시 조치로도 공간 확보가 부족할 경우, 볼륨을 확장하거나 추가 스토리지를 연결하는 방안을 고려해야 합니다.\n\n3) 후속 조치:\n   - 디스크 공간이 정상화된 후, 로그 보존 정책과 디스크 사용률 알림 임계값을 재검토하여 조기에 감지될 수 있도록 조정해야 합니다."
-  },
-  {
-   "id": "r4",
-   "category": "regression",
-   "rep": 3,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 7.22,
-   "error": null,
-   "llm_calls": 4,
-   "llm_failed_calls": 0,
-   "tokens": 1507,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 150,
-     "sec": 0.84
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 382,
-     "sec": 1.33
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 186,
-     "sec": 0.88
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 789,
-     "sec": 3.16
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "gateway-service",
-    "payments-service"
-   ],
-   "runbooks": [
-    "network-timeout"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.4074,
-   "rag_margin": 0.0511,
-   "embed_tokens": 60,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.004052,
-   "reply": "1) 현재 gateway-service와 payments-service 모두 상태가 저하된 것으로 확인되었습니다. gateway-service에서는 'upstream timeout to payments-service (504)'와 'network packet loss 3%' 알림이 발생하였고, payments-service에서는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow' 알림이 발생하였습니다.\n\n2) 문제의 원인으로는 네트워크 패킷 손실과 payments-service의 CPU 과부하가 의심됩니다. 이는 두 서비스 간의 요청 타임아웃에 영향을 미칠 수 있습니다.\n\n3) 대응 절차로는 다음을 권장합니다:\n   - 네트워크 경로에서의 패킷 손실 문제를 해결하기 위해 네트워크 장비 및 설정을 점검합니다.\n   - payments-service의 CPU 사용률을 낮추기 위해 인스턴스 추가 또는 부하 분산을 고려합니다.\n   - 타임아웃 설정을 검토하여 필요 시 임시로 상향 조정하여 2차 피해를 줄입니다.\n   - 문제 해결 후 네트워크 경로 기록을 남기고, 헬스체크 주기와 재시도 정책을 재검토하여 재발 방지를 위한 조치를 취합니다."
-  },
-  {
-   "id": "r5",
-   "category": "regression",
-   "rep": 3,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 5.94,
-   "error": null,
-   "llm_calls": 4,
-   "llm_failed_calls": 0,
-   "tokens": 1335,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 153,
-     "sec": 0.74
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 387,
-     "sec": 1.17
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 140,
-     "sec": 0.72
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 655,
-     "sec": 2.29
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "web-01",
-    "auth-service"
-   ],
-   "runbooks": [
-    "cpu-spike"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.5411,
-   "rag_margin": 0.0818,
-   "embed_tokens": 57,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003377,
-   "reply": "1) 참고: web-01의 CPU 사용률은 39.4%로 정상 범위에 있으며, 상태는 'healthy'로 보고되었습니다. 따라서 web-01의 CPU 급증 문제는 현재 관찰되지 않았습니다.\n\n2) auth-service의 상태는 'degraded'로 보고되었으며, CPU 사용률은 76.3%입니다. 메모리 사용률은 60.2%이며, 두 건의 알림이 발생했습니다. 알림 내용은 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'입니다.\n\n3) auth-service의 커넥션 풀 사용률이 92%로 높아, 커넥션 풀 관련 문제 해결이 필요합니다. 현재 수집된 정보로는 CPU 급증 문제는 없으나, 커넥션 풀 사용률이 높아 성능 저하가 발생할 수 있습니다. 추가적인 조치가 필요할 수 있습니다."
-  },
-  {
-   "id": "r6",
-   "category": "regression",
-   "rep": 3,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 6.79,
-   "error": null,
-   "llm_calls": 4,
-   "llm_failed_calls": 0,
-   "tokens": 1435,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 152,
-     "sec": 0.88
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 386,
-     "sec": 1.38
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 149,
-     "sec": 0.82
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 748,
-     "sec": 2.68
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "payments-service",
-    "cache-service"
-   ],
-   "runbooks": [
-    "memory-leak"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.3789,
-   "rag_margin": 0.0261,
-   "embed_tokens": 70,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003843,
-   "reply": "1) payments-service와 cache-service 모두 상태가 저하된 것으로 확인되었습니다. payments-service는 CPU 사용률이 98.9%로 매우 높고, cache-service는 메모리 사용률이 92.4%로 높습니다. \n\n2) payments-service의 주요 문제는 CPU 사용률 과다로, 알림에는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 포함되어 있습니다. 이는 CPU 과부하로 인한 성능 저하를 시사합니다.\n\n3) cache-service의 주요 문제는 메모리 사용률 과다로, 알림에는 'memory usage climbing steadily over 6h'와 'heap near limit'가 포함되어 있습니다. 이는 메모리 누수 가능성을 시사하며, runbook에 따라 메모리 사용률 추세를 확인하고 필요 시 프로세스를 재시작하는 등의 조치가 필요합니다.\n\n결론적으로, 두 서비스의 저하 원인은 각각 CPU 과부하와 메모리 과다 사용으로, 공통 원인은 발견되지 않았습니다. 각 서비스의 문제를 개별적으로 해결해야 할 것으로 보입니다."
-  },
-  {
-   "id": "r7",
-   "category": "regression",
-   "rep": 3,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 5.79,
-   "error": null,
-   "llm_calls": 3,
-   "llm_failed_calls": 0,
-   "tokens": 1187,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 147,
-     "sec": 0.8
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 334,
-     "sec": 0.98
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 706,
-     "sec": 3.05
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "auth-service"
-   ],
-   "runbooks": [
-    "high-latency"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": true,
-   "classifier": "rag",
-   "rag_score": 0.4223,
-   "rag_margin": 0.0476,
-   "embed_tokens": 45,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003602,
-   "reply": "1) 참고: 현재 모니터링 중인 시스템은 auth-service이며, 상태는 'degraded'로 확인되었습니다. CPU 사용률은 83.9%, 메모리 사용률은 63.9%입니다. 알림으로는 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'가 수신되었습니다.\n\n2) 대응 절차:\n   - p95 지연시간이 2.4초로 임계치인 1.0초를 초과하고 있습니다.\n   - 커넥션 풀 사용률이 92%로 90%를 초과하고 있습니다. 따라서, 커넥션 풀 크기를 늘리거나 느린 쿼리/외부 호출에 타임아웃을 설정해야 합니다.\n\n3) 추가 조치:\n   - 5분 내 p95 지연시간이 임계치 아래로 내려오지 않으면 캐시 계층 또는 읽기 복제본으로 트래픽을 분산하는 방안을 고려해야 합니다.\n   - 정상화 후에는 느린 쿼리 로그를 분석하여 근본 원인을 문서화하고, 후속 최적화 티켓을 등록해야 합니다."
-  },
-  {
-   "id": "r8",
-   "category": "unknown-system",
-   "rep": 3,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 1.96,
-   "error": null,
-   "llm_calls": 2,
-   "llm_failed_calls": 0,
-   "tokens": 466,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 142,
-     "sec": 0.83
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 324,
-     "sec": 1.1
-    }
-   ],
-   "route": "incident",
-   "monitored": [],
-   "runbooks": [],
-   "route_ok": true,
-   "targets_ok": true,
-   "classifier": null,
-   "rag_score": null,
-   "rag_margin": null,
-   "embed_tokens": 0,
+   "rag_score": 0.3269,
+   "rag_margin": 0.026,
+   "embed_tokens": 20,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
    "replan_rounds": 0,
-   "cost_usd_virtual": 7e-05,
-   "reply": "1) billing-service은(는) 모니터링 대상 시스템이 아니어서 상태를 조회할 수 없습니다\n2) 현재 모니터링 대상 시스템: auth-service, cache-service, gateway-service, log-service, payments-service, web-01\n3) 위 목록의 시스템명으로 다시 요청해 주시면 상태 조회와 대응 절차를 안내하겠습니다."
-  },
-  {
-   "id": "r9",
-   "category": "chat",
-   "rep": 3,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 1.62,
-   "error": null,
-   "llm_calls": 2,
-   "llm_failed_calls": 0,
-   "tokens": 237,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 140,
-     "sec": 0.88
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 97,
-     "sec": 0.74
-    }
-   ],
-   "route": "chat",
-   "monitored": [],
-   "runbooks": [],
-   "route_ok": true,
-   "classifier": null,
-   "rag_score": null,
-   "rag_margin": null,
-   "embed_tokens": 0,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 0,
-   "replan_rounds": 0,
-   "cost_usd_virtual": 3.6e-05,
-   "reply": "안녕하세요! 저는 당신의 비서입니다. 도움이 필요하시면 말씀해 주세요."
-  },
-  {
-   "id": "r10",
-   "category": "chat",
-   "rep": 3,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 1.69,
-   "error": null,
-   "llm_calls": 2,
-   "llm_failed_calls": 0,
-   "tokens": 245,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 141,
-     "sec": 0.94
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 104,
-     "sec": 0.75
-    }
-   ],
-   "route": "chat",
-   "monitored": [],
-   "runbooks": [],
-   "route_ok": true,
-   "reply_ok": true,
-   "classifier": null,
-   "rag_score": null,
-   "rag_margin": null,
-   "embed_tokens": 0,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 0,
-   "replan_rounds": 0,
-   "cost_usd_virtual": 3.7e-05,
-   "reply": "민수님입니다!"
-  },
-  {
-   "id": "s1",
-   "category": "unknown-system",
-   "rep": 3,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 1.8,
-   "error": null,
-   "llm_calls": 2,
-   "llm_failed_calls": 0,
-   "tokens": 467,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 141,
-     "sec": 0.81
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 326,
-     "sec": 0.96
-    }
-   ],
-   "route": "incident",
-   "monitored": [],
-   "runbooks": [],
-   "route_ok": true,
-   "targets_ok": true,
-   "classifier": null,
-   "rag_score": null,
-   "rag_margin": null,
-   "embed_tokens": 0,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 0,
-   "cost_usd_virtual": 7e-05,
-   "reply": "1) order-service은(는) 모니터링 대상 시스템이 아니어서 상태를 조회할 수 없습니다\n2) 현재 모니터링 대상 시스템: auth-service, cache-service, gateway-service, log-service, payments-service, web-01\n3) 위 목록의 시스템명으로 다시 요청해 주시면 상태 조회와 대응 절차를 안내하겠습니다."
-  },
-  {
-   "id": "s2",
-   "category": "unknown-system",
-   "rep": 3,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 1.72,
-   "error": null,
-   "llm_calls": 2,
-   "llm_failed_calls": 0,
-   "tokens": 488,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 148,
-     "sec": 0.76
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 340,
-     "sec": 0.93
-    }
-   ],
-   "route": "incident",
-   "monitored": [],
-   "runbooks": [],
-   "route_ok": true,
-   "targets_ok": true,
-   "classifier": null,
-   "rag_score": null,
-   "rag_margin": null,
-   "embed_tokens": 0,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 0,
-   "cost_usd_virtual": 7.3e-05,
-   "reply": "1) inventory-service은(는) 모니터링 대상 시스템이 아니어서 상태를 조회할 수 없습니다\n2) 현재 모니터링 대상 시스템: auth-service, cache-service, gateway-service, log-service, payments-service, web-01\n3) 위 목록의 시스템명으로 다시 요청해 주시면 상태 조회와 대응 절차를 안내하겠습니다."
-  },
-  {
-   "id": "s3",
-   "category": "multi-system",
-   "rep": 3,
-   "faults": [],
-   "success": true,
-   "elapsed_s": 6.78,
-   "error": null,
-   "llm_calls": 3,
-   "llm_failed_calls": 0,
-   "tokens": 1447,
-   "llm_detail": [
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 146,
-     "sec": 0.87
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 374,
-     "sec": 1.28
-    },
-    {
-     "model": "openai:gpt-4o",
-     "ok": true,
-     "error": null,
-     "tokens": 927,
-     "sec": 3.55
-    }
-   ],
-   "route": "incident",
-   "monitored": [
-    "auth-service",
-    "payments-service",
-    "cache-service"
-   ],
-   "runbooks": [
-    "network-timeout"
-   ],
-   "route_ok": true,
-   "targets_ok": true,
-   "runbook_ok": false,
-   "classifier": "rag",
-   "rag_score": 0.3208,
-   "rag_margin": 0.0026,
-   "embed_tokens": 80,
-   "degraded": 0,
-   "degraded_stages": [],
-   "retry_count": 0,
-   "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.004713,
-   "reply": "1) 현재 auth-service, payments-service, cache-service 모두 성능 저하 상태입니다. 각 서비스의 상태는 다음과 같습니다:\n   - auth-service: CPU 사용률 83.6%, 메모리 사용률 63.8%, 주요 알림으로는 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'가 있습니다.\n   - payments-service: CPU 사용률 96.9%, 메모리 사용률 57.9%, 주요 알림으로는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 있습니다.\n   - cache-service: CPU 사용률 46.3%, 메모리 사용률 91.2%, 주요 알림으로는 'memory usage climbing steadily over 6h'와 'heap near limit'가 있습니다.\n\n2) 각 서비스의 성능 저하 원인은 다음과 같습니다:\n   - auth-service는 높은 CPU 사용률과 연결 풀 사용률이 주요 원인으로 보입니다.\n   - payments-service는 CPU 사용률이 매우 높고, 특정 인스턴스의 응답 속도가 느린 것이 문제입니다.\n   - cache-service는 메모리 사용률이 매우 높고, 메모리 사용량이 지속적으로 증가하고 있는 것이 문제입니다.\n\n3) 대응 방안:\n   - auth-service: 연결 풀 사용률을 낮추기 위해 연결 풀 크기를 조정하거나, CPU 사용률을 낮추기 위한 최적화 작업이 필요합니다.\n   - payments-service: CPU 사용률을 낮추기 위한 리소스 확장 또는 인스턴스 최적화가 필요하며, 느린 인스턴스에 대한 추가 점검이 필요합니다.\n   - cache-service: 메모리 사용률을 낮추기 위해 캐시 데이터 최적화 또는 메모리 확장이 필요합니다."
+   "cost_usd_virtual": 0.004176,
+   "reply": "1) auth-service, payments-service, cache-service 모두 상태가 저하되었습니다. 각 서비스의 모니터링 결과는 다음과 같습니다:\n   - auth-service: CPU 사용률 83.8%, 메모리 사용률 63.9%, 주요 알림으로는 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'가 있습니다.\n   - payments-service: CPU 사용률 97.5%, 메모리 사용률 58.3%, 주요 알림으로는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 있습니다.\n   - cache-service: CPU 사용률 49.4%, 메모리 사용률 92.7%, 주요 알림으로는 'memory usage climbing steadily over 6h'와 'heap near limit'가 있습니다.\n\n2) 각 서비스의 상태 저하 원인으로는 높은 CPU 및 메모리 사용률과 관련된 경고가 있습니다. 특히, auth-service와 payments-service는 CPU 사용률이 높고, cache-service는 메모리 사용률이 높습니다.\n\n3) 네트워크 타임아웃 관련 문제는 현재 수집된 정보에 포함되어 있지 않으므로, runbook의 네트워크 타임아웃 대응 절차는 이번 상황에 적용되지 않습니다. 각 서비스의 리소스 사용률을 최적화하고, 알림에 명시된 문제를 해결하는 것이 우선입니다."
   },
   {
    "id": "s4",
@@ -3878,39 +3748,39 @@
    "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 7.05,
+   "elapsed_s": 6.23,
    "error": null,
    "llm_calls": 4,
    "llm_failed_calls": 0,
-   "tokens": 1458,
+   "tokens": 1483,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 153,
-     "sec": 0.96
+     "sec": 0.94
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 384,
-     "sec": 1.19
+     "sec": 1.18
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 148,
-     "sec": 0.87
+     "sec": 0.88
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 773,
-     "sec": 2.99
+     "tokens": 798,
+     "sec": 2.84
     }
    ],
    "route": "incident",
@@ -3925,16 +3795,16 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.459,
-   "rag_margin": 0.0099,
-   "embed_tokens": 62,
+   "rag_score": 0.4952,
+   "rag_margin": 0.0333,
+   "embed_tokens": 29,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003968,
-   "reply": "1) 현재 gateway-service와 log-service 모두 상태가 'degraded'로 확인되었습니다. gateway-service에서는 'upstream timeout to payments-service (504)'와 'network packet loss 3%' 알림이 발생하였고, log-service에서는 '/var/log' 디스크 사용률이 95%에 도달하여 'disk usage 95% on /var/log'와 'disk space low' 알림이 발생하였습니다.\n\n2) gateway-service의 타임아웃 문제는 payments-service와의 연결에서 발생한 것으로 보이며, 네트워크 패킷 손실이 3%로 확인되었습니다. 이는 네트워크 연결 문제로 인해 발생할 수 있는 상황입니다.\n\n3) log-service의 디스크 경고는 /var/log의 디스크 사용률이 95%로 높아진 것이 원인입니다. runbook에 따라 디스크 용량 부족 문제를 해결하기 위해 다음 절차를 수행해야 합니다:\n   - 로그 파일, 임시 파일, 오래된 백업 등을 정리하여 즉시 여유 공간을 확보합니다.\n   - 로그 레벨을 낮추거나 로테이션 주기를 단축하여 로그 파일의 증가 속도를 줄입니다.\n   - 필요 시 볼륨을 확장하거나 추가 스토리지를 연결하여 디스크 공간을 확보합니다.\n   - 문제 해결 후 로그 보존 정책과 디스크 사용률 알림 임계값을 재검토하여 조기에 감지될 수 있도록 조정합니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.004093,
+   "reply": "1) **Gateway-service 문제 분석 및 대응:**\n   - 상태: degraded\n   - CPU 사용률: 38.0%\n   - 메모리 사용률: 49.0%\n   - 알림: 'upstream timeout to payments-service (504)', 'network packet loss 3%'\n   - 조치: 네트워크 패킷 손실 문제를 해결하기 위해 네트워크 상태를 점검하고, payments-service와의 연결 상태를 확인하여 타임아웃 문제를 해결해야 합니다.\n\n2) **Log-service 문제 분석 및 대응:**\n   - 상태: degraded\n   - CPU 사용률: 19.8%\n   - 메모리 사용률: 34.9%\n   - 알림: 'disk usage 95% on /var/log', 'disk space low'\n   - 조치:\n     1. 디스크 사용률이 95%로 임계 수준을 초과했으므로, 즉시 로그 파일, 임시 파일, 오래된 백업 등을 정리하여 여유 공간을 확보합니다.\n     2. 로그 레벨을 낮추거나 로테이션 주기를 단축하여 로그 파일의 증가 속도를 줄입니다.\n     3. 필요 시 볼륨을 확장하거나 추가 스토리지를 연결하여 디스크 공간을 확보합니다.\n     4. 문제 해결 후 로그 보존 정책과 디스크 사용률 알림 임계값을 재검토하여 조기에 감지될 수 있도록 조정합니다.\n\n3) **추가 조치:**\n   - 두 서비스 모두 상태가 degraded로 표시되므로, 전체 시스템의 성능 및 네트워크 상태를 종합적으로 점검하여 추가적인 문제를 예방합니다."
   },
   {
    "id": "s5",
@@ -3942,18 +3812,18 @@
    "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 5.42,
+   "elapsed_s": 6.15,
    "error": null,
    "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1157,
+   "tokens": 1120,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 145,
-     "sec": 0.85
+     "sec": 1.04
     },
     {
      "model": "openai:gpt-4o-mini",
@@ -3966,8 +3836,8 @@
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 678,
-     "sec": 2.51
+     "tokens": 641,
+     "sec": 3.69
     }
    ],
    "route": "incident",
@@ -3981,16 +3851,16 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.5115,
-   "rag_margin": 0.1677,
-   "embed_tokens": 35,
+   "rag_score": 0.5353,
+   "rag_margin": 0.1683,
+   "embed_tokens": 20,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003462,
-   "reply": "1) 현재 cache-service의 상태는 'degraded'이며, CPU 사용률은 40.1%, 메모리 사용률은 88.0%로 확인되었습니다. 알림으로는 'memory usage climbing steadily over 6h'와 'heap near limit'가 수신되었습니다.\n\n2) 메모리 사용률이 88.0%로 OOM 직전 상태(90% 이상)에 근접해 있으므로, 서비스 중단을 막기 위해 해당 프로세스를 즉시 재시작하는 것이 권장됩니다. 이는 임시 조치임을 기록해두어야 합니다.\n\n3) 이후, 힙 덤프 또는 프로파일링 도구를 사용하여 어떤 객체가 계속 쌓이고 있는지 확인해야 합니다. 또한, 캐시 무제한 증가, 커넥션 미반환, 이벤트 리스너 중복 등록 같은 패턴이 최근 배포에 있었는지 점검해야 합니다. 원인이 된 배포가 발견되면 롤백을 고려하고, 컨테이너 메모리 상한선을 재확인하여 재발 시 더 빨리 감지되도록 조정해야 합니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003277,
+   "reply": "1) 현재 cache-service의 상태는 'degraded'이며, CPU 사용률은 44.0%, 메모리 사용률은 90.0%로 확인되었습니다. 알림으로는 'memory usage climbing steadily over 6h'와 'heap near limit'가 발생했습니다.\n\n2) 메모리 사용률이 90% 이상으로 OOM 직전 상태이므로, 서비스 중단을 막기 위해 해당 프로세스를 즉시 재시작해야 합니다. 이 조치는 임시 조치임을 기록해두어야 합니다.\n\n3) 이후, 힙 덤프 또는 프로파일링 도구를 사용하여 어떤 객체가 계속 쌓이고 있는지 확인해야 합니다. 또한, 캐시 무제한 증가, 커넥션 미반환, 이벤트 리스너 중복 등록 같은 패턴이 최근 배포에 있었는지 점검해야 합니다. 원인이 된 배포가 발견되면 롤백을 고려하고, 컨테이너 메모리 상한선을 재확인하여 재발 시 더 빨리 감지되도록 조정해야 합니다."
   },
   {
    "id": "s6",
@@ -3998,39 +3868,32 @@
    "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 8.4,
+   "elapsed_s": 5.56,
    "error": null,
-   "llm_calls": 4,
+   "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 2053,
+   "tokens": 1461,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 148,
-     "sec": 0.83
+     "sec": 0.88
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 452,
-     "sec": 1.77
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 317,
-     "sec": 1.05
+     "sec": 1.87
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 1136,
-     "sec": 3.58
+     "tokens": 861,
+     "sec": 2.02
     }
    ],
    "route": "incident",
@@ -4049,14 +3912,14 @@
    "classifier": "rag",
    "rag_score": 0.3658,
    "rag_margin": 0.0203,
-   "embed_tokens": 124,
+   "embed_tokens": 149,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
    "replan_rounds": 1,
-   "cost_usd_virtual": 0.005818,
-   "reply": "1) 현재 모니터링된 서비스 중 gateway-service, auth-service, cache-service, log-service, payments-service가 모두 'degraded' 상태입니다. 이는 서비스 성능 저하의 주요 원인으로 보입니다.\n\n2) 각 서비스의 주요 문제는 다음과 같습니다:\n   - **gateway-service**: 'upstream timeout to payments-service (504)' 및 'network packet loss 3%' 알림이 발생했습니다.\n   - **auth-service**: 'p95 latency 2.4s (threshold 1.0s)' 및 'connection pool 92% used' 알림이 발생했습니다.\n   - **cache-service**: 'memory usage climbing steadily over 6h' 및 'heap near limit' 알림이 발생했습니다.\n   - **log-service**: 'disk usage 95% on /var/log' 및 'disk space low' 알림이 발생했습니다.\n   - **payments-service**: 'CPU 91% (threshold 80%)' 및 'payments-service-3 instance responding slow' 알림이 발생했습니다.\n\n3) 네트워크 타임아웃 및 패킷 손실 문제는 gateway-service와 관련이 있으며, 이는 payments-service와의 연결에서 발생하고 있습니다. runbook에 따라 네트워크 타임아웃 대응 절차를 수행해야 합니다:\n   - get_monitoring_status로 타임아웃 발생 시스템을 확인했습니다.\n   - DNS 해석 실패, 방화벽/보안그룹 변경, 로드밸런서 헬스체크 실패 여부를 점검해야 합니다.\n   - 특정 리전/가용영역 문제 시 라우팅을 임시 전환합니다.\n   - 타임아웃 임계값을 임시 상향 조정하여 2차 피해를 줄입니다.\n   - 정상화 후 네트워크 경로 기록을 남기고, 헬스체크 주기와 재시도 정책을 재검토합니다.\n\n이러한 문제 해결을 통해 서비스 성능을 개선할 수 있을 것으로 예상됩니다."
+   "cost_usd_virtual": 0.004395,
+   "reply": "1) gateway-service에서 'upstream timeout to payments-service (504)'와 'network packet loss 3%' 알림이 발생하여 네트워크 타임아웃 문제가 확인되었습니다. 이는 서비스가 느려지는 주요 원인 중 하나로 보입니다.\n\n2) auth-service는 CPU 사용률이 84.1%로 높고, p95 latency가 2.4초로 임계값인 1.0초를 초과하여 응답 지연이 발생하고 있습니다. connection pool 사용률도 92%로 높아 성능 저하에 기여하고 있습니다.\n\n3) payments-service는 CPU 사용률이 94.6%로 매우 높으며, 특정 인스턴스가 느리게 응답하고 있어 서비스 성능에 영향을 미치고 있습니다. 이는 gateway-service의 타임아웃 문제와도 관련이 있을 수 있습니다.\n\n위의 문제들을 해결하기 위해 네트워크 타임아웃 대응 절차에 따라 조치를 취하고, 각 서비스의 리소스 사용률을 최적화하는 방안을 검토해야 합니다."
   },
   {
    "id": "b1",
@@ -4064,32 +3927,32 @@
    "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 4.16,
+   "elapsed_s": 5.77,
    "error": null,
    "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 980,
+   "tokens": 950,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 146,
-     "sec": 0.91
+     "sec": 1.6
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 334,
-     "sec": 0.97
+     "sec": 1.16
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 500,
-     "sec": 1.29
+     "tokens": 470,
+     "sec": 2.63
     }
    ],
    "route": "incident",
@@ -4103,16 +3966,16 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.5588,
-   "rag_margin": 0.1375,
-   "embed_tokens": 24,
+   "rag_score": 0.6311,
+   "rag_margin": 0.1623,
+   "embed_tokens": 18,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.002572,
-   "reply": "1) 참고: 현재 web-01의 상태는 'healthy'이며, CPU 사용률은 39.4%로 급증 상태가 아님. 메모리 사용률은 50.7%이며, 알림은 0건으로 보고됨.\n\n2) 수집된 데이터에 따르면, web-01의 CPU 사용률은 39.4%로 정상 범위 내에 있으며, 급증 원인을 진단할 필요가 없음.\n\n3) 추가적인 조치나 분석은 필요하지 않으며, 모니터링을 지속하여 상태 변화를 주시할 것을 권장함."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.002422,
+   "reply": "1) 현재 web-01의 CPU 사용률은 38.1%로, 급증 상태가 아님을 확인했습니다. 이는 runbook에서 정의한 CPU 급증 증상(100% 과부하)과 일치하지 않습니다.\n\n2) 모니터링 결과, web-01의 상태는 'healthy'로 나타났으며, 알림도 발생하지 않았습니다. 따라서 현재 시스템은 정상적으로 운영되고 있습니다.\n\n3) 추가적인 조치가 필요하지 않으며, CPU 사용률이 급증할 경우 runbook에 따라 대응 절차를 진행할 수 있습니다."
   },
   {
    "id": "b2",
@@ -4120,39 +3983,32 @@
    "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 5.95,
+   "elapsed_s": 4.82,
    "error": null,
-   "llm_calls": 4,
+   "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1214,
+   "tokens": 1185,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 152,
-     "sec": 0.73
+     "sec": 0.87
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 366,
-     "sec": 1.22
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 98,
-     "sec": 0.71
+     "sec": 1.0
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 598,
-     "sec": 2.08
+     "tokens": 667,
+     "sec": 2.55
     }
    ],
    "route": "incident",
@@ -4166,16 +4022,16 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.5247,
-   "rag_margin": 0.1841,
-   "embed_tokens": 34,
+   "rag_score": 0.5916,
+   "rag_margin": 0.2358,
+   "embed_tokens": 28,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003083,
-   "reply": "1) 참고: 현재 web-01의 상태는 'healthy'로 보고되었으며, CPU 사용률은 32.5%, 메모리 사용률은 47.3%로 나타났습니다. 알림은 0건으로 기록되었습니다. \n\n2) 현재 수집된 데이터에 따르면 메모리 사용률이 47.3%로, 메모리 누수로 의심할 만한 증상(메모리 사용률의 꾸준한 증가, OOM 직전 상태 등)은 확인되지 않았습니다. \n\n3) 패턴 분석 결과에서도 특이 패턴이 발견되지 않았습니다. 따라서 현재로서는 메모리 누수로 인한 문제는 확인되지 않았으며, 추가적인 모니터링이 필요할 수 있습니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003413,
+   "reply": "1) 현재 web-01의 메모리 사용량은 51.7%로, 메모리 누수로 인한 OOM 상태는 아닌 것으로 확인되었습니다. 따라서 즉각적인 프로세스 재시작은 필요하지 않습니다.\n\n2) 메모리 사용량이 계속 증가하는지 추세를 확인하기 위해 `get_monitoring_status`를 사용하여 메모리 사용률의 시간 경과에 따른 변화를 모니터링해야 합니다.\n\n3) 메모리 사용량이 지속적으로 증가하는 추세가 확인되면, 힙 덤프 또는 프로파일링 도구를 사용하여 어떤 객체가 계속 쌓이고 있는지 분석해야 합니다. 이를 통해 메모리 누수의 원인을 파악할 수 있습니다.\n\n4) 최근 배포에서 캐시 무제한 증가, 커넥션 미반환, 이벤트 리스너 중복 등록과 같은 패턴이 있었는지 점검하여 메모리 누수의 원인을 찾습니다.\n\n5) 만약 특정 배포가 원인으로 확인되면, 해당 배포를 롤백하고 컨테이너 메모리 상한선을 재확인하여 향후 유사한 문제가 발생할 경우 더 빨리 감지될 수 있도록 조정합니다."
   },
   {
    "id": "b3",
@@ -4183,17 +4039,17 @@
    "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 5.66,
+   "elapsed_s": 4.22,
    "error": null,
-   "llm_calls": 4,
+   "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1166,
+   "tokens": 1017,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
-     "tokens": 153,
+     "tokens": 155,
      "sec": 0.91
     },
     {
@@ -4201,21 +4057,14 @@
      "ok": true,
      "error": null,
      "tokens": 388,
-     "sec": 1.28
-    },
-    {
-     "model": "openai:gpt-4o-mini",
-     "ok": true,
-     "error": null,
-     "tokens": 117,
-     "sec": 0.71
+     "sec": 1.35
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 508,
-     "sec": 1.72
+     "tokens": 474,
+     "sec": 1.56
     }
    ],
    "route": "incident",
@@ -4229,16 +4078,16 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.4061,
-   "rag_margin": 0.0354,
-   "embed_tokens": 49,
+   "rag_score": 0.4406,
+   "rag_margin": 0.061,
+   "embed_tokens": 29,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.002639,
-   "reply": "1) 현재 payments-service의 상태는 'degraded'로 확인되었으며, CPU 사용률은 88.8%, 메모리 사용률은 53.9%입니다. 모니터링 알림으로는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 감지되었습니다.\n\n2) DB 연결이 끊기고 리플리케이션이 멈춘 상황에 대해, runbook에 따라 커넥션 풀과 리플리케이션 상태를 점검하고 필요 시 failover 노드로 전환해야 합니다.\n\n3) 서비스 정상화 후에는 원인 분석과 재발 방지 대책을 문서화해야 합니다. 현재까지의 패턴 분석에서는 특이 패턴이 발견되지 않았습니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.002451,
+   "reply": "1) 현재 payments-service의 상태는 'degraded'로 확인되었으며, CPU 사용률은 88.1%, 메모리 사용률은 53.5%입니다. 모니터링 알림으로는 'CPU 91% (threshold 80%)'와 'payments-service-3 instance responding slow'가 발생했습니다.\n\n2) DB 연결이 끊기고 리플리케이션이 멈춘 상황에 따라, runbook에 명시된 절차에 따라 커넥션 풀과 리플리케이션 상태를 점검하고 필요 시 failover 노드로 전환해야 합니다.\n\n3) 서비스가 정상화된 후에는 원인 분석과 재발 방지 대책을 문서화하여 향후 유사한 문제가 발생하지 않도록 대비해야 합니다."
   },
   {
    "id": "b4",
@@ -4246,32 +4095,32 @@
    "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 5.64,
+   "elapsed_s": 4.82,
    "error": null,
    "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1217,
+   "tokens": 1125,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 147,
-     "sec": 0.84
+     "sec": 0.83
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 334,
-     "sec": 1.0
+     "sec": 0.96
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 736,
-     "sec": 2.76
+     "tokens": 644,
+     "sec": 2.63
     }
    ],
    "route": "incident",
@@ -4285,16 +4134,16 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.5062,
-   "rag_margin": 0.1303,
-   "embed_tokens": 34,
+   "rag_score": 0.518,
+   "rag_margin": 0.1222,
+   "embed_tokens": 17,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003752,
-   "reply": "1) 현재 gateway-service의 상태는 'degraded'로 확인되었으며, CPU 사용률은 31.3%, 메모리 사용률은 45.6%입니다. 알림으로는 'upstream timeout to payments-service (504)'와 'network packet loss 3%'가 발생하고 있습니다.\n\n2) 문제의 원인은 payments-service로의 업스트림 타임아웃과 네트워크 패킷 손실로 추정됩니다. 따라서, 네트워크 타임아웃 대응 절차에 따라 다음 단계를 진행해야 합니다.\n\n3) 대응 절차:\n   - get_monitoring_status를 사용하여 payments-service와의 호출에서 타임아웃이 발생하는 것을 확인했습니다.\n   - DNS 해석 실패, 방화벽/보안그룹 변경, 로드밸런서 헬스체크 실패 중 최근 변경 사항이 있는지 점검해야 합니다.\n   - 특정 리전/가용영역에서만 발생하는지 확인하고, 해당 구간을 우회하는 라우팅으로 임시 전환할 수 있습니다.\n   - 타임아웃 값이 너무 짧아 정상 응답도 실패로 처리되는 경우라면, 임계값을 임시 상향하여 2차 피해를 줄이는 방안을 고려해야 합니다.\n   - 문제 해결 후 네트워크 경로 기록을 남기고, 재발 방지를 위해 헬스체크 주기와 재시도 정책을 재검토해야 합니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003292,
+   "reply": "1) 모니터링 결과, gateway-service의 상태가 'degraded'로 확인되었으며, CPU 사용률은 28.9%, 메모리 사용률은 44.5%로 나타났습니다. 알림으로는 'upstream timeout to payments-service (504)'와 'network packet loss 3%'가 보고되었습니다.\n\n2) Runbook에 따라, 먼저 get_monitoring_status를 통해 payments-service와의 호출에서 타임아웃이 발생하고 있음을 확인했습니다. \n\n3) 네트워크 타임아웃 대응 절차에 따라, DNS 해석 실패, 방화벽/보안그룹 변경, 로드밸런서 헬스체크 실패 중 최근 변경 사항이 있는지 점검해야 합니다. 이후, 특정 리전/가용영역에서만 발생하는지 확인하고, 필요시 라우팅을 임시 전환하며, 타임아웃 임계값을 조정하여 2차 피해를 줄이는 조치를 고려해야 합니다. 정상화 후에는 네트워크 경로 기록을 남기고, 헬스체크 주기와 재시도 정책을 재검토해야 합니다."
   },
   {
    "id": "b5",
@@ -4302,32 +4151,32 @@
    "rep": 3,
    "faults": [],
    "success": true,
-   "elapsed_s": 5.8,
+   "elapsed_s": 4.11,
    "error": null,
    "llm_calls": 3,
    "llm_failed_calls": 0,
-   "tokens": 1231,
+   "tokens": 1095,
    "llm_detail": [
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 150,
-     "sec": 0.79
+     "sec": 0.83
     },
     {
      "model": "openai:gpt-4o-mini",
      "ok": true,
      "error": null,
      "tokens": 340,
-     "sec": 1.01
+     "sec": 0.87
     },
     {
      "model": "openai:gpt-4o",
      "ok": true,
      "error": null,
-     "tokens": 741,
-     "sec": 2.98
+     "tokens": 605,
+     "sec": 2.01
     }
    ],
    "route": "incident",
@@ -4341,16 +4190,16 @@
    "targets_ok": true,
    "runbook_ok": true,
    "classifier": "rag",
-   "rag_score": 0.3907,
-   "rag_margin": 0.0199,
-   "embed_tokens": 48,
+   "rag_score": 0.4139,
+   "rag_margin": 0.0255,
+   "embed_tokens": 23,
    "degraded": 0,
    "degraded_stages": [],
    "retry_count": 0,
    "validation_attempts": 1,
-   "replan_rounds": 1,
-   "cost_usd_virtual": 0.003778,
-   "reply": "1) 참고: 현재 auth-service의 디스크 사용률에 대한 구체적인 수치는 수집되지 않았습니다. 그러나 디스크가 꽉 찼다는 알림이 수신되었습니다.\n\n2) 대응 절차:\n   - 1단계: get_monitoring_status를 통해 auth-service의 디스크 사용률을 확인하고, 임계 수준(90% 이상)인지 판단합니다.\n   - 2단계: 로그 파일, 임시 파일, 오래된 백업 등 안전하게 삭제할 수 있는 항목을 정리하여 즉시 여유 공간을 확보합니다.\n   - 3단계: 특정 프로세스가 비정상적으로 로그를 쌓고 있는지 확인하고, 필요 시 로그 레벨을 낮추거나 로테이션 주기를 단축합니다.\n   - 4단계: 임시 조치로도 부족할 경우, 볼륨을 확장하거나 추가 스토리지를 연결합니다.\n   - 5단계: 정상화 후 로그 보존 정책과 디스크 사용률 알림 임계값을 재검토하여 조기에 감지되도록 조정합니다.\n\n3) 추가 모니터링: 현재 auth-service는 상태가 'degraded'이며, CPU 사용률은 75.6%, 메모리 사용률은 59.8%입니다. 알림으로는 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'가 있습니다. 이러한 상태도 함께 모니터링하여 종합적인 시스템 안정성을 확보해야 합니다."
+   "replan_rounds": 0,
+   "cost_usd_virtual": 0.003098,
+   "reply": "1) 모니터링 결과, auth-service의 상태는 'degraded'이며, CPU 사용률은 84.3%, 메모리 사용률은 64.1%로 확인되었습니다. 디스크 사용률에 대한 구체적인 수치는 수집되지 않았으나, 디스크 공간 부족으로 인한 알림이 발생한 상황입니다.\n\n2) 알림 내용으로는 'p95 latency 2.4s (threshold 1.0s)'와 'connection pool 92% used'가 보고되었습니다. 이는 시스템 성능 저하와 관련이 있을 수 있습니다.\n\n3) 디스크 용량 부족 대응 절차에 따라, 우선적으로 로그 파일, 임시 파일, 오래된 백업 등을 정리하여 여유 공간을 확보해야 합니다. 이후에도 문제가 지속된다면, 볼륨 확장이나 추가 스토리지 연결을 고려해야 합니다. 정상화 후에는 로그 보존 정책과 디스크 사용률 알림 임계값을 재검토하여 조기 감지가 가능하도록 조정해야 합니다."
   }
  ]
 }
