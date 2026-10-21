@@ -14,6 +14,7 @@ from .runbook import build_runbook_agent
 
 
 def build_agents(deps) -> dict:
+    """서브에이전트 3개를 컴파일해 이름으로 돌려준다 — build_graph에서 1회만 호출."""
     return {"monitoring": build_monitoring_agent(deps),
             "runbook": build_runbook_agent(deps),
             "analysis": build_analysis_agent(deps)}

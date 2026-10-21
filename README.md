@@ -29,12 +29,12 @@ Before/After로 실측했다.
 | ① 에이전트 분리 | research 노드 1개 | 모니터링·런북·분석 서브에이전트(compiled subgraph) 3개, supervisor가 병렬 호출 (`agent/agents/`) |
 | ② RAG 런북 선택 | alert 키워드 매칭, 없으면 db-down | 런북 에이전트가 질의 임베딩 유사도로 선택, 1·2위 차가 작으면 alert를 더해 1회 재검색 (`agent/rag.py`) |
 | ③ 하드코딩 제거 | 모르는 시스템 → auth-service | 쿼리에 나온 시스템만 조사, 모니터링 대상이 아니면 안내 (`agent/systems.py`) |
+| ④ 분석 필요 여부 판단 | LLM의 `needs_analysis`로 결정 — 소형 모델은 단순 조회에도 "분석 필요" | gate가 코드 규칙으로 확정: 시스템 2개 이상 + 비교 표현(공통·비교·둘 다 …)일 때만 분석 에이전트 호출, LLM 판단은 참고로만 기록 |
 
 **추가 (원래 없던 것)**
 
 | 항목 | 내용 |
 |---|---|
-| ④ 질문 난이도 구분 | 시스템 2개 이상 + 비교 표현(공통·비교·둘 다 …)일 때만 분석 에이전트 호출 — LLM 판단은 참고만 (gate 노드) |
 | ⑤ 장애 대응 | 단계별 timeout → 일시 오류(timeout·연결 실패·5xx·429)만 지수 백오프 재시도 → 그래도 실패하면 대체 답변. 노드는 외부 호출 실패만 `try/except`로 잡고 버그는 숨기지 않음. 요청 전체 상한 60초 (`agent/errors.py`, `agent/fallback.py`) |
 | ⑥ 평가·테스트 | 같은 입력 21건 + 장애 주입 16건(seed 고정)으로 Before/After 비교 (`eval/`), 단위 테스트 48개 (`tests/`) |
 
@@ -121,6 +121,8 @@ fast=`gpt-4o-mini`, quality=`gpt-4o` · Before=`253fb4c`(baseline) · After=정�
 - 루프 상한: runbook 재검색 1회, validate 재작성 3회
 - 소형 모델(Ollama qwen3:0.6b)은 시스템명이 없는 질의("로그인 응답이 느려요")에서 대상을 못 고르거나, 인사말을
   장애 문의로 분류하는 경우가 있다 (OpenAI에서는 정상)
+- 대화 기억은 chat 경로만: thread별 이력을 SQLite(`session.db`)에 저장하고 일반 대화에서 최근 10턴을 참고한다.
+  장애 진단 경로는 매번 현재 질문만으로 진단한다 ("아까 그 시스템"은 이어받지 못함)
 - 평가 데이터셋 21건·직접 라벨링, 장애 비율은 실제보다 가혹한 조건
 
 **추가 개선 방향**: LLM-as-Judge 답변 검증(할루시네이션), runbook 검색을 MCP Tool로 노출, MCP 자동 재연결

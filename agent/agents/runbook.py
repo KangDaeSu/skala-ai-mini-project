@@ -16,6 +16,7 @@ from ..errors import EXTERNAL, call_mcp, describe, error_info
 
 
 class RunbookState(TypedDict, total=False):
+    """supervisor가 query(·collected)를 넣고, 고른 장애 유형과 runbook 본문을 돌려받는다."""
     query: str
     collected: list[dict]     # 재검색 때만 — 수집된 모니터링 결과(alert)를 함께 본다
     incident_type: str | None
@@ -55,6 +56,7 @@ def keyword_incident_type(collected: list[dict]) -> str | None:
 
 @traceable(name="runbook.retrieve")
 async def retrieve(state: RunbookState, deps) -> dict:
+    """RAG로 장애 유형을 고른다. retriever가 없거나 임베딩이 실패하면 baseline 키워드 규칙을 쓴다."""
     collected = state.get("collected", [])
     if deps.retriever is not None:
         try:
@@ -72,6 +74,7 @@ async def retrieve(state: RunbookState, deps) -> dict:
 
 @traceable(name="runbook.read")
 async def read(state: RunbookState, deps) -> dict:
+    """고른 장애 유형의 runbook 본문을 MCP Resource로 가져온다."""
     if state.get("incident_type") is None:   # 장애 유형을 정하지 못했다 — 본문 조회 없음
         return {"runbook": None, "retries": 0}
     try:
@@ -89,6 +92,7 @@ async def read(state: RunbookState, deps) -> dict:
 
 
 def build_runbook_agent(deps):
+    """retrieve → read 서브그래프."""
     g = StateGraph(RunbookState)
     g.add_node("retrieve", partial(retrieve, deps=deps))
     g.add_node("read", partial(read, deps=deps))

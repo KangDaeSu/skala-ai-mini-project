@@ -14,6 +14,7 @@ from ..errors import EXTERNAL, call_mcp, describe, error_info
 
 
 class MonitoringState(TypedDict, total=False):
+    """supervisor가 targets를 넣고, results·degraded_systems·alert_count를 돌려받는다."""
     targets: list[str]
     results: list[dict]          # 대상별 {"target", "data", "retries"} 또는 {"target", "error", "reason"}
     degraded_systems: list[str]  # 상태가 healthy가 아닌 시스템
@@ -22,6 +23,7 @@ class MonitoringState(TypedDict, total=False):
 
 @traceable(name="monitoring.fetch")
 async def fetch(state: MonitoringState, deps) -> dict:
+    """대상 시스템마다 MCP Tool(get_monitoring_status)을 동시에 호출한다. 실패한 대상은 error로 남긴다."""
     async def one(target: str) -> dict:
         await asyncio.sleep(0.35)   # 대상당 고정 지연 — baseline research와 같은 조건 (병렬 효과 실측용)
         try:
@@ -36,12 +38,14 @@ async def fetch(state: MonitoringState, deps) -> dict:
 
 @traceable(name="monitoring.assess")
 async def assess(state: MonitoringState, deps) -> dict:
+    """조회 결과에서 저하된 시스템과 알림 수를 정리한다 (LLM 없이 코드로 판단)."""
     found = [r["data"] for r in state["results"] if "data" in r]
     return {"degraded_systems": [d["system_name"] for d in found if d.get("status") != "healthy"],
             "alert_count": sum(len(d.get("alerts") or []) for d in found)}
 
 
 def build_monitoring_agent(deps):
+    """fetch → assess 서브그래프. deps는 functools.partial로 노드에 주입한다(Wave 13)."""
     g = StateGraph(MonitoringState)
     g.add_node("fetch", partial(fetch, deps=deps))
     g.add_node("assess", partial(assess, deps=deps))

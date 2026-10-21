@@ -99,10 +99,10 @@ except ImportError:
 try:   # 요청 전체 시간 상한도 server.py와 똑같이 건다 (Before 코드에는 없음)
     from agent.errors import REQUEST_TIMEOUT
 
-    def request_deadline():
+    def request_timeout():
         return asyncio.timeout(REQUEST_TIMEOUT)
 except ImportError:
-    from contextlib import nullcontext as request_deadline
+    from contextlib import nullcontext as request_timeout
 
 
 @traceable(name="chat_request")
@@ -110,7 +110,7 @@ async def _run_turn(graph, store, query: str, thread_id: str) -> dict:
     """server.py의 _handle_chat과 같은 순서: 이력 로드 → 그래프 실행 → 이력 저장.
     루트 run 이름도 chat_request로 맞춰 LangSmith에서 서버 요청과 같은 모양으로 보인다."""
     history = store.load(thread_id)
-    async with request_deadline():
+    async with request_timeout():
         result = await graph.ainvoke({"query": query, "thread_id": thread_id, "history": history,
                                       "events": [], "cost_usd": 0.0})
     store.append(thread_id, "user", query)

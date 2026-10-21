@@ -15,6 +15,7 @@ from ..errors import EXTERNAL, describe, error_info
 
 
 class AnalysisState(TypedDict, total=False):
+    """supervisor가 collected를 넣고, 비교 분석 요약(summary)을 돌려받는다."""
     collected: list[dict]
     summary: str | None
     usage: dict
@@ -23,6 +24,7 @@ class AnalysisState(TypedDict, total=False):
 
 @traceable(name="analysis.compare")
 async def compare(state: AnalysisState, deps) -> dict:
+    """fast LLM으로 여러 시스템의 모니터링 결과를 비교한다. 실패하면 summary=None과 errors."""
     try:
         summary, usage = await asyncio.to_thread(deps.fast_llm.analyze, state["collected"])
     except EXTERNAL as exc:
@@ -33,6 +35,7 @@ async def compare(state: AnalysisState, deps) -> dict:
 
 
 def build_analysis_agent(deps):
+    """compare 노드 하나짜리 서브그래프."""
     g = StateGraph(AnalysisState)
     g.add_node("compare", partial(compare, deps=deps))
     g.set_entry_point("compare")

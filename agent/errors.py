@@ -32,6 +32,7 @@ EXTERNAL = TRANSIENT + (httpx.HTTPStatusError,)
 
 
 def is_transient(exc: BaseException) -> bool:
+    """다시 시도하면 성공할 수 있는 실패인가 — 재시도 여부와 error.retryable의 기준."""
     if isinstance(exc, httpx.HTTPStatusError):   # 5xx·429는 서버 쪽 일시 문제, 4xx는 요청 자체의 문제
         code = exc.response.status_code
         return code >= 500 or code == 429

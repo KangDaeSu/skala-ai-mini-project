@@ -415,6 +415,7 @@ def _after_route(state: AgentState) -> str:
 
 
 def _after_replan_check(state: AgentState) -> str:
+    """replan_check가 불충분하다고 판단하면 research로 돌아가 runbook만 재검색한다 (상한 1회)."""
     last = state["events"][-1]
     return "analysis" if last.get("is_sufficient") else "research"
 
@@ -424,6 +425,7 @@ def _after_validate(state: AgentState) -> str:
 
 
 def build_graph(deps: SupervisorDeps):
+    """그래프 조립 — research·analysis 노드에는 서브에이전트를, 모든 노드에는 deps를 주입한다."""
     agents = build_agents(deps)   # 서브에이전트(compiled subgraph)는 그래프와 함께 1회만 만든다
     g = StateGraph(AgentState)
     node = lambda fn: partial(fn, deps=deps)   # Wave 13 — 명시적 의존성 주입

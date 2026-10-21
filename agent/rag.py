@@ -114,6 +114,7 @@ class RunbookRetriever:
 
     @traceable(name="rag.classify_runbook")
     def classify(self, query: str, collected: list[dict]) -> dict:
+        """질의(+수집된 alert)와 가장 가까운 runbook — 장애 유형, 유사도, 1·2위 차(margin)를 돌려준다."""
         alerts = " ".join(
             f"{d['system_name']}: {'; '.join(d.get('alerts') or ['no alerts'])}"
             for d in (c["data"] for c in collected if c["source"] == "monitoring"))

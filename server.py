@@ -182,6 +182,7 @@ def _metadata(result: dict, run_id: str | None) -> dict:
 
 @traceable(name="chat_request")
 async def _handle_chat(message: str, thread_id: str) -> tuple[dict, str | None]:
+    """/chat 처리 — 이력 로드 → 그래프 실행(요청 상한 안에서) → 이력 저장."""
     deps = app.state.deps
     history, load_warning = _load_history(deps, thread_id)   # Wave 12 — 실패해도 이력 없이 진행
     async with asyncio.timeout(REQUEST_TIMEOUT):   # 요청 전체 시간 상한 — 넘으면 TimeoutError → 503

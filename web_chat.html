@@ -114,8 +114,11 @@
 <script>
 const { createApp, ref, reactive, nextTick } = Vue;
 
+// 서브에이전트 이름 → 화면 표시 이름 (agent/agents/)
 const AGENT_NAMES = { monitoring: '모니터링', runbook: '런북', analysis: '분석' };
 
+// 서버 SSE 이벤트 type → 진행 단계 한 줄. null을 돌려주면 화면에 표시하지 않는다.
+// AgentStarted는 에이전트가 시작하는 순간(custom 이벤트), 나머지는 노드가 끝날 때 도착한다.
 const STEP_LABELS = {
   PlanCreated: e => `계획 수립: 할 일 ${e.task_count}가지${e.targets?.length ? ` (시스템: ${e.targets.join(', ')})` : ''}`,
   GateApplied: e => !e.systems ? null : e.complex
