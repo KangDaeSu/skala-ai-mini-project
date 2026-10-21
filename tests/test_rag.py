@@ -72,18 +72,26 @@ def _run_graph(retriever):
          "cost_usd": 0.0}))
 
 
+def _runbook_event(result):
+    return next(e for e in result["events"]
+                if e["type"] == "TaskCompleted" and e["source"] == "runbook")
+
+
 def test_graph_uses_rag_classifier():
-    result = _run_graph(_retriever())
-    replan = next(e for e in result["events"] if e["type"] == "ReplanCheck" and not e["is_sufficient"])
-    assert replan["classifier"] == "rag" and replan["target"] == "disk-full"
+    """runbook 에이전트가 모니터링과 병렬로, 질의만 보고 RAG로 고른다 (1차 검색)."""
+    event = _runbook_event(_run_graph(_retriever()))
+    assert event["classifier"] == "rag" and event["target"] == "disk-full"
+    assert event["round"] == 0
 
 
 def test_graph_falls_back_to_keyword_rules_when_embedding_fails():
+    """임베딩이 죽으면 1차(alert 없음)는 runbook을 추측하지 않고, 재검색 때 alert 키워드로 고른다."""
     retriever = _retriever()
     retriever.embedder = BrokenEmbedder()   # 인덱스는 있는데 질의 임베딩이 실패하는 상황
     result = _run_graph(retriever)
-    replan = next(e for e in result["events"] if e["type"] == "ReplanCheck" and not e["is_sufficient"])
-    assert replan["classifier"] == "keyword"
-    assert [d["stage"] for d in result["degraded"]] == ["rag"]
+    event = _runbook_event(result)
+    assert event["classifier"] == "keyword" and event["round"] == 1
+    assert event["target"] == "cpu-spike"           # FakeMCP의 alert "CPU 91%"
+    assert [d["stage"] for d in result["degraded"]] == ["rag", "rag"]
     assert result["degraded"][0]["error"]["kind"] == "ConnectError"
     assert result["final"]

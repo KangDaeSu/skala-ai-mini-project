@@ -114,14 +114,22 @@
 <script>
 const { createApp, ref, reactive, nextTick } = Vue;
 
+const AGENT_NAMES = { monitoring: '모니터링', runbook: '런북', analysis: '분석' };
+
 const STEP_LABELS = {
   PlanCreated: e => `계획 수립: 할 일 ${e.task_count}가지${e.targets?.length ? ` (시스템: ${e.targets.join(', ')})` : ''}`,
-  GateApplied: e => e.removed_analysis_tasks ? `불필요한 작업 ${e.removed_analysis_tasks}건 제거` : null,
+  GateApplied: e => !e.systems ? null : e.complex
+      ? `복잡한 질문 → 비교 분석 에이전트 포함 (시스템 ${e.systems}개)`
+      : '단순 질문 → 모니터링·런북 에이전트만 실행',
+  AgentStarted: e => `▶ ${AGENT_NAMES[e.agent] || e.agent} 에이전트 시작`,
+  AgentCompleted: e => `✓ ${AGENT_NAMES[e.agent] || e.agent} 에이전트 완료 (${e.elapsed}초)`,
   TaskCompleted: e => (e.source === 'monitoring'
       ? `모니터링 지표 확인 (시스템: ${e.target})`
-      : `대응 매뉴얼(runbook) 조회 (장애유형: ${e.target})`) + (e.retries ? ' (재시도 성공)' : ''),
-  ReplanCheck: e => e.is_sufficient ? null : `정보 부족 → 장애유형 "${e.target}"로 추가 조사`
-      + (e.classifier === 'rag' ? ` (RAG 유사도 ${e.score.toFixed(2)})` : ' (키워드 규칙)'),
+      : `대응 매뉴얼(runbook) 선택: ${e.target}`
+        + (e.classifier === 'rag' ? ` (RAG 유사도 ${e.score.toFixed(2)})`
+           : e.classifier === 'keyword' ? ' (키워드 규칙)' : ''))
+      + (e.retries ? ' (재시도 성공)' : ''),
+  ReplanCheck: e => e.is_sufficient ? null : `재검색: ${e.reason}`,
   DraftWritten: e => `답변 초안 작성 (시도 ${e.attempt})`,
   Validation: e => e.verdict === '합격' ? '검수 통과' : '검수 반려 → 다시 작성',
   Finalize: () => '최종 답변 완성',

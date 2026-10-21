@@ -1,37 +1,42 @@
-"""v2 Supervisor — 실제 langgraph.StateGraph (Wave 4·5·6·7·8·10b·15 통합).
+"""v2 Supervisor — 실제 langgraph.StateGraph. research 구간을 전문 서브에이전트로 나눴다.
 
 route → (chat 직행 | incident 파이프라인)
-incident: plan(MCP Prompt 절차 반영) → gate(권위 게이트) → research(가드+병렬+재시도)
-          → replan_check(부족 시 gap task 후 재조사) → analysis(needs_analysis=True일 때만
-          실제 실행) → write → validate(반려 시 재작성) → finalize
+incident: plan(MCP Prompt 절차 + 조사 대상 보정) → gate(분석 필요 여부를 코드로 확정)
+          → research(supervisor: monitoring ∥ runbook 에이전트 병렬 호출)
+          → replan_check(runbook 선택이 불확실하면 alert를 더해 1회 재검색)
+          → analysis(분석 에이전트, 복잡한 질문만) → write → validate(반려 시 재작성) → finalize
 
 모든 노드는 SupervisorDeps를 functools.partial로 주입받는 순수 함수다(Wave 13).
-각 노드는 @traceable로 LangSmith에 계층 트리로 기록된다.
+각 노드·에이전트는 @traceable로 LangSmith에 계층 트리로 기록된다.
 
-개선에서 바뀐 점:
-- 외부 호출(LLM·MCP·임베딩)은 timeout + 일시 오류 재시도(errors.py)를 거친다. 그래도 실패하면
-  노드가 try/except EXTERNAL로 잡아 fallback.py의 대체 동작으로 계속 진행하고 _degrade()로 기록
-  (baseline: 예외가 그래프 밖으로 터져 HTTP 500). EXTERNAL 밖의 예외(버그)는 잡지 않는다
-- MCP 호출(prompt·monitoring·runbook)에도 timeout·재시도 적용, 실패 시 기본 절차·
-  "조회하지 못했다" 안내로 진행
-- plan: 모델이 고른 조사 대상을 systems.resolve_targets로 쿼리 기준 보정
-- replan_check: runbook을 키워드 규칙 대신 RAG(rag.py)로 선택, 실패 시 키워드 규칙
-- analysis·write: 조사한 모니터링 데이터가 없으면 LLM을 부르지 않는다
+baseline 대비 바뀐 점:
+- research: 노드 하나가 모니터링·runbook 조회를 함께 하던 것을 서브에이전트(agents/)로 분리하고,
+  runbook을 조사 뒤 키워드로 고르던 것을 runbook 에이전트가 처음부터 RAG로 병렬 검색한다
+- replan_check: "runbook이 없으면 재조사"에서 "runbook 선택이 불확실하면 재검색"으로 (상한 1회)
+- plan: 모르는 시스템을 auth-service로 바꾸던 하드코딩 대신 쿼리에 명시된 시스템만 조사한다
+- 외부 호출은 timeout + 일시 오류 재시도(errors.py)를 거치고, 그래도 실패하면 노드가
+  try/except EXTERNAL로 잡아 대체 동작으로 진행한다 (baseline: 예외가 그래프 밖으로 터져 HTTP 500)
 """
 import asyncio
+import os
 import time
 from functools import partial
-from typing import Any, TypedDict
+from typing import TypedDict
 
 from langgraph.config import get_stream_writer
 from langgraph.graph import END, StateGraph
 from langsmith import traceable
 
+from .agents import build_agents
 from .deps import SupervisorDeps
-from .errors import EXTERNAL, TIMEOUTS, describe, error_info, retry_async
+from .errors import EXTERNAL, call_mcp, describe, error_info
 from .fallback import (CHAT_FALLBACK, DEFAULT_PROCEDURE, degraded_event, rule_route,
                        tag_current_run, template_answer)
 from .systems import KNOWN_SYSTEMS, no_data_answer, notices_for, prompt_label, resolve_targets
+
+# runbook 선택의 1·2위 유사도 차가 이보다 작으면 "불확실" — alert를 더해 한 번 더 검색한다.
+# 기준값 근거(OpenAI 실측): 틀린 선택은 차이가 0.003, 맞힌 선택은 모두 0.01 이상이었다.
+RAG_MIN_MARGIN = float(os.environ.get("RAG_MIN_MARGIN", 0.01))
 
 
 class AgentState(TypedDict, total=False):
@@ -43,6 +48,8 @@ class AgentState(TypedDict, total=False):
     tasks: list[dict]
     gate_removed: int
     collected: list[dict]
+    runbook_round: int | None   # 실행할 runbook 검색 차수 (0: 1차, 1: 재검색, None: 없음)
+    runbook_detail: dict        # 마지막 runbook 선택 근거 (RAG 유사도·1·2위 차)
     replan_rounds: int
     retry_count: int
     parallel_elapsed: float
@@ -61,29 +68,16 @@ def _cost(state: AgentState, usage: dict) -> float:
 
 
 def _degrade(state: AgentState, update: dict, stage: str, reason: str,
-             exc: BaseException | None = None) -> dict:
+             error: dict | None = None) -> dict:
     """폴백 기록 — Degraded 이벤트를 붙이고 degraded 목록에 누적, LangSmith 노드 run에 태그.
 
     update는 노드가 돌려줄 상태 델타다. events·degraded는 노드가 이미 새 목록을 만들었으면
-    (같은 노드에서 두 번 폴백한 경우 등) 그 뒤에, 아니면 기존 state 뒤에 붙인다. degraded 목록은
-    /chat metadata의 degraded_count와 평가 스크립트의 degraded_runs 지표가 된다."""
+    (같은 노드에서 두 번 폴백한 경우 등) 그 뒤에, 아니면 기존 state 뒤에 붙인다."""
     tag_current_run(stage, reason)
-    event = degraded_event(stage, reason, error_info(exc) if exc else None)
+    event = degraded_event(stage, reason, error)
     update["events"] = update.get("events", state.get("events", [])) + [event]
     update["degraded"] = update.get("degraded", state.get("degraded", [])) + [event]
     return update
-
-
-async def _mcp(fn, *args, **kwargs):
-    """MCP 호출 — 시도마다 10초 timeout(baseline: timeout 없음), 일시 오류는 재시도.
-    (결과, 재시도 횟수)를 돌려주고, 끝내 실패하면 예외를 그대로 올린다."""
-    return await retry_async(lambda: asyncio.wait_for(fn(*args, **kwargs), TIMEOUTS["mcp"]))
-
-
-def _rule_plan(query: str) -> dict:
-    """plan 폴백 — LLM이 계획을 못 세우면 빈 계획에서 출발한다. 비어 있어도 괜찮은 이유:
-    아래 plan_node의 resolve_targets가 쿼리에 명시된 시스템으로 조사 대상을 다시 채운다."""
-    return {"needs_analysis": False, "tasks": []}
 
 
 def _research_tasks(targets: list[str]) -> list[dict]:
@@ -103,7 +97,7 @@ async def route_node(state: AgentState, deps: SupervisorDeps) -> dict:
         result, usage = await asyncio.to_thread(deps.fast_llm.route, state["query"])
         reason = result.get("fallback")   # 어댑터 안에서 JSON 파싱 실패로 폴백한 경우
     except EXTERNAL as exc:
-        result, usage, error = rule_route(state["query"], KNOWN_SYSTEMS), {"usd": 0.0}, exc
+        result, usage, error = rule_route(state["query"], KNOWN_SYSTEMS), {"usd": 0.0}, error_info(exc)
         reason = f"LLM 호출 실패({describe(exc)}) → 규칙 기반 분류"
     event = {"type": "RouteDecided", "route": result["route"]}
     update = {"route": result["route"], "needs_analysis": result["needs_analysis"],
@@ -132,38 +126,39 @@ async def chat_answer_node(state: AgentState, deps: SupervisorDeps) -> dict:
               "events": state["events"] + [{"type": "Finalize", "pipeline": "chat-direct"}]}
     if error is None:
         return update
-    return _degrade(state, update, "chat",
-                    f"LLM 호출 실패({describe(error)}) → 안내 문구로 대체", error)
+    return _degrade(state, update, "chat", f"LLM 호출 실패({describe(error)}) → 안내 문구로 대체",
+                    error_info(error))
 
 
 @traceable(name="plan_node")
 async def plan_node(state: AgentState, deps: SupervisorDeps) -> dict:
     """Wave 4 — Plan/Task 분해. Wave 2의 MCP Prompt가 표준 절차를 깔아준다.
 
-    resource와 마찬가지로 이름을 어느 서버가 들고 있는지 미리 가정하지 않고,
-    find_prompt()로 연결된 서버들을 먼저 조회해 찾은 뒤에만 get_prompt를 보낸다.
-    MCP가 실패하면 같은 내용의 기본 절차(DEFAULT_PROCEDURE)로 계획한다."""
+    prompt 이름을 어느 서버가 들고 있는지 미리 가정하지 않고, find_prompt()로 연결된 서버들을
+    먼저 조회해 찾은 뒤에만 get_prompt를 보낸다. MCP가 실패하면 같은 내용의 기본 절차로 계획한다."""
     update: dict = {}
     try:
-        server, _ = await _mcp(deps.mcp.find_prompt, "incident_analysis_prompt")
+        server, _ = await call_mcp(deps.mcp.find_prompt, "incident_analysis_prompt")
         # system_name은 증상 문장과 모순되지 않는 이름만 넣는다(모르면 "미확인").
         # baseline은 billing-service 질의에 "시스템: auth-service"를 넣어 추론 모델이 thinking
         # 루프에 빠졌다(302초 후 HTTP 500의 직접 원인).
-        procedure, _ = await _mcp(
+        procedure, _ = await call_mcp(
             deps.mcp.get_prompt, "incident_analysis_prompt",
             {"system_name": prompt_label(state["query"]), "symptom": state["query"]},
             server=server)
     except EXTERNAL as exc:
         procedure = DEFAULT_PROCEDURE + f"\n## 증상\n{state['query']}\n"
         update = _degrade(state, update, "mcp",
-                          f"MCP Prompt 조회 실패({describe(exc)}) → 기본 절차 사용", exc)
+                          f"MCP Prompt 조회 실패({describe(exc)}) → 기본 절차 사용", error_info(exc))
 
     error = None
     try:
         result, usage = await asyncio.to_thread(deps.fast_llm.plan, state["query"], procedure)
         reason = result.get("fallback")   # 어댑터 안에서 JSON 파싱 실패로 복구한 경우
     except EXTERNAL as exc:
-        result, usage, error = _rule_plan(state["query"]), {"usd": 0.0}, exc
+        # LLM이 계획을 못 세우면 빈 계획에서 출발한다 — 아래 resolve_targets가 쿼리에
+        # 명시된 시스템으로 조사 대상을 다시 채운다
+        result, usage, error = {"needs_analysis": False, "tasks": []}, {"usd": 0.0}, error_info(exc)
         reason = f"LLM 호출 실패({describe(exc)}) → 쿼리의 시스템으로 계획"
     # 조사 대상 보정 — 쿼리에 명시된 시스템이 우선, 모니터링 밖 시스템은 조사하지 않는다
     model_targets = [t["target"] for t in result["tasks"]
@@ -180,196 +175,177 @@ async def plan_node(state: AgentState, deps: SupervisorDeps) -> dict:
     notices = [{"source": "notice", "data": n} for n in notices_for(targets, unmonitored)]
     update.update({"tasks": tasks, "needs_analysis": result["needs_analysis"],
                    "collected": state.get("collected", []) + notices,
+                   # 조사할 시스템이 있을 때만 runbook을 찾는다 (없으면 증상 근거가 없다)
+                   "runbook_round": 0 if targets else None,
                    "cost_usd": _cost(state, usage), "events": events})
     return _degrade(state, update, "plan", reason, error) if reason else update
 
 
 @traceable(name="gate_node")
 async def gate_node(state: AgentState, deps: SupervisorDeps) -> dict:
-    """Wave 6 — 권위 게이트. needs_analysis=False인데 섞여 들어온 analysis task를
-    프롬프트가 아니라 코드로 강제 제거한다."""
+    """Wave 6 — 권위 게이트: 분석 에이전트를 부를지 프롬프트가 아니라 코드로 확정한다.
+
+    LLM이 needs_analysis=True라고 해도, 비교할 시스템이 2개 이상일 때만 분석한다.
+    (단순 질문 → monitoring·runbook 에이전트만 / 복잡한 질문 → + analysis 에이전트)"""
     tasks = state["tasks"]
-    if not state.get("needs_analysis", False):
-        kept = [t for t in tasks if t["agent"] != "analysis"]
-        removed = len(tasks) - len(kept)
-    else:
-        kept, removed = tasks, 0
-    event = {"type": "GateApplied", "removed_analysis_tasks": removed}
-    return {"tasks": kept, "gate_removed": removed,
-            "events": state["events"] + [event]}
+    systems = sum(1 for t in tasks if t["agent"] == "research")
+    complex_query = state.get("needs_analysis", False) and systems >= 2
+    kept = tasks if complex_query else [t for t in tasks if t["agent"] != "analysis"]
+    removed = len(tasks) - len(kept)
+    event = {"type": "GateApplied", "removed_analysis_tasks": removed,
+             "complex": complex_query, "systems": systems}
+    return {"tasks": kept, "gate_removed": removed, "events": state["events"] + [event]}
+
+
+async def _call_agent(name: str, agent, inputs: dict, writer) -> tuple[dict, float]:
+    """에이전트 1개 호출 — 시작을 화면에 즉시 알리고(custom 이벤트), 걸린 시간을 잰다."""
+    writer({"type": "AgentStarted", "agent": name})
+    started = time.perf_counter()
+    output = await agent.ainvoke(inputs)
+    return output, round(time.perf_counter() - started, 2)
 
 
 @traceable(name="research_node")
-async def research_node(state: AgentState, deps: SupervisorDeps) -> dict:
-    """Wave 15 가드 + Wave 10b 병렬 + Tool/Resource 실호출, 모든 MCP 호출에 timeout·재시도 적용.
+async def research_node(state: AgentState, deps: SupervisorDeps, agents: dict) -> dict:
+    """Supervisor — 전문 에이전트를 호출해 조사 결과를 모은다.
 
-    조회가 끝내 실패한 task는 status="failed"로 두고, "조회하지 못했다"는 안내를 notice로
-    남긴다 — 실패한 시스템의 수치를 write 단계가 지어내지 않게 하기 위함."""
-    tasks = state["tasks"]
-    research_indices = [i for i, t in enumerate(tasks)
-                        if t["agent"] == "research" and t["status"] == "pending"]
-    # Wave 15 — 객체가 아니라 '실행할 목록'을 검사한다 (not research_agent 버그의 수정판)
-    if not research_indices:
+    1차: monitoring 에이전트(대상 시스템 상태) ∥ runbook 에이전트(질의로 RAG 검색)를 병렬 호출.
+    재검색: replan_check가 요청하면 runbook 에이전트만 수집된 alert까지 넣어 다시 호출.
+    에이전트는 외부 호출 실패를 errors로 돌려주므로, 여기서 예외가 나면 우리 코드의 버그다."""
+    writer = get_stream_writer()
+    tasks = [dict(t) for t in state["tasks"]]
+    collected = list(state.get("collected", []))
+    pending = [t for t in tasks if t["kind"] == "monitoring" and t["status"] == "pending"]
+    runbook_round = state.get("runbook_round")
+
+    calls = {}
+    if pending:
+        calls["monitoring"] = (agents["monitoring"], {"targets": [t["target"] for t in pending]})
+    if runbook_round is not None:
+        # 1차는 모니터링과 동시에 돌기 때문에 질의만, 재검색은 수집된 alert까지 본다
+        calls["runbook"] = (agents["runbook"],
+                            {"query": state["query"],
+                             "collected": collected if runbook_round > 0 else []})
+    if not calls:
         return {"events": state["events"] +
-                [{"type": "ResearchSkipped", "reason": "pending research task 0개"}]}
-
-    retry_total = state.get("retry_count", 0)
-
-    # URI를 코드에 하드코딩하지 않는다. 여러 MCP 서버가 연결돼 있고 그중 어느 서버가
-    # "get_incident_runbook" resource를 제공하는지 모른다고 가정하고, 먼저 연결된
-    # 서버들을 조회(list)해 유효한 서버를 찾은 뒤에만 그 서버로 요청한다.
-    needs_runbook = any(tasks[i]["kind"] != "monitoring" for i in research_indices)
-    template = template_error = None
-    if needs_runbook:
-        try:
-            template, _ = await _mcp(deps.mcp.find_resource_template, "get_incident_runbook")
-        except EXTERNAL as exc:
-            template_error = exc
-
-    async def run_one(idx: int) -> dict:
-        task = tasks[idx]
-        source = "monitoring" if task["kind"] == "monitoring" else "runbook"
-        await asyncio.sleep(0.35)   # 태스크당 고정 지연 — 병렬 효과를 실측하기 위함
-        try:
-            if source == "monitoring":
-                data, retries = await _mcp(deps.mcp.call_tool, "get_monitoring_status",
-                                           {"system_name": task["target"]})
-            else:
-                if template_error is not None:
-                    raise template_error
-                server, uri_template = template
-                data, retries = await _mcp(deps.mcp.read_resource,
-                                           uri_template.format(incident_type=task["target"]),
-                                           server=server)
-        except EXTERNAL as exc:   # 이 task만 실패로 두고 나머지는 계속 진행
-            return {"idx": idx, "source": source, "error": exc}
-        return {"idx": idx, "source": source, "data": data, "retries": retries}
+                [{"type": "ResearchSkipped", "reason": "조사할 시스템 없음"}]}
 
     started = time.perf_counter()
-    results = await asyncio.gather(*(run_one(i) for i in research_indices))
+    outputs = await asyncio.gather(*(_call_agent(name, agent, inputs, writer)
+                                     for name, (agent, inputs) in calls.items()))
     elapsed = round(time.perf_counter() - started, 2)
+    results = dict(zip(calls, outputs))
 
-    new_tasks = [dict(t) for t in tasks]
-    collected = list(state.get("collected", []))
-    update: dict = {"events": list(state["events"])}
-    for r in results:
-        task = new_tasks[r["idx"]]
-        if "error" not in r:
-            task["status"] = "done"
-            collected.append({"source": r["source"], "data": r["data"]})
-            retry_total += r["retries"]
-            update["events"].append({"type": "TaskCompleted", "id": task["id"],
-                                     "source": r["source"], "target": task["target"],
-                                     "retries": r["retries"]})
-            continue
-        task["status"] = "failed"
-        what = (f"{task['target']} 모니터링 상태" if r["source"] == "monitoring"
-                else f"'{task['target']}' 대응 절차(runbook)")
-        collected.append({"source": "notice", "data": f"{what}를 조회하지 못했습니다 (MCP 호출 실패)"})
-        update["events"].append({"type": "TaskFailed", "id": task["id"], "source": r["source"],
-                                 "target": task["target"], "error": error_info(r["error"])})
-        update = _degrade(state, update, "mcp",
-                          f"{what} 조회 실패({describe(r['error'])})", r["error"])
-    update.update({"tasks": new_tasks, "collected": collected, "retry_count": retry_total,
+    update: dict = {"events": list(state["events"]), "runbook_round": None}
+    retry_total = state.get("retry_count", 0)
+    errors: list[dict] = []
+    for name, (_, agent_elapsed) in results.items():
+        update["events"].append({"type": "AgentCompleted", "agent": name, "elapsed": agent_elapsed})
+
+    if "monitoring" in results:
+        by_target = {r["target"]: r for r in results["monitoring"][0]["results"]}
+        for task in pending:   # pending은 tasks 안의 dict를 가리키므로 상태가 그대로 반영된다
+            r = by_target[task["target"]]
+            if "data" in r:
+                task["status"] = "done"
+                collected.append({"source": "monitoring", "data": r["data"]})
+                retry_total += r["retries"]
+                update["events"].append({"type": "TaskCompleted", "id": task["id"],
+                                         "source": "monitoring", "target": task["target"],
+                                         "retries": r["retries"]})
+            else:   # 이 시스템만 실패 — 수치를 지어내지 않도록 "조회하지 못했다"는 사실을 남긴다
+                task["status"] = "failed"
+                what = f"{task['target']} 모니터링 상태"
+                collected.append({"source": "notice",
+                                  "data": f"{what}를 조회하지 못했습니다 (MCP 호출 실패)"})
+                update["events"].append({"type": "TaskFailed", "id": task["id"],
+                                         "source": "monitoring", "target": task["target"],
+                                         "error": r["error"]})
+                errors.append({"stage": "mcp", "reason": f"{what} 조회 실패({r['reason']})",
+                               "error": r["error"]})
+
+    if "runbook" in results:
+        out = results["runbook"][0]
+        errors += out.get("errors", [])
+        detail = out.get("detail", {})
+        update["runbook_detail"] = detail
+        if out.get("runbook"):
+            # 재검색이면 이전 runbook을 새 결과로 바꾼다
+            collected = [c for c in collected if c["source"] != "runbook"]
+            collected.append({"source": "runbook", "data": out["runbook"]})
+            tasks = [t for t in tasks if t["kind"] != "runbook"] + [
+                {"id": "task-runbook", "agent": "research", "kind": "runbook",
+                 "target": out["incident_type"], "status": "done"}]
+            retry_total += out.get("retries", 0)
+            update["events"].append({"type": "TaskCompleted", "id": "task-runbook",
+                                     "source": "runbook", "target": out["incident_type"],
+                                     "retries": out.get("retries", 0),
+                                     "round": runbook_round, **detail})
+
+    update.update({"tasks": tasks, "collected": collected, "retry_count": retry_total,
                    "parallel_elapsed": elapsed})
+    for e in errors:
+        update = _degrade(state, update, e["stage"], e["reason"], e["error"])
     return update
-
-
-# [baseline 규칙] RAG가 없거나(RUNBOOK_CLASSIFIER=keyword) 임베딩이 실패했을 때만 쓰인다.
-# 사용자 질의를 보지 않고 alert 문구만, 목록 순서대로 매칭한다는 한계가 RAG 도입의 이유.
-# 수집된 모니터링 결과(상태·알림 문구)를 보고 어떤 runbook이 맞는지 고른다. LLM에게
-# 다시 묻는 대신 코드 레벨 규칙으로 판단한다 — gate(Wave 6)·replan(Wave 7)과 같은 설계
-# 원칙: 모델의 판단을 그대로 믿지 않고, 실측 데이터로 검증 가능한 결정은 코드가 내린다.
-_INCIDENT_TYPE_RULES = [
-    ("latency", "high-latency"),
-    ("pool", "high-latency"),
-    ("cpu", "cpu-spike"),
-    ("memory", "memory-leak"),
-    ("heap", "memory-leak"),
-    ("timeout", "network-timeout"),
-    ("network", "network-timeout"),
-    ("disk", "disk-full"),
-    ("down", "db-down"),
-]
-
-
-def _classify_incident_type(collected: list[dict]) -> str:
-    text = " ".join(
-        f"{c['data'].get('status', '')} " + " ".join(c["data"].get("alerts", []))
-        for c in collected if c.get("source") == "monitoring"
-    ).lower()
-    for keyword, incident_type in _INCIDENT_TYPE_RULES:
-        if keyword in text:
-            return incident_type
-    return "db-down"   # 매칭되는 증상이 없으면 가장 일반적인 장애 대응 절차로 폴백
 
 
 @traceable(name="replan_check_node")
 async def replan_check_node(state: AgentState, deps: SupervisorDeps) -> dict:
-    """Wave 7 — 1차 수집 결과 평가. runbook이 없으면 gap task만 추가해 재조사.
+    """Wave 7 — 상한형 Replanning(최대 1회). 조사 결과가 충분한지 평가만 한다.
 
-    plan은 monitoring task만 만들기 때문에 1차 조사 뒤에는 거의 항상 runbook이 없다 —
-    즉 runbook 선택은 사실상 이 노드가 전담한다(RAG 적용 지점)."""
-    has_runbook = any(c["source"] == "runbook" for c in state.get("collected", []))
-    has_monitoring = any(c["source"] == "monitoring" for c in state.get("collected", []))
+    baseline은 "runbook이 없으면 재조사"였다 — plan이 monitoring task만 만들어 거의 항상 재조사가
+    일어났다. 지금은 runbook 에이전트가 처음부터 병렬로 찾으므로, 기준을 "runbook 선택에 확신이
+    있는가"로 바꿨다. 불확실하면(1·2위 유사도 차 < RAG_MIN_MARGIN, 또는 runbook을 못 찾음)
+    수집된 alert까지 넣어 runbook 에이전트만 한 번 더 호출한다."""
+    collected = state.get("collected", [])
     rounds = state.get("replan_rounds", 0)
-    # 모니터링 데이터가 없으면(대상이 모니터링 밖이거나 특정 불가·조회 실패) 증상 근거가 없으므로
-    # runbook을 추측하지 않는다 — baseline은 이때 db-down으로 폴백해 엉뚱한 절차를 안내했다
-    if has_runbook or rounds >= 1 or not has_monitoring:
+    has_monitoring = any(c["source"] == "monitoring" for c in collected)
+    has_runbook = any(c["source"] == "runbook" for c in collected)
+    detail = state.get("runbook_detail") or {}
+    margin = detail.get("margin")
+    uncertain = detail.get("classifier") == "rag" and margin is not None and margin < RAG_MIN_MARGIN
+    # 모니터링 데이터가 없으면 증상 근거가 없으므로 runbook을 다시 찾지 않는다
+    if rounds >= 1 or not has_monitoring or (has_runbook and not uncertain):
         verdict = {"type": "ReplanCheck", "round": rounds, "is_sufficient": True}
         return {"events": state["events"] + [verdict]}
-    collected = state.get("collected", [])
-    incident_type, detail, update = None, {"classifier": "keyword"}, {}
-    if deps.retriever is not None:   # RAG — 질의 + 수집된 alert의 임베딩 유사도로 runbook 선택
-        try:
-            found = await asyncio.to_thread(deps.retriever.classify, state["query"], collected)
-            incident_type = found["incident_type"]
-            # 유사도·1·2위 차이를 이벤트에 남겨 웹 UI·평가에서 판단 근거를 볼 수 있게 한다
-            detail = {"classifier": "rag", **{k: found[k] for k in
-                                              ("score", "margin", "ranking", "embed_tokens")}}
-        except EXTERNAL as exc:      # 임베딩 실패 시 baseline 키워드 규칙으로 폴백
-            update = _degrade(state, {}, "rag", f"임베딩 실패({describe(exc)}) → 키워드 규칙", exc)
-    if incident_type is None:
-        incident_type = _classify_incident_type(collected)
-    gap_task = {"id": "task-gap-runbook", "agent": "research", "kind": "runbook",
-                "target": incident_type, "status": "pending"}
+    reason = (f"runbook 선택 불확실(1·2위 차 {margin:.3f})" if has_runbook
+              else "runbook을 찾지 못함")
     verdict = {"type": "ReplanCheck", "round": rounds, "is_sufficient": False,
-               "gap_task": gap_task["id"], "target": incident_type, **detail}
-    # update는 RAG 실패 시의 Degraded 기록(events·degraded)이다 — 있으면 그 events 뒤에 verdict
-    return {**update, "tasks": state["tasks"] + [gap_task], "replan_rounds": rounds + 1,
-            "events": update.get("events", state["events"]) + [verdict]}
+               "reason": reason + " → 모니터링 alert를 더해 재검색"}
+    return {"runbook_round": rounds + 1, "replan_rounds": rounds + 1,
+            "events": state["events"] + [verdict]}
 
 
 @traceable(name="analysis_node")
-async def analysis_node(state: AgentState, deps: SupervisorDeps) -> dict:
-    """Wave 6 보완 — needs_analysis=True가 정당한 경우(모델의 자기모순이 아니라
-    실제로 패턴 비교가 필요하다고 판단한 경우)를 위한 실행 경로. gate가 살려둔
-    agent=='analysis' task가 있을 때만 수집된 monitoring 결과들을 비교 분석한다."""
+async def analysis_node(state: AgentState, deps: SupervisorDeps, agents: dict) -> dict:
+    """gate가 남겨 둔 analysis task가 있을 때만 분석 에이전트를 호출한다 (복잡한 질문)."""
     tasks = state["tasks"]
-    pending = [t for t in tasks if t["agent"] == "analysis" and t["status"] == "pending"]
-    if not pending:
+    if not any(t["agent"] == "analysis" and t["status"] == "pending" for t in tasks):
         return {"events": state["events"] +
-                [{"type": "AnalysisSkipped", "reason": "analysis task 0개"}]}
-    new_tasks = [{**t, "status": "done"} if t["agent"] == "analysis" else dict(t) for t in tasks]
-    if not any(c["source"] == "monitoring" for c in state.get("collected", [])):
-        # 비교할 모니터링 데이터가 없으면 분석하지 않는다 ("특이 패턴 없음"이 답변에 섞이던 문제)
+                [{"type": "AnalysisSkipped", "reason": "단순 질문 — 비교 분석 불필요"}]}
+    new_tasks = [{**t, "status": "done"} if t["agent"] == "analysis" else t for t in tasks]
+    collected = state.get("collected", [])
+    if sum(1 for c in collected if c["source"] == "monitoring") < 2:
+        # 조회에 실패해 비교할 시스템이 2개 미만이면 분석하지 않는다
         return {"tasks": new_tasks, "events": state["events"] +
-                [{"type": "AnalysisSkipped", "reason": "모니터링 데이터 없음"}]}
-    try:
-        summary, usage = await asyncio.to_thread(deps.fast_llm.analyze, state.get("collected", []))
-    except EXTERNAL as exc:   # 비교 분석은 부가 단계 — 건너뛰고 수집된 사실로 답변을 쓴다
-        update = {"tasks": new_tasks, "events": state["events"] +
-                  [{"type": "AnalysisSkipped", "reason": "LLM 호출 실패"}]}
-        return _degrade(state, update, "analyze", f"LLM 호출 실패({describe(exc)}) → 분석 생략", exc)
-    collected = state.get("collected", []) + [{"source": "analysis", "data": summary}]
-    event = {"type": "AnalysisCompleted", "length": len(summary)}
-    return {"tasks": new_tasks, "collected": collected,
-            "cost_usd": _cost(state, usage), "events": state["events"] + [event]}
+                [{"type": "AnalysisSkipped", "reason": "비교할 모니터링 데이터 부족"}]}
+    out, elapsed = await _call_agent("analysis", agents["analysis"], {"collected": collected},
+                                     get_stream_writer())
+    events = state["events"] + [{"type": "AgentCompleted", "agent": "analysis", "elapsed": elapsed}]
+    update = {"tasks": new_tasks, "cost_usd": _cost(state, out["usage"]), "events": events}
+    if out.get("summary") is None:
+        update["events"] = events + [{"type": "AnalysisSkipped", "reason": "LLM 호출 실패"}]
+        for e in out.get("errors", []):
+            update = _degrade(state, update, e["stage"], e["reason"], e["error"])
+        return update
+    update["collected"] = collected + [{"source": "analysis", "data": out["summary"]}]
+    update["events"] = events + [{"type": "AnalysisCompleted", "length": len(out["summary"])}]
+    return update
 
 
 @traceable(name="write_node")
 async def write_node(state: AgentState, deps: SupervisorDeps) -> dict:
-    """Wave 8/10a — 고품질 모델로 초안 작성 (1차는 의도적 저품질).
+    """Wave 8/10a — 고품질 모델로 초안 작성.
 
     토큰마다 attempt 번호를 같이 실어 보낸다 — validate가 반려해 재작성(attempt 증가)
     될 때 프론트가 새 말풍선으로 끊어서 보여줄 수 있게 하기 위함(Wave 8 재작성 루프를
@@ -399,7 +375,8 @@ async def write_node(state: AgentState, deps: SupervisorDeps) -> dict:
     if error is None:
         return update
     return _degrade(state, update, "write",
-                    f"LLM 호출 실패({describe(error)}) → 수집된 사실로 템플릿 답변", error)
+                    f"LLM 호출 실패({describe(error)}) → 수집된 사실로 템플릿 답변",
+                    error_info(error))
 
 
 @traceable(name="validate_node")
@@ -439,15 +416,16 @@ def _after_validate(state: AgentState) -> str:
 
 
 def build_graph(deps: SupervisorDeps):
+    agents = build_agents(deps)   # 서브에이전트(compiled subgraph)는 그래프와 함께 1회만 만든다
     g = StateGraph(AgentState)
     node = lambda fn: partial(fn, deps=deps)   # Wave 13 — 명시적 의존성 주입
     g.add_node("route", node(route_node))
     g.add_node("chat_answer", node(chat_answer_node))
     g.add_node("plan", node(plan_node))
     g.add_node("gate", node(gate_node))
-    g.add_node("research", node(research_node))
+    g.add_node("research", partial(research_node, deps=deps, agents=agents))
     g.add_node("replan_check", node(replan_check_node))
-    g.add_node("analysis", node(analysis_node))
+    g.add_node("analysis", partial(analysis_node, deps=deps, agents=agents))
     g.add_node("write", node(write_node))
     g.add_node("validate", node(validate_node))
     g.add_node("finalize", node(finalize_node))

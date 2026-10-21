@@ -126,8 +126,10 @@ def _score(item: dict, result: dict | None) -> dict:
     events = result.get("events", [])
     monitored = list(dict.fromkeys(e["target"] for e in events
                                    if e.get("type") == "TaskCompleted" and e.get("source") == "monitoring"))
-    runbooks = list(dict.fromkeys(e["target"] for e in events
-                                  if e.get("type") == "TaskCompleted" and e.get("source") == "runbook"))
+    # 답변에 쓰인 runbook = 마지막으로 고른 것. 재검색으로 바뀐 경우 1차 선택은 채점하지 않는다
+    # (Before 코드는 runbook을 한 번만 고르므로 점수가 달라지지 않는다)
+    runbooks = [e["target"] for e in events
+                if e.get("type") == "TaskCompleted" and e.get("source") == "runbook"][-1:]
     s = {"route": result.get("route"), "monitored": monitored, "runbooks": runbooks,
          "route_ok": result.get("route") == item["expect_route"]}
     if item.get("expect_targets") is not None:
@@ -302,11 +304,17 @@ async def main() -> None:
                    "tokens": sum(c["tokens"] for c in CALLS), "llm_detail": list(CALLS),
                    **_score(item, result)}
             if result is not None:
-                replan = next((e for e in result.get("events", [])
-                               if e.get("type") == "ReplanCheck" and not e.get("is_sufficient")), {})
-                run.update({"classifier": replan.get("classifier", "keyword" if replan else None),
-                            "rag_score": replan.get("score"), "rag_margin": replan.get("margin"),
-                            "embed_tokens": replan.get("embed_tokens", 0),
+                events = result.get("events", [])
+                # runbook 선택 근거 — Multi-Agent 구조는 runbook 에이전트의 TaskCompleted에,
+                # Before 코드는 재조사를 결정한 ReplanCheck 이벤트에 담겨 있다
+                picks = [e for e in events if (e.get("type") == "TaskCompleted"
+                                               and e.get("source") == "runbook" and "classifier" in e)
+                         or (e.get("type") == "ReplanCheck" and not e.get("is_sufficient")
+                             and "target" in e)]
+                pick = picks[-1] if picks else {}
+                run.update({"classifier": pick.get("classifier", "keyword" if pick else None),
+                            "rag_score": pick.get("score"), "rag_margin": pick.get("margin"),
+                            "embed_tokens": sum(e.get("embed_tokens", 0) for e in picks),
                             "degraded": len(result.get("degraded", [])),   # Before 코드에는 키가 없어 0
                             "degraded_stages": [d["stage"] for d in result.get("degraded", [])],
                             "retry_count": result.get("retry_count", 0),
