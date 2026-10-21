@@ -233,6 +233,7 @@ all_total_vue/
 │   ├── run_agent_ollma.sh       # 에이전트만 기동 — 로컬 실모델
 │   ├── run_agent_openai.sh      # 에이전트만 기동 — OpenAI API (과금)
 │   ├── run_frontend.sh          # 브라우저 채팅 화면(web_demo_server.py) 기동
+│   └── make_student_zip.sh      # .env 제외 + .env.example 포함한 학생 배포용 zip 생성
 │
 ├── doc/                       # 문서
 │   ├── README.md                # 이 문서
