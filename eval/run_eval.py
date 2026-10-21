@@ -96,8 +96,11 @@ except ImportError:
     def tag_request_run(result: dict) -> None:
         pass
 
-try:   # 요청 전체 deadline도 server.py와 똑같이 건다 (Before 코드에는 없음)
-    from agent.resilience import request_deadline
+try:   # 요청 전체 시간 상한도 server.py와 똑같이 건다 (Before 코드에는 없음)
+    from agent.errors import REQUEST_TIMEOUT
+
+    def request_deadline():
+        return asyncio.timeout(REQUEST_TIMEOUT)
 except ImportError:
     from contextlib import nullcontext as request_deadline
 
@@ -107,7 +110,7 @@ async def _run_turn(graph, store, query: str, thread_id: str) -> dict:
     """server.py의 _handle_chat과 같은 순서: 이력 로드 → 그래프 실행 → 이력 저장.
     루트 run 이름도 chat_request로 맞춰 LangSmith에서 서버 요청과 같은 모양으로 보인다."""
     history = store.load(thread_id)
-    with request_deadline():
+    async with request_deadline():
         result = await graph.ainvoke({"query": query, "thread_id": thread_id, "history": history,
                                       "events": [], "cost_usd": 0.0})
     store.append(thread_id, "user", query)
@@ -271,10 +274,6 @@ async def main() -> None:
             chaos.wrap_mcp(mcp, args.chaos_mcp_rate)
         print(f"[eval] 장애 주입 설치: {args.chaos_rates} mcp={args.chaos_mcp_rate} seed={args.chaos_seed}")
 
-    try:   # After 코드에만 있다
-        from agent.resilience import reset_breakers
-    except ImportError:
-        reset_breakers = None
     tag = datetime.now().strftime("%H%M%S")
     runs: list[dict] = []
     for rep in range(1, args.repeat + 1):
@@ -286,10 +285,6 @@ async def main() -> None:
                 for setup in item.get("setup", []):   # 다턴 시나리오의 앞선 턴 (측정 제외)
                     await _run_turn(graph, store, setup, thread_id)
                 CALLS.clear()
-                if reset_breakers is not None:
-                    # 장애 주입은 호출마다 독립적으로 걸린다 — 앞 쿼리의 연속 실패로 열린 서킷이
-                    # 다음 쿼리로 이어지면 쿼리별 비교가 흐려지므로 쿼리마다 초기화한다
-                    reset_breakers()
                 if args.mode == "chaos":
                     chaos.begin(item["id"], rep)
                 started = time.perf_counter()

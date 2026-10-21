@@ -3,7 +3,6 @@
 실제 LLM·MCP 서버 없이, 노드 코드는 그대로 둔 채 deps만 갈아 끼운다 (Wave 13).
 """
 import asyncio
-import time
 
 import httpx
 import pytest
@@ -12,8 +11,6 @@ from agent.deps import SupervisorDeps
 from agent.fake_llm import FastLLM, QualityLLM
 from agent.fallback import CHAT_FALLBACK, DEFAULT_PROCEDURE, DEGRADED_NOTICE
 from agent.graph import build_graph
-from agent import resilience as R
-from agent.resilience import ExternalCallError
 
 
 class FakeMCP:
@@ -37,12 +34,11 @@ class FakeMCP:
 
 
 class DeadLLM:
-    """모든 호출이 실패하는 LLM — resilience가 재시도·예산을 다 쓰고 포기한 뒤의 상황."""
+    """모든 호출이 실패하는 LLM — 재시도까지 다 실패하고 timeout 예외가 올라온 상황."""
     name = "dead-llm"
 
     def _fail(self, *args, **kwargs):
-        raise ExternalCallError({"stage": "llm", "kind": "timeout", "retryable": True,
-                                 "attempts": 3, "elapsed_s": 30.0, "message": "simulated outage"})
+        raise httpx.ReadTimeout("simulated outage", request=httpx.Request("POST", "http://llm"))
 
     route = plan = analyze = _fail
 
@@ -54,7 +50,7 @@ class DeadLLM:
 
 
 class DownMCP(FakeMCP):
-    """MCP 서버가 응답하지 않는다 — 모든 호출이 연결 실패 (resilience가 재시도 후 포기)."""
+    """MCP 서버가 응답하지 않는다 — 모든 호출이 연결 실패 (재시도 후 포기)."""
 
     async def find_prompt(self, name):
         raise ConnectionError("MCP 세션 없음")
@@ -119,8 +115,7 @@ def test_plan_targets_are_corrected_to_the_query():
 def test_degraded_events_carry_structured_errors():
     result = _run(DeadLLM(), DeadLLM(), "payments-service CPU가 급증했어요")
     first = result["degraded"][0]
-    assert first["error"]["kind"] == "timeout" and first["error"]["retryable"] is True
-    assert first["error"]["attempts"] == 3
+    assert first["error"]["kind"] == "ReadTimeout" and first["error"]["retryable"] is True
 
 
 def test_mcp_outage_does_not_take_down_the_request():
@@ -129,7 +124,7 @@ def test_mcp_outage_does_not_take_down_the_request():
                   "payments-service CPU가 급증했어요", mcp=DownMCP())
     stages = [d["stage"] for d in result["degraded"]]
     assert stages.count("mcp") == 2                  # prompt 조회 + monitoring 조회
-    assert result["degraded"][0]["error"]["kind"] == "connection"
+    assert result["degraded"][0]["error"]["kind"] == "ConnectionError"
     failed = [e for e in result["events"] if e["type"] == "TaskFailed"]
     assert [e["target"] for e in failed] == ["payments-service"]
     assert "payments-service 모니터링 상태를 조회하지 못했습니다" in result["final"]
@@ -154,42 +149,23 @@ def test_bugs_are_not_hidden_behind_fallbacks():
         _run(BuggyLLM(), DeadLLM(), "payments-service CPU가 급증했어요")
 
 
-class HangingLLM:
-    """응답하지 않는 LLM — 실제 어댑터처럼 resilience(call_sync)를 거쳐 단계 예산만큼 기다린다."""
-    name = "hanging-llm"
+class FlakyMCP(FakeMCP):
+    """모니터링 조회가 처음 한 번만 응답하지 않는다 — 재시도로 복구돼야 한다."""
 
-    @staticmethod
-    def _hang(stage):
-        def attempt(timeout):
-            time.sleep(timeout)
-            raise httpx.ReadTimeout("no response", request=httpx.Request("POST", "http://llm"))
-        return R.call_sync(stage, attempt)
+    def __init__(self):
+        self.calls = 0
 
-    def route(self, *args, **kwargs):
-        return self._hang("route")
-
-    def plan(self, *args, **kwargs):
-        return self._hang("plan")
-
-    async def write(self, *args, **kwargs):
-        return await asyncio.to_thread(self._hang, "write")
+    async def call_tool(self, name, arguments, server="ops"):
+        self.calls += 1
+        if self.calls == 1:
+            raise asyncio.TimeoutError("first call hangs")
+        return await super().call_tool(name, arguments, server)
 
 
-def test_request_deadline_bounds_the_whole_graph():
-    """단계 예산 합(route 30 + plan 45 + write 90초)과 무관하게 요청 deadline 안에 끝난다."""
-    deps = SupervisorDeps(fast_llm=HangingLLM(), quality_llm=HangingLLM(), mcp=FakeMCP(),
-                          session_store=None, version="v2")
-
-    async def scenario():
-        with R.request_deadline(1.0):
-            return await build_graph(deps).ainvoke(
-                {"query": "payments-service CPU가 급증했어요", "thread_id": "t", "history": [],
-                 "events": [], "cost_usd": 0.0})
-
-    started = time.monotonic()
-    result = asyncio.run(scenario())
-    assert time.monotonic() - started < 2.5
-    errors = [(d["stage"], d["error"]["kind"]) for d in result["degraded"]]
-    assert errors[0] == ("route", "timeout")            # route가 deadline 1초를 다 썼다
-    assert ("mcp", "deadline") in errors                 # 이후 단계는 MCP까지 호출 없이 바로 폴백
-    assert "조회하지 못했습니다" in result["final"]       # 수치를 지어내지 않고 안내로 끝난다
+def test_transient_mcp_failure_is_retried():
+    mcp = FlakyMCP()
+    result = _run(FastLLM("fake", 0.0), QualityLLM("fake", 0.0),
+                  "payments-service CPU가 급증했어요", mcp=mcp)
+    assert mcp.calls == 2 and not result.get("degraded")
+    done = [e for e in result["events"] if e["type"] == "TaskCompleted" and e["source"] == "monitoring"]
+    assert done[0]["retries"] == 1

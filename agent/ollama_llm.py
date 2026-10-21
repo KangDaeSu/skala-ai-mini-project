@@ -15,9 +15,9 @@ import json
 import httpx
 from langsmith import traceable
 
+from .errors import MAX_TOKENS, TIMEOUTS, retry_sync
 from .fallback import rule_route
 from .systems import KNOWN_SYSTEMS
-from .resilience import PermanentError, call_async, call_sync, max_tokens, request_time_left
 
 OLLAMA_URL = "http://127.0.0.1:11434/api/chat"
 
@@ -68,23 +68,23 @@ class OllamaLLM:
                          {"role": "user", "content": user}],
             "stream": stream,
             "think": False,
-            "options": {"temperature": 0.0, "num_predict": max_tokens(json_output)},
+            "options": {"temperature": 0.0,
+                        "num_predict": MAX_TOKENS["json" if json_output else "text"]},
         }
 
     def _chat(self, system: str, user: str, schema: dict | None = None,
               stage: str = "chat") -> tuple[str, dict]:
-        # stage: resilience 정책 이름(route/plan/analyze/chat/write) — 단계별 타임아웃·예산이 다르다
+        # stage: route/plan/analyze/chat/write — 단계마다 timeout이 다르다 (errors.TIMEOUTS)
         payload = self._payload(system, user, stream=False, json_output=schema is not None)
         if schema is not None:
             payload["format"] = schema
 
-        def attempt(timeout: float) -> dict:   # HTTP 요청 1회 — 재시도 여부는 resilience가 판단
-            resp = httpx.post(OLLAMA_URL, json=payload, timeout=timeout)
+        def attempt() -> dict:   # HTTP 요청 1회 (baseline: timeout 300초 1회, 재시도 없음)
+            resp = httpx.post(OLLAMA_URL, json=payload, timeout=TIMEOUTS[stage])
             resp.raise_for_status()
             return resp.json()
 
-        # 단계별 타임아웃·재시도·시간 예산은 resilience가 맡는다 (baseline: timeout 300초 1회)
-        data, retries = call_sync(stage, attempt)
+        data, retries = retry_sync(attempt)   # 일시 오류만 재시도
         content = data["message"]["content"]
         tokens = (data.get("prompt_eval_count") or 0) + (data.get("eval_count") or 0)
         usage = {"model": self.name, "tokens": tokens, "retries": retries,
@@ -96,44 +96,32 @@ class OllamaLLM:
         """사용자 대면 텍스트(최종 답변류) 전용 — Ollama NDJSON 스트림을 토큰 단위로
         받아 on_token(조각)을 즉시 호출해 SSE로 실시간 중계할 수 있게 한다. 분류/계획
         등 JSON 스키마 출력(route/plan/analyze)은 부분 출력이 의미가 없어 그대로 _chat을
-        쓴다."""
+        쓴다.
+
+        스트리밍은 재시도하지 않는다 — 이미 화면에 나간 토큰이 있으면 답변이 중복되기 때문이다.
+        실패하면 예외를 그대로 올려 write/chat 노드가 폴백한다."""
         payload = self._payload(system, user, stream=True, json_output=False)
-
-        async def attempt(timeout: float) -> tuple[str, dict]:
-            chunks: list[str] = []
-            usage = {"model": self.name, "tokens": 0, "usd": 0.0}
-            try:
-                async with httpx.AsyncClient(timeout=timeout) as client:
-                    async with client.stream("POST", OLLAMA_URL, json=payload) as resp:
-                        resp.raise_for_status()
-                        async for line in resp.aiter_lines():
-                            left = request_time_left()
-                            if left is not None and left <= 0:   # 느린 스트리밍도 요청 deadline에서 끊는다
-                                raise TimeoutError("요청 deadline 초과 — 스트리밍 중단")
-                            if not line:
-                                continue
-                            data = json.loads(line)
-                            piece = data.get("message", {}).get("content", "")
-                            if piece:
-                                chunks.append(piece)
-                                if on_token is not None:
-                                    on_token(piece)
-                            if data.get("done"):
-                                tokens = ((data.get("prompt_eval_count") or 0)
-                                          + (data.get("eval_count") or 0))
-                                usage = {"model": self.name, "tokens": tokens,
-                                         "usd": round(tokens / 1000 * self.usd_per_1k, 6)}
-            except Exception as exc:
-                # 이미 사용자에게 흘려보낸 토큰이 있으면 재시도하면 답변이 중복된다
-                if chunks:
-                    raise PermanentError(f"스트리밍 도중 실패: {exc!r}") from exc
-                raise
-            return "".join(chunks), usage
-
-        (text, usage), retries = await call_async(stage, attempt)
-        usage["retries"] = retries
+        chunks: list[str] = []
+        usage = {"model": self.name, "tokens": 0, "usd": 0.0, "retries": 0}
+        async with httpx.AsyncClient(timeout=TIMEOUTS[stage]) as client:
+            async with client.stream("POST", OLLAMA_URL, json=payload) as resp:
+                resp.raise_for_status()
+                async for line in resp.aiter_lines():
+                    if not line:
+                        continue
+                    data = json.loads(line)
+                    piece = data.get("message", {}).get("content", "")
+                    if piece:
+                        chunks.append(piece)
+                        if on_token is not None:
+                            on_token(piece)
+                    if data.get("done"):
+                        tokens = ((data.get("prompt_eval_count") or 0)
+                                  + (data.get("eval_count") or 0))
+                        usage.update(tokens=tokens,
+                                     usd=round(tokens / 1000 * self.usd_per_1k, 6))
         usage["prompt"] = f"[SYSTEM]\n{system}\n\n[USER]\n{user}"
-        return text, usage
+        return "".join(chunks), usage
 
 
 class OllamaFastLLM(OllamaLLM):

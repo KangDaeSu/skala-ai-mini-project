@@ -1,6 +1,6 @@
 """LLM 실패 시 대체 동작(graceful degradation).
 
-resilience가 재시도·시간 예산을 다 쓰고도 실패하면 baseline은 예외가 그래프 밖으로 터져
+외부 호출이 재시도(errors.py)까지 실패하면 baseline은 예외가 그래프 밖으로 터져
 HTTP 500이 됐다. 여기서는 단계별로 LLM 없이도 할 수 있는 최소한의 동작을 정의한다 —
 서버는 죽지 않고, 사용자는 "축소된 답변"이라는 표시와 함께 수집된 사실을 받는다.
 
@@ -28,13 +28,8 @@ def rule_route(query: str, known_systems: set[str]) -> dict:
     return {"route": "incident" if incident else "chat", "needs_analysis": False}
 
 
-def describe(error: dict) -> str:
-    """resilience가 만든 구조화된 error → 사람이 읽는 한 줄 (예: "timeout, 3회 시도, 30.1초")."""
-    return f"{error['kind']}, {error['attempts']}회 시도, {error['elapsed_s']}초"
-
-
 def degraded_event(stage: str, reason: str, error: dict | None = None) -> dict:
-    """폴백 기록 1건 — error에는 실패 종류·재시도 가능 여부·시도 횟수가 구조화돼 남는다."""
+    """폴백 기록 1건 — error에는 실패 종류와 재시도 가능 여부가 남는다 (errors.error_info)."""
     return {"type": "Degraded", "stage": stage, "reason": reason, "error": error}
 
 

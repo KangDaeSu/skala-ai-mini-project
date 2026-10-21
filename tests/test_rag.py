@@ -10,7 +10,7 @@ from agent.deps import SupervisorDeps
 from agent.fake_llm import FastLLM, QualityLLM
 from agent.graph import build_graph
 from agent.rag import RunbookRetriever, split_runbook
-from agent.resilience import call_sync
+from agent.errors import retry_sync
 from tests.test_graph_fallback import FakeMCP
 
 VOCAB = ["cpu", "메모리", "누수", "디스크", "타임아웃", "504", "지연", "느림", "db", "리플리케이션"]
@@ -25,13 +25,13 @@ class WordEmbedder:
 
 
 class BrokenEmbedder:
-    """임베딩 서버가 죽었다 — 실제 어댑터처럼 resilience(call_sync)를 거쳐 실패한다."""
+    """임베딩 서버가 죽었다 — 실제 어댑터처럼 재시도(retry_sync)를 거쳐 실패한다."""
     name = "fake:broken"
 
     def embed(self, texts, kind):
-        def down(timeout):
+        def down():
             raise httpx.ConnectError("embedding server down", request=httpx.Request("POST", "http://e"))
-        return call_sync("embed", down)
+        return retry_sync(down)
 
 
 def _retriever():
@@ -85,5 +85,5 @@ def test_graph_falls_back_to_keyword_rules_when_embedding_fails():
     replan = next(e for e in result["events"] if e["type"] == "ReplanCheck" and not e["is_sufficient"])
     assert replan["classifier"] == "keyword"
     assert [d["stage"] for d in result["degraded"]] == ["rag"]
-    assert result["degraded"][0]["error"]["kind"] == "connection"
+    assert result["degraded"][0]["error"]["kind"] == "ConnectError"
     assert result["final"]

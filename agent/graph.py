@@ -8,11 +8,11 @@ incident: plan(MCP Prompt 절차 반영) → gate(권위 게이트) → research
 모든 노드는 SupervisorDeps를 functools.partial로 주입받는 순수 함수다(Wave 13).
 각 노드는 @traceable로 LangSmith에 계층 트리로 기록된다.
 
-신뢰성 개선에서 바뀐 점 (그래프 구조·엣지는 그대로, 노드 내부만 변경):
-- 외부 호출(LLM·MCP·임베딩)은 전부 resilience.guard()로 감싸 CallResult(ok, value, error)로
-  받는다. ok=False면 fallback.py의 대체 동작으로 계속 진행하고 _degrade()로 구조화된 error를 기록
-  (baseline: 예외가 그래프 밖으로 터져 HTTP 500). guard는 외부 호출 실패만 잡고 버그는 그대로 둔다
-- MCP 호출(prompt·monitoring·runbook)에도 타임아웃·재시도·서킷 브레이커 적용, 실패 시 기본 절차·
+개선에서 바뀐 점:
+- 외부 호출(LLM·MCP·임베딩)은 timeout + 일시 오류 재시도(errors.py)를 거친다. 그래도 실패하면
+  노드가 try/except EXTERNAL로 잡아 fallback.py의 대체 동작으로 계속 진행하고 _degrade()로 기록
+  (baseline: 예외가 그래프 밖으로 터져 HTTP 500). EXTERNAL 밖의 예외(버그)는 잡지 않는다
+- MCP 호출(prompt·monitoring·runbook)에도 timeout·재시도 적용, 실패 시 기본 절차·
   "조회하지 못했다" 안내로 진행
 - plan: 모델이 고른 조사 대상을 systems.resolve_targets로 쿼리 기준 보정
 - replan_check: runbook을 키워드 규칙 대신 RAG(rag.py)로 선택, 실패 시 키워드 규칙
@@ -28,9 +28,9 @@ from langgraph.graph import END, StateGraph
 from langsmith import traceable
 
 from .deps import SupervisorDeps
-from .fallback import (CHAT_FALLBACK, DEFAULT_PROCEDURE, degraded_event, describe, rule_route,
+from .errors import EXTERNAL, TIMEOUTS, describe, error_info, retry_async
+from .fallback import (CHAT_FALLBACK, DEFAULT_PROCEDURE, degraded_event, rule_route,
                        tag_current_run, template_answer)
-from .resilience import CallResult, call_async, guard
 from .systems import KNOWN_SYSTEMS, no_data_answer, notices_for, prompt_label, resolve_targets
 
 
@@ -61,24 +61,23 @@ def _cost(state: AgentState, usage: dict) -> float:
 
 
 def _degrade(state: AgentState, update: dict, stage: str, reason: str,
-             error: dict | None = None) -> dict:
+             exc: BaseException | None = None) -> dict:
     """폴백 기록 — Degraded 이벤트를 붙이고 degraded 목록에 누적, LangSmith 노드 run에 태그.
 
     update는 노드가 돌려줄 상태 델타다. events·degraded는 노드가 이미 새 목록을 만들었으면
     (같은 노드에서 두 번 폴백한 경우 등) 그 뒤에, 아니면 기존 state 뒤에 붙인다. degraded 목록은
     /chat metadata의 degraded_count와 평가 스크립트의 degraded_runs 지표가 된다."""
     tag_current_run(stage, reason)
-    event = degraded_event(stage, reason, error)
+    event = degraded_event(stage, reason, error_info(exc) if exc else None)
     update["events"] = update.get("events", state.get("events", [])) + [event]
     update["degraded"] = update.get("degraded", state.get("degraded", [])) + [event]
     return update
 
 
-async def _mcp(fn, *args, **kwargs) -> CallResult:
-    """MCP 호출 경계 — 시도마다 asyncio.wait_for로 타임아웃을 걸고 resilience 정책("mcp")으로
-    재시도한다. 결과는 CallResult(ok, value=(결과, 재시도 횟수), error)."""
-    return await guard(call_async, "mcp",
-                       lambda timeout: asyncio.wait_for(fn(*args, **kwargs), timeout))
+async def _mcp(fn, *args, **kwargs):
+    """MCP 호출 — 시도마다 10초 timeout(baseline: timeout 없음), 일시 오류는 재시도.
+    (결과, 재시도 횟수)를 돌려주고, 끝내 실패하면 예외를 그대로 올린다."""
+    return await retry_async(lambda: asyncio.wait_for(fn(*args, **kwargs), TIMEOUTS["mcp"]))
 
 
 def _rule_plan(query: str) -> dict:
@@ -97,15 +96,15 @@ def _research_tasks(targets: list[str]) -> list[dict]:
 async def route_node(state: AgentState, deps: SupervisorDeps) -> dict:
     """Wave 5 — 모든 쿼리가 무거운 파이프라인을 탈 필요는 없다.
 
-    LLM 호출이 실패하면(resilience의 재시도·예산을 다 쓴 뒤) 정규식 규칙으로 분류한다."""
-    called = await guard(deps.fast_llm.route, state["query"])
+    LLM 호출이 재시도까지 실패하면 정규식 규칙으로 분류한다."""
     error = None
-    if called.ok:
-        result, usage = called.value
+    try:
+        # 동기 HTTP 호출이라 스레드에서 돌려 이벤트 루프(다른 요청)를 막지 않는다
+        result, usage = await asyncio.to_thread(deps.fast_llm.route, state["query"])
         reason = result.get("fallback")   # 어댑터 안에서 JSON 파싱 실패로 폴백한 경우
-    else:
-        result, usage, error = rule_route(state["query"], KNOWN_SYSTEMS), {"usd": 0.0}, called.error
-        reason = f"LLM 호출 실패({describe(error)}) → 규칙 기반 분류"
+    except EXTERNAL as exc:
+        result, usage, error = rule_route(state["query"], KNOWN_SYSTEMS), {"usd": 0.0}, exc
+        reason = f"LLM 호출 실패({describe(exc)}) → 규칙 기반 분류"
     event = {"type": "RouteDecided", "route": result["route"]}
     update = {"route": result["route"], "needs_analysis": result["needs_analysis"],
               "cost_usd": _cost(state, usage),
@@ -121,16 +120,20 @@ async def chat_answer_node(state: AgentState, deps: SupervisorDeps) -> dict:
     때만 실제로 전송되고, /chat(ainvoke)처럼 스트리밍하지 않는 호출에서는 자동으로
     no-op이 된다."""
     writer = get_stream_writer()
-    called = await guard(deps.fast_llm.chat, state["query"], state.get("history", []),
-                         on_token=lambda piece: writer({"type": "AnswerToken", "delta": piece}))
-    reply, usage = called.value if called.ok else (CHAT_FALLBACK, {"usd": 0.0})
+    error = None
+    try:
+        reply, usage = await deps.fast_llm.chat(
+            state["query"], state.get("history", []),
+            on_token=lambda piece: writer({"type": "AnswerToken", "delta": piece}))
+    except EXTERNAL as exc:
+        reply, usage, error = CHAT_FALLBACK, {"usd": 0.0}, exc
     update = {"final": reply, "last_prompt": usage.get("prompt"),
               "cost_usd": _cost(state, usage),
               "events": state["events"] + [{"type": "Finalize", "pipeline": "chat-direct"}]}
-    if called.ok:
+    if error is None:
         return update
     return _degrade(state, update, "chat",
-                    f"LLM 호출 실패({describe(called.error)}) → 안내 문구로 대체", called.error)
+                    f"LLM 호출 실패({describe(error)}) → 안내 문구로 대체", error)
 
 
 @traceable(name="plan_node")
@@ -141,29 +144,27 @@ async def plan_node(state: AgentState, deps: SupervisorDeps) -> dict:
     find_prompt()로 연결된 서버들을 먼저 조회해 찾은 뒤에만 get_prompt를 보낸다.
     MCP가 실패하면 같은 내용의 기본 절차(DEFAULT_PROCEDURE)로 계획한다."""
     update: dict = {}
-    found = await _mcp(deps.mcp.find_prompt, "incident_analysis_prompt")
-    # system_name은 증상 문장과 모순되지 않는 이름만 넣는다(모르면 "미확인").
-    # baseline은 billing-service 질의에 "시스템: auth-service"를 넣어 추론 모델이 thinking
-    # 루프에 빠졌다(302초 후 HTTP 500의 직접 원인).
-    prompt = await _mcp(deps.mcp.get_prompt, "incident_analysis_prompt",
-                        {"system_name": prompt_label(state["query"]), "symptom": state["query"]},
-                        server=found.value[0]) if found.ok else found
-    if prompt.ok:
-        procedure = prompt.value[0]
-    else:
+    try:
+        server, _ = await _mcp(deps.mcp.find_prompt, "incident_analysis_prompt")
+        # system_name은 증상 문장과 모순되지 않는 이름만 넣는다(모르면 "미확인").
+        # baseline은 billing-service 질의에 "시스템: auth-service"를 넣어 추론 모델이 thinking
+        # 루프에 빠졌다(302초 후 HTTP 500의 직접 원인).
+        procedure, _ = await _mcp(
+            deps.mcp.get_prompt, "incident_analysis_prompt",
+            {"system_name": prompt_label(state["query"]), "symptom": state["query"]},
+            server=server)
+    except EXTERNAL as exc:
         procedure = DEFAULT_PROCEDURE + f"\n## 증상\n{state['query']}\n"
         update = _degrade(state, update, "mcp",
-                          f"MCP Prompt 조회 실패({describe(prompt.error)}) → 기본 절차 사용",
-                          prompt.error)
+                          f"MCP Prompt 조회 실패({describe(exc)}) → 기본 절차 사용", exc)
 
-    called = await guard(deps.fast_llm.plan, state["query"], procedure)
     error = None
-    if called.ok:
-        result, usage = called.value
+    try:
+        result, usage = await asyncio.to_thread(deps.fast_llm.plan, state["query"], procedure)
         reason = result.get("fallback")   # 어댑터 안에서 JSON 파싱 실패로 복구한 경우
-    else:
-        result, usage, error = _rule_plan(state["query"]), {"usd": 0.0}, called.error
-        reason = f"LLM 호출 실패({describe(error)}) → 쿼리의 시스템으로 계획"
+    except EXTERNAL as exc:
+        result, usage, error = _rule_plan(state["query"]), {"usd": 0.0}, exc
+        reason = f"LLM 호출 실패({describe(exc)}) → 쿼리의 시스템으로 계획"
     # 조사 대상 보정 — 쿼리에 명시된 시스템이 우선, 모니터링 밖 시스템은 조사하지 않는다
     model_targets = [t["target"] for t in result["tasks"]
                      if t["agent"] == "research" and t.get("target")]
@@ -200,7 +201,7 @@ async def gate_node(state: AgentState, deps: SupervisorDeps) -> dict:
 
 @traceable(name="research_node")
 async def research_node(state: AgentState, deps: SupervisorDeps) -> dict:
-    """Wave 15 가드 + Wave 10b 병렬 + Tool/Resource 실호출, 모든 MCP 호출에 resilience 적용.
+    """Wave 15 가드 + Wave 10b 병렬 + Tool/Resource 실호출, 모든 MCP 호출에 timeout·재시도 적용.
 
     조회가 끝내 실패한 task는 status="failed"로 두고, "조회하지 못했다"는 안내를 notice로
     남긴다 — 실패한 시스템의 수치를 write 단계가 지어내지 않게 하기 위함."""
@@ -218,23 +219,31 @@ async def research_node(state: AgentState, deps: SupervisorDeps) -> dict:
     # "get_incident_runbook" resource를 제공하는지 모른다고 가정하고, 먼저 연결된
     # 서버들을 조회(list)해 유효한 서버를 찾은 뒤에만 그 서버로 요청한다.
     needs_runbook = any(tasks[i]["kind"] != "monitoring" for i in research_indices)
-    template = await _mcp(deps.mcp.find_resource_template,
-                          "get_incident_runbook") if needs_runbook else None
+    template = template_error = None
+    if needs_runbook:
+        try:
+            template, _ = await _mcp(deps.mcp.find_resource_template, "get_incident_runbook")
+        except EXTERNAL as exc:
+            template_error = exc
 
     async def run_one(idx: int) -> dict:
         task = tasks[idx]
+        source = "monitoring" if task["kind"] == "monitoring" else "runbook"
         await asyncio.sleep(0.35)   # 태스크당 고정 지연 — 병렬 효과를 실측하기 위함
-        if task["kind"] == "monitoring":
-            # baseline의 with_retry(asyncio.TimeoutError만 재시도)를 resilience 정책으로 대체
-            called = await _mcp(deps.mcp.call_tool, "get_monitoring_status",
-                                {"system_name": task["target"]})
-            return {"idx": idx, "source": "monitoring", "called": called}
-        if not template.ok:
-            return {"idx": idx, "source": "runbook", "called": template}
-        server, uri_template = template.value[0]
-        called = await _mcp(deps.mcp.read_resource,
-                            uri_template.format(incident_type=task["target"]), server=server)
-        return {"idx": idx, "source": "runbook", "called": called}
+        try:
+            if source == "monitoring":
+                data, retries = await _mcp(deps.mcp.call_tool, "get_monitoring_status",
+                                           {"system_name": task["target"]})
+            else:
+                if template_error is not None:
+                    raise template_error
+                server, uri_template = template
+                data, retries = await _mcp(deps.mcp.read_resource,
+                                           uri_template.format(incident_type=task["target"]),
+                                           server=server)
+        except EXTERNAL as exc:   # 이 task만 실패로 두고 나머지는 계속 진행
+            return {"idx": idx, "source": source, "error": exc}
+        return {"idx": idx, "source": source, "data": data, "retries": retries}
 
     started = time.perf_counter()
     results = await asyncio.gather(*(run_one(i) for i in research_indices))
@@ -244,24 +253,23 @@ async def research_node(state: AgentState, deps: SupervisorDeps) -> dict:
     collected = list(state.get("collected", []))
     update: dict = {"events": list(state["events"])}
     for r in results:
-        task, called = new_tasks[r["idx"]], r["called"]
-        if called.ok:
-            data, retries = called.value
+        task = new_tasks[r["idx"]]
+        if "error" not in r:
             task["status"] = "done"
-            collected.append({"source": r["source"], "data": data})
-            retry_total += retries
+            collected.append({"source": r["source"], "data": r["data"]})
+            retry_total += r["retries"]
             update["events"].append({"type": "TaskCompleted", "id": task["id"],
                                      "source": r["source"], "target": task["target"],
-                                     "retries": retries})
+                                     "retries": r["retries"]})
             continue
         task["status"] = "failed"
         what = (f"{task['target']} 모니터링 상태" if r["source"] == "monitoring"
                 else f"'{task['target']}' 대응 절차(runbook)")
         collected.append({"source": "notice", "data": f"{what}를 조회하지 못했습니다 (MCP 호출 실패)"})
         update["events"].append({"type": "TaskFailed", "id": task["id"], "source": r["source"],
-                                 "target": task["target"], "error": called.error})
+                                 "target": task["target"], "error": error_info(r["error"])})
         update = _degrade(state, update, "mcp",
-                          f"{what} 조회 실패({describe(called.error)})", called.error)
+                          f"{what} 조회 실패({describe(r['error'])})", r["error"])
     update.update({"tasks": new_tasks, "collected": collected, "retry_count": retry_total,
                    "parallel_elapsed": elapsed})
     return update
@@ -313,16 +321,14 @@ async def replan_check_node(state: AgentState, deps: SupervisorDeps) -> dict:
     collected = state.get("collected", [])
     incident_type, detail, update = None, {"classifier": "keyword"}, {}
     if deps.retriever is not None:   # RAG — 질의 + 수집된 alert의 임베딩 유사도로 runbook 선택
-        called = await guard(deps.retriever.classify, state["query"], collected)
-        if called.ok:
-            found = called.value
+        try:
+            found = await asyncio.to_thread(deps.retriever.classify, state["query"], collected)
             incident_type = found["incident_type"]
             # 유사도·1·2위 차이를 이벤트에 남겨 웹 UI·평가에서 판단 근거를 볼 수 있게 한다
             detail = {"classifier": "rag", **{k: found[k] for k in
                                               ("score", "margin", "ranking", "embed_tokens")}}
-        else:                        # 임베딩 실패 시 baseline 키워드 규칙으로 폴백
-            update = _degrade(state, {}, "rag",
-                              f"임베딩 실패({describe(called.error)}) → 키워드 규칙", called.error)
+        except EXTERNAL as exc:      # 임베딩 실패 시 baseline 키워드 규칙으로 폴백
+            update = _degrade(state, {}, "rag", f"임베딩 실패({describe(exc)}) → 키워드 규칙", exc)
     if incident_type is None:
         incident_type = _classify_incident_type(collected)
     gap_task = {"id": "task-gap-runbook", "agent": "research", "kind": "runbook",
@@ -349,13 +355,12 @@ async def analysis_node(state: AgentState, deps: SupervisorDeps) -> dict:
         # 비교할 모니터링 데이터가 없으면 분석하지 않는다 ("특이 패턴 없음"이 답변에 섞이던 문제)
         return {"tasks": new_tasks, "events": state["events"] +
                 [{"type": "AnalysisSkipped", "reason": "모니터링 데이터 없음"}]}
-    called = await guard(deps.fast_llm.analyze, state.get("collected", []))
-    if not called.ok:   # 비교 분석은 부가 단계 — 건너뛰고 수집된 사실로 답변을 쓴다
+    try:
+        summary, usage = await asyncio.to_thread(deps.fast_llm.analyze, state.get("collected", []))
+    except EXTERNAL as exc:   # 비교 분석은 부가 단계 — 건너뛰고 수집된 사실로 답변을 쓴다
         update = {"tasks": new_tasks, "events": state["events"] +
                   [{"type": "AnalysisSkipped", "reason": "LLM 호출 실패"}]}
-        return _degrade(state, update, "analyze",
-                        f"LLM 호출 실패({describe(called.error)}) → 분석 생략", called.error)
-    summary, usage = called.value
+        return _degrade(state, update, "analyze", f"LLM 호출 실패({describe(exc)}) → 분석 생략", exc)
     collected = state.get("collected", []) + [{"source": "analysis", "data": summary}]
     event = {"type": "AnalysisCompleted", "length": len(summary)}
     return {"tasks": new_tasks, "collected": collected,
@@ -379,22 +384,22 @@ async def write_node(state: AgentState, deps: SupervisorDeps) -> dict:
         writer({"type": "AnswerToken", "attempt": attempt, "delta": draft})   # 웹 UI 스트리밍에도 전달
         return {"draft": draft, "events": state["events"] + [
             {"type": "DraftWritten", "attempt": attempt, "length": len(draft), "llm": False}]}
-    called = await guard(deps.quality_llm.write, state["query"], collected,
-                         attempt, state.get("validation_feedback"),
-                         on_token=lambda piece: writer(
-                             {"type": "AnswerToken", "attempt": attempt, "delta": piece}))
-    # 실패하면 LLM 없이 수집된 사실만으로 1) 2) 3) 답변을 만든다
-    draft, usage = called.value if called.ok else (template_answer(state["query"], collected),
-                                                   {"usd": 0.0})
+    error = None
+    try:
+        draft, usage = await deps.quality_llm.write(
+            state["query"], collected, attempt, state.get("validation_feedback"),
+            on_token=lambda piece: writer(
+                {"type": "AnswerToken", "attempt": attempt, "delta": piece}))
+    except EXTERNAL as exc:   # LLM 없이 수집된 사실만으로 1) 2) 3) 답변을 만든다
+        draft, usage, error = template_answer(state["query"], collected), {"usd": 0.0}, exc
     update = {"draft": draft, "last_prompt": usage.get("prompt"),
               "cost_usd": _cost(state, usage),
               "events": state["events"] + [{"type": "DraftWritten", "attempt": attempt,
                                             "length": len(draft)}]}
-    if called.ok:
+    if error is None:
         return update
     return _degrade(state, update, "write",
-                    f"LLM 호출 실패({describe(called.error)}) → 수집된 사실로 템플릿 답변",
-                    called.error)
+                    f"LLM 호출 실패({describe(error)}) → 수집된 사실로 템플릿 답변", error)
 
 
 @traceable(name="validate_node")

@@ -8,6 +8,7 @@
 - Wave 14 : SUPERVISOR_VERSION(v1/v2) 환경변수로 legacy/신형 파이프라인 즉시 전환
 - LangSmith: 요청당 chat_request 루트 run 아래로 노드·LLM·MCP 호출이 계층 기록됨
 """
+import asyncio
 import json
 import os
 from contextlib import asynccontextmanager
@@ -23,12 +24,12 @@ from langsmith.run_helpers import get_current_run_tree
 from pydantic import BaseModel
 
 from agent.deps import SupervisorDeps
+from agent.errors import EXTERNAL, REQUEST_TIMEOUT, error_info
 from agent.fake_llm import FastLLM, QualityLLM
 from agent.fallback import tag_request_run
 from agent.graph import build_graph
 from agent.mcp_client import MCPClient
 from agent.rag import build_retriever
-from agent.resilience import ExternalCallError, request_deadline, request_deadline_seconds
 from agent.session_store import SqliteSessionStore
 from agent.supervisor_v1 import run_v1
 
@@ -104,6 +105,13 @@ def _internal_error(exc: BaseException) -> dict:
             "message": f"{type(exc).__name__}: {str(exc)[:300]}"}
 
 
+def _failure(exc: BaseException) -> tuple[int, dict]:
+    """외부 호출 실패·요청 시간 초과는 503(잠시 후 재시도 가능), 그 밖의 예외(버그)는 500."""
+    if isinstance(exc, EXTERNAL):
+        return 503, {"stage": "server", **error_info(exc)}
+    return 500, _internal_error(exc)
+
+
 def _session_warning(action: str, exc: Exception) -> dict:
     """세션 저장소(SQLite) 실패 — 대화 이력은 부가 기능이라 답변을 막지 않고 Degraded로만 남긴다."""
     reason = ("대화 이력 조회 실패 → 이력 없이 진행" if action == "load"
@@ -129,16 +137,11 @@ def _save_turn(deps, thread_id: str, message: str, reply: str) -> dict | None:
         return _session_warning("save", exc)
 
 
-@app.exception_handler(ExternalCallError)
-async def _external_failure(request: Request, exc: ExternalCallError):
-    """그래프가 폴백하지 못한 외부 호출 실패 — 503 + 구조화된 원인 (재시도 가능 여부 포함)."""
-    return JSONResponse(status_code=503, content=_error_body(exc.error))
-
-
 @app.exception_handler(Exception)
 async def _unexpected_failure(request: Request, exc: Exception):
-    """예상 못 한 예외(버그 포함)도 구조 없는 'Internal Server Error' 대신 같은 형태로 내려준다."""
-    return JSONResponse(status_code=500, content=_error_body(_internal_error(exc)))
+    """그래프가 폴백하지 못한 실패도 구조 없는 'Internal Server Error' 대신 같은 형태로 내려준다."""
+    status, error = _failure(exc)
+    return JSONResponse(status_code=status, content=_error_body(error))
 
 
 @app.get("/health")
@@ -169,7 +172,7 @@ def _metadata(result: dict, run_id: str | None) -> dict:
         "validation_attempts": result.get("validation_attempts", 0),
         "cost_usd": result.get("cost_usd", 0.0),
         "degraded_count": len(result.get("degraded", [])),   # 외부 호출·이력 실패로 폴백한 단계 수
-        "request_deadline_s": request_deadline_seconds(),     # 요청 하나가 쓸 수 있는 총시간
+        "request_timeout_s": REQUEST_TIMEOUT,                 # 요청 하나가 쓸 수 있는 총시간
         "llm_backend": app.state.llm_backend,
         "supervisor_version": app.state.deps.version,
         "instance_id": app.state.instance_id,
@@ -181,7 +184,7 @@ def _metadata(result: dict, run_id: str | None) -> dict:
 async def _handle_chat(message: str, thread_id: str) -> tuple[dict, str | None]:
     deps = app.state.deps
     history, load_warning = _load_history(deps, thread_id)   # Wave 12 — 실패해도 이력 없이 진행
-    with request_deadline():   # 이 요청의 모든 외부 호출이 하나의 총시간 상한을 공유한다
+    async with asyncio.timeout(REQUEST_TIMEOUT):   # 요청 전체 시간 상한 — 넘으면 TimeoutError → 503
         if deps.version == "v2":
             result = await app.state.graph.ainvoke(
                 {"query": message, "thread_id": thread_id, "history": history,
@@ -209,6 +212,27 @@ async def chat(req: ChatRequest):
             "events": result.get("events", []), "metadata": _metadata(result, run_id)}
 
 
+async def _stream_graph(inputs: dict):
+    """그래프 스트림을 요청 전체 시간 상한(REQUEST_TIMEOUT) 안에서 흘려보낸다.
+
+    그래프는 별도 task에서 돌며 이벤트를 큐에 넣고, 여기서는 큐에서 꺼내 보낸다. 상한을
+    넘기면 task가 TimeoutError로 끝나고, 그 예외가 아래 raise로 올라가 Error 이벤트가 된다."""
+    queue: asyncio.Queue = asyncio.Queue()
+    done = object()
+
+    async def produce():
+        try:
+            async for item in app.state.graph.astream(inputs, stream_mode=["updates", "custom"]):
+                await queue.put(item)
+        finally:
+            await queue.put(done)
+
+    task = asyncio.create_task(asyncio.wait_for(produce(), REQUEST_TIMEOUT))
+    while (item := await queue.get()) is not done:
+        yield item
+    await task   # 그래프가 실패·시간 초과로 끝났으면 여기서 예외가 올라온다
+
+
 @app.get("/chat/stream")
 async def chat_stream(message: str, thread_id: str = "default"):
     """Wave 3 — 그래프의 노드별 진행 상황을 SSE로 스트리밍.
@@ -228,8 +252,7 @@ async def chat_stream(message: str, thread_id: str = "default"):
             async for chunk in run():
                 yield chunk
         except Exception as exc:
-            error = exc.error if isinstance(exc, ExternalCallError) else _internal_error(exc)
-            yield sse({"type": "Error", "ok": False, "error": error})
+            yield sse({"type": "Error", "ok": False, "error": _failure(exc)[1]})
         yield "data: [DONE]\n\n"
 
     async def run():
@@ -237,7 +260,7 @@ async def chat_stream(message: str, thread_id: str = "default"):
         if load_warning:
             yield sse({**load_warning, "node": "session"})
         if deps.version != "v2":
-            with request_deadline():
+            async with asyncio.timeout(REQUEST_TIMEOUT):
                 result = await run_v1(deps, message, thread_id, history)
             for ev in result["events"]:
                 yield f"data: {json.dumps(ev, ensure_ascii=False)}\n\n"
@@ -249,23 +272,22 @@ async def chat_stream(message: str, thread_id: str = "default"):
             # stream_mode를 리스트로 주면 (mode, payload) 튜플이 나온다 — "updates"는
             # 노드가 끝날 때마다의 상태 델타, "custom"은 write_node/chat_answer_node가
             # get_stream_writer()로 실행 중에 즉시 흘려보내는 토큰(AnswerToken) 이벤트다.
-            with request_deadline():
-                async for mode, payload in app.state.graph.astream(
-                        {"query": message, "thread_id": thread_id, "history": history,
-                         "events": [], "cost_usd": 0.0}, stream_mode=["updates", "custom"]):
-                    if mode == "custom":
-                        yield f"data: {json.dumps(payload, ensure_ascii=False)}\n\n"
-                        continue
-                    for node_name, delta in payload.items():
-                        for ev in (delta.get("events") or [])[seen:]:
-                            ev = {**ev, "node": node_name}
-                            yield f"data: {json.dumps(ev, ensure_ascii=False)}\n\n"
-                        if delta.get("events"):
-                            seen = len(delta["events"])
-                        if delta.get("final"):
-                            final = delta["final"]
-                        if delta.get("last_prompt"):
-                            last_prompt = delta["last_prompt"]
+            async for mode, payload in _stream_graph(
+                    {"query": message, "thread_id": thread_id, "history": history,
+                     "events": [], "cost_usd": 0.0}):
+                if mode == "custom":
+                    yield f"data: {json.dumps(payload, ensure_ascii=False)}\n\n"
+                    continue
+                for node_name, delta in payload.items():
+                    for ev in (delta.get("events") or [])[seen:]:
+                        ev = {**ev, "node": node_name}
+                        yield f"data: {json.dumps(ev, ensure_ascii=False)}\n\n"
+                    if delta.get("events"):
+                        seen = len(delta["events"])
+                    if delta.get("final"):
+                        final = delta["final"]
+                    if delta.get("last_prompt"):
+                        last_prompt = delta["last_prompt"]
             save_warning = _save_turn(deps, thread_id, message, final)
             if save_warning:
                 yield sse({**save_warning, "node": "session"})

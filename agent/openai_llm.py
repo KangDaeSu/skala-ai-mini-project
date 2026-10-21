@@ -24,9 +24,9 @@ import os
 import httpx
 from langsmith import traceable
 
+from .errors import MAX_TOKENS, TIMEOUTS, retry_sync
 from .fallback import rule_route
 from .systems import KNOWN_SYSTEMS
-from .resilience import call_sync, max_tokens
 
 OPENAI_URL = "https://api.openai.com/v1/chat/completions"
 
@@ -51,7 +51,7 @@ class OpenAILLM:
 
     def _chat(self, system: str, user: str, json_mode: bool = False,
               stage: str = "chat") -> tuple[str, dict]:
-        # stage: resilience 정책 이름(route/plan/analyze/chat/write) — 단계별 타임아웃·예산이 다르다
+        # stage: route/plan/analyze/chat/write — 단계마다 timeout이 다르다 (errors.TIMEOUTS)
         if not self.api_key:
             raise RuntimeError(
                 "OPENAI_API_KEY가 설정되지 않았습니다 — .env 또는 환경변수로 지정하세요."
@@ -61,20 +61,19 @@ class OpenAILLM:
             "messages": [{"role": "system", "content": system},
                          {"role": "user", "content": user}],
             "temperature": 0,
-            "max_tokens": max_tokens(json_output=json_mode),
+            "max_tokens": MAX_TOKENS["json" if json_mode else "text"],
         }
         if json_mode:
             payload["response_format"] = {"type": "json_object"}
         headers = {"Authorization": f"Bearer {self.api_key}",
                    "Content-Type": "application/json"}
 
-        def attempt(timeout: float) -> dict:   # HTTP 요청 1회 — 재시도 여부는 resilience가 판단
-            resp = httpx.post(OPENAI_URL, json=payload, headers=headers, timeout=timeout)
+        def attempt() -> dict:   # HTTP 요청 1회 (baseline: timeout 120초 1회, 재시도 없음)
+            resp = httpx.post(OPENAI_URL, json=payload, headers=headers, timeout=TIMEOUTS[stage])
             resp.raise_for_status()
             return resp.json()
 
-        # 단계별 타임아웃·재시도·시간 예산은 resilience가 맡는다 (baseline: timeout 120초 1회)
-        data, retries = call_sync(stage, attempt)
+        data, retries = retry_sync(attempt)   # 일시 오류(timeout·연결 실패·5xx·429)만 재시도
         content = data["choices"][0]["message"]["content"]
         tokens = data.get("usage", {}).get("total_tokens", 0)
         usage = {"model": self.name, "tokens": tokens, "retries": retries,

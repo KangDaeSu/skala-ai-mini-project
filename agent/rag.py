@@ -22,7 +22,7 @@ from pathlib import Path
 import httpx
 from langsmith import traceable
 
-from .resilience import call_sync
+from .errors import TIMEOUTS, retry_sync
 
 RUNBOOK_DIR = Path(__file__).resolve().parent.parent / "data" / "runbooks"
 OLLAMA_EMBED_URL = "http://127.0.0.1:11434/api/embed"
@@ -40,12 +40,12 @@ class OllamaEmbedder:
     def embed(self, texts: list[str], kind: str) -> tuple[list[list[float]], int]:
         payload = {"model": self.model, "input": [self.prefix[kind] + t for t in texts]}
 
-        def attempt(timeout: float) -> dict:
-            resp = httpx.post(OLLAMA_EMBED_URL, json=payload, timeout=timeout)
+        def attempt() -> dict:
+            resp = httpx.post(OLLAMA_EMBED_URL, json=payload, timeout=TIMEOUTS["embed"])
             resp.raise_for_status()
             return resp.json()
 
-        data, _ = call_sync("embed", attempt)
+        data, _ = retry_sync(attempt)
         return data["embeddings"], data.get("prompt_eval_count") or 0
 
 
@@ -59,12 +59,13 @@ class OpenAIEmbedder:
         headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
         payload = {"model": self.model, "input": texts}
 
-        def attempt(timeout: float) -> dict:
-            resp = httpx.post(OPENAI_EMBED_URL, json=payload, headers=headers, timeout=timeout)
+        def attempt() -> dict:
+            resp = httpx.post(OPENAI_EMBED_URL, json=payload, headers=headers,
+                              timeout=TIMEOUTS["embed"])
             resp.raise_for_status()
             return resp.json()
 
-        data, _ = call_sync("embed", attempt)
+        data, _ = retry_sync(attempt)
         vectors = [d["embedding"] for d in sorted(data["data"], key=lambda d: d["index"])]
         return vectors, data.get("usage", {}).get("total_tokens", 0)
 
