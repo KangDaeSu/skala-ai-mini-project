@@ -15,8 +15,10 @@ import time
 import anyio
 import httpx
 
-# 단계별 시도 1회의 timeout(초) — 짧은 분류(route)와 긴 생성(write)의 정상 소요 시간이 다르다
-TIMEOUTS = {"route": 20, "plan": 30, "analyze": 30, "chat": 30, "write": 60, "embed": 15, "mcp": 10}
+# 단계별 시도 1회의 timeout(초) — 짧은 분류(route)와 긴 생성(write)의 정상 소요 시간이 다르다.
+# 실측 최대(OpenAI / Ollama): fast 모델 2.1 / 1.3초, write 5.1 / 13.5초. 요청 상한(60초) 안에
+# 응답 없음 1회 + 재시도가 들어가도록 잡았다 (write 60초였을 때는 응답 없음 1번에 요청 전체가 끝났다)
+TIMEOUTS = {"route": 10, "plan": 15, "analyze": 15, "chat": 15, "write": 30, "embed": 10, "mcp": 5}
 RETRIES = 2                                                      # 첫 시도 이후 추가 시도 횟수
 BASE_DELAY = float(os.environ.get("LLM_RETRY_BASE_DELAY", 0.5))  # 0.5초 → 1초 (지수 백오프)
 REQUEST_TIMEOUT = float(os.environ.get("REQUEST_TIMEOUT", 60))   # 요청 하나의 전체 상한 (server.py)
