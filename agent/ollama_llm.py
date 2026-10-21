@@ -11,6 +11,7 @@ fc
 사전 조건: `ollama serve` 실행 중 + `ollama pull qwen3:0.6b qwen3:8b`.
 """
 import json
+import os
 
 import httpx
 from langsmith import traceable
@@ -19,7 +20,8 @@ from .errors import MAX_TOKENS, TIMEOUTS, retry_sync
 from .fallback import rule_route
 from .systems import KNOWN_SYSTEMS
 
-OLLAMA_URL = "http://127.0.0.1:11434/api/chat"
+# 환경변수로 바꿀 수 있다 — 예: 존재하지 않는 주소로 기동해 LLM 장애 시 대체 답변을 재현
+OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434/api/chat")
 
 
 ROUTE_SCHEMA = {

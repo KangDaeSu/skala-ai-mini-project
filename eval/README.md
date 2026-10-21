@@ -5,9 +5,10 @@ Before/After를 **같은 데이터셋·같은 조건**으로 측정하기 위한
 
 | 파일 | 역할 |
 |---|---|
-| `dataset.json` | 쿼리 16건과 정답 라벨 (route, 조사 대상, 허용 runbook) |
+| `dataset.json` | 쿼리 21건과 정답 라벨 (route, 조사 대상, 허용 runbook) — 장애 주입 모드는 Before와 같은 16건(`--only`) |
 | `run_eval.py` | deps 생성 → 그래프 실행 → 채점 → `output/`에 JSON·마크다운 저장 |
 | `chaos.py` | 장애 주입기 — httpx 전송 계층을 바꿔치기해 LLM API 호출에 장애를 낸다 |
+| `compare.py` | Before/After 결과를 합쳐 `output/final_comparison.md` 생성 |
 
 ## 실행
 
