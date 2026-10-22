@@ -66,7 +66,7 @@ async def retry_async(fn):
 
 
 async def call_mcp(fn, *args, **kwargs):
-    """MCP 호출 — 시도마다 10초 timeout(baseline: timeout 없음), 일시 오류는 재시도.
+    """MCP 호출 — 시도마다 5초 timeout(baseline: timeout 없음), 일시 오류는 재시도.
     (결과, 재시도 횟수)를 돌려주고, 끝내 실패하면 예외를 그대로 올린다."""
     return await retry_async(lambda: asyncio.wait_for(fn(*args, **kwargs), TIMEOUTS["mcp"]))
 
