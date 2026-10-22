@@ -200,6 +200,13 @@ fast=`gpt-4o-mini`, quality=`gpt-4o` · Before=`253fb4c`(baseline) · After=정�
 <img src="output/captures/a_simple_query.png" width="49%" alt="단순 질문: 분석 생략, network-timeout 선택">
 <img src="output/captures/a_pytest.png" width="49%" alt="단위 테스트 48개 통과">
 </p>
+<p>
+<img src="output/captures/a_unknown_system.png" width="49%" alt="모니터링 대상 외 시스템: 에이전트 없이 안내">
+<img src="output/captures/a_langsmith_trace.png" width="49%" alt="LangSmith: research_node 아래 서브에이전트 trace">
+</p>
+<p>
+<img src="output/captures/a_before_after.png" width="70%" alt="Before/After 비교표">
+</p>
 
 ## 11. 한계와 트레이드오프
 
