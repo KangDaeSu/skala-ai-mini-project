@@ -21,3 +21,7 @@ session.db
 .idea/
 .vscode/
 .claude/settings.local.json
+
+# 평가 실행별 요약 표 (run_eval.py가 매번 다시 만든다 — 원본은 JSON, 전체 비교는 final_comparison.md)
+output/*_normal_*.md
+output/*_chaos_*.md

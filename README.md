@@ -237,7 +237,7 @@ agent/   graph.py (supervisor 그래프)  agents/ (monitoring · runbook · anal
 eval/    run_eval.py  chaos.py  compare.py  dataset.json  README.md
 tests/   test_agents.py  test_errors.py  test_graph_fallback.py  test_rag.py
          test_systems.py  test_server_errors.py
-output/  before_* / after_* 결과(JSON·MD), final_comparison.md, captures/
+output/  before_* / after_* 결과(JSON), final_comparison.md, captures/
 doc/     README.md (Base 코드 설명), regression_test_queries.md, 사용자 매뉴얼
 ```
 
