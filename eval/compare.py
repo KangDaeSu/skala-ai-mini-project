@@ -60,7 +60,7 @@ def main() -> None:
         _row("장애를 맞은 실행 수", "faulted_runs", bc, ac),
         _row("**성공률**", "success", bc, ac),
         _row("**장애를 맞은 실행의 성공률**", "success_when_faulted", bc, ac),
-        _row("폴백(축소 답변)이 일어난 실행", "degraded_runs", bc, ac),
+        _row("대체 동작(규칙·템플릿)이 일어난 실행", "degraded_runs", bc, ac),
         _row("지연 p50 (초, 성공한 실행)", "latency_p50", bc, ac),
         _row("**최대 지연 (초, 실패 포함)**", "latency_max_all", bc, ac),
         "", "## 2. 정상 모드 — 품질 (회귀 검사 포함)", "",
